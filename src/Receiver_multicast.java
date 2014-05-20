@@ -373,7 +373,7 @@ public class Receiver_multicast {
 
 					if (flag == FLAG_PUSH && para_test == 2) {
 						System.out.println("          je decode");
-						para_test++;
+						para_test=10;
 						continue;
 					}
 
