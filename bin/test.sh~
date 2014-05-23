@@ -6,5 +6,5 @@ echo "$i"
 java Sender_multicast /home/tai/Bureau/image_test2.jpg 2 239.255.80.84 5000 2 1.00 >> resultat.txt
 
 done
-#./rapport.sh
-cat resultat.txt
+./rapport.sh
+#cat resultat.txt
