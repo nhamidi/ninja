@@ -12,6 +12,7 @@ public class Recepteur_thread_multi extends Thread {
     // private int port;
     private MulticastSocket socketReception;
     private boolean end_loop;
+    private boolean historic;
     int packetData;
     private int number_of_packets;
     private int end_reception;
@@ -23,7 +24,7 @@ public class Recepteur_thread_multi extends Thread {
     private long before;
     private boolean need_more;
     
-    public Recepteur_thread_multi(int port, InetAddress groupeIP, int nb_of_recv) throws IOException {
+    public Recepteur_thread_multi(int port, InetAddress groupeIP, int nb_of_recv, boolean historic) throws IOException {
 	// this.port = port;
 	this.end_loop = true;
 	this.need_more = false;
@@ -37,6 +38,7 @@ public class Recepteur_thread_multi extends Thread {
 	this.time_1 = 0;
 	this.time_2 = 0;
 	this.nb_ack = 0;
+	this.historic = historic;
 	
     }
     
@@ -65,25 +67,18 @@ public class Recepteur_thread_multi extends Thread {
     }
     
     public void set_number_of_packets(int nb_packets) {
+	this.need_more = true;
 	if ( this.number_of_packets < nb_packets ) {
-	    // this.number_of_packets = nb_packets;
-	    this.need_more = true;
-	    // this.number_of_packets = (int) Math.round((float) ((nb_packets
-	    // *this.total_symb) + nb_packets* nb_packets)/ (this.total_symb
-	    // *nb_packets));
-	    this.number_of_packets = (int) Math.round((((float) nb_packets / (float) this.total_symb) + 1) * (float) nb_packets);
+	    
+	    if ( this.historic ) {
+		// this.number_of_packets = (int) Math.round((float) ((nb_packets*this.total_symb) + nb_packets* nb_packets)/ (this.total_symb*nb_packets));
+		this.number_of_packets = (int) Math.round((((float) nb_packets / (float) this.total_symb) + 1) * (float) nb_packets);
+	    } else
+		this.number_of_packets = nb_packets;
 	    
 	    set_total_number_of_packets(this.number_of_packets);
-	    // System.out.println("                 avant pourcent       "+
-	    // nb_packets+"        après pourcent              "+
-	    // this.number_of_packets);
-	    
-	    // System.out.println("          " +(int) Math.round((float)
-	    // ((nb_packets * this.total_symb) + nb_packets* nb_packets)/
-	    // (this.total_symb * nb_packets)));
 	    
 	}
-	this.need_more = true;
 	
     }
     
@@ -122,8 +117,7 @@ public class Recepteur_thread_multi extends Thread {
 	    } catch (Exception exc) {
 		System.out.println(exc);
 	    }
-	    // System.out.println("numéros receptionné       " +
-	    // this.packetData);
+	    // System.out.println("numéros receptionné       " + this.packetData);
 	    this.nb_ack++;
 	    
 	    if ( this.packetData == FLAG_PUSH ) {
@@ -133,13 +127,13 @@ public class Recepteur_thread_multi extends Thread {
 	    
 	    if ( this.packetData == NACK ) {
 		this.need_more = true;
-		set_number_of_packets(5);
+		set_number_of_packets(1);
 		// nb_ack++;
 		continue;
 	    }
 	    
 	    if ( this.packetData == ACK ) {
-		this.packetData = -5;
+		// this.packetData = -5;
 		
 		// set_number_of_packets(0);
 		// nb_ack++;

@@ -31,7 +31,7 @@ public class Receiver_multicast {
     final static int FLAG_STOP = 111111111;
     
     // Simulate a lost of the canal
-    public static boolean packet_is_loss(float percentageLoss) {
+    public static boolean packet_is_lost(float percentageLoss) {
 	Random randomGenerator = new Random();
 	int rand = randomGenerator.nextInt(100);
 	if ( rand < (int) percentageLoss ) {
@@ -250,12 +250,13 @@ public class Receiver_multicast {
 	
 	boolean successfulDecoding = false;
 	Set<EncodingSymbol> received_packets = new HashSet<EncodingSymbol>();
-	int nb_of_utils_packet = (int) Math.round((float) total_symbols * redondance);
-	// int nb_of_utils_packet =total_symbols;
+	//int nb_of_utils_packet = (int) Math.round((float) total_symbols * redondance);
+	 int nb_of_utils_packet =total_symbols;
 	
 	int compteur_utils_packet = -1;
 	long before_2 = System.currentTimeMillis();
 	int id_data_packet;
+	int compteur=0;
 	while (!successfulDecoding) {
 	    MulticastSocket serverSocket = null;
 	    try {
@@ -272,6 +273,7 @@ public class Receiver_multicast {
 		int flag = 0;
 		total_symbols = total_symbols * 2;
 		for (int recv = 0; recv < total_symbols; recv++) {
+		    compteur++;
 		    compteur_utils_packet++;
 		    /**
 		     * reception of the response and add noise
@@ -309,8 +311,9 @@ public class Receiver_multicast {
 			continue;
 		    }
 		    // If the packets is lost
-		    
-		    if ( packet_is_loss(canalloss) ) {
+		    ////////////////////////////////////////////
+		    Thread.sleep(30);
+		    if ( packet_is_lost(canalloss) ) {
 			re_send_for_a_lost++;
 			recv--;
 			compteur_utils_packet--;
@@ -337,7 +340,7 @@ public class Receiver_multicast {
 		    }
 		    
 		    packetData = parameter_test(packetData, para_test);
-		    System.out.println("    fin     "+nb_of_utils_packet+"    maintenant      "+ compteur_utils_packet);
+		    System.out.println("    fin     "+nb_of_utils_packet+"    maintenant      "+ compteur);
 		    
 		    if ( flag == FLAG_PUSH && para_test == 2 ) {
 			System.out.println("          je decode");
@@ -352,7 +355,7 @@ public class Receiver_multicast {
 			    break;
 			}
 			System.out.println("          je peux pas decoder");
-			System.out.println("Grosse bite         "+nb_of_utils_packet);
+			
 			sending_thread.set_ACK_NACK((nb_of_utils_packet - compteur_utils_packet));
 			
 			sending_thread.send_thing();
@@ -361,10 +364,9 @@ public class Receiver_multicast {
 			continue;
 			
 		    }
-//		    if ( nb_of_utils_packet < compteur_utils_packet ) {
-//			System.out.println("bite         "+nb_of_utils_packet);
-//			continue;
-//		    }
+		    if ( nb_of_utils_packet < compteur_utils_packet ) {
+			continue;
+		    }
 		    
 		    ByteArrayInputStream bis = new ByteArrayInputStream(packetData);
 		    ObjectInput in = null;
@@ -414,7 +416,7 @@ public class Receiver_multicast {
 	    
 	    // for each block
 	    for (int sblock = 0; sblock < no_blocks; sblock++) {
-		System.out.println("\nDecoding block: " + sblock);
+		//System.out.println("\nDecoding block: " + sblock);
 		try {
 		    // get the time before decoding
 		    
@@ -444,15 +446,15 @@ public class Receiver_multicast {
 		    int nb_packets_lost = Integer.parseInt(e.getMessage());
 		    compteur_utils_packet = 0;
 		    sending_thread.set_ACK_NACK(nb_packets_lost);
-		    // nb_of_utils_packet = (int) Math.round((float)
+		     nb_of_utils_packet = nb_packets_lost;
 		    // nb_packets_lost * redondance);
-		    nb_of_utils_packet = (int) Math.round((float) nb_packets_lost * (1 + ((float) nb_packets_lost / (float) nb_of_utils_packet)));
+		   // nb_of_utils_packet = (int) Math.round((float) nb_packets_lost * (1 + ((float) nb_packets_lost / (float) nb_of_utils_packet)));
 		    
 		    // re_send_for_a_lost=0;
 		    
 		    successfulDecoding = false;
 		    if ( para_test == 3 ) {
-			Recepteur_thread_multi recep_thread = new Recepteur_thread_multi(src_port, sendIP, 1);
+			Recepteur_thread_multi recep_thread = new Recepteur_thread_multi(src_port, sendIP, 1, false);
 			recep_thread.start();
 			
 			for (int u = 1; u < 4000; u++) {
@@ -465,6 +467,7 @@ public class Receiver_multicast {
 			}
 			sending_thread.send_thing();
 			recep_thread.join();
+			para_test=10;
 			continue;
 		    } else
 			sending_thread.send_thing();
@@ -500,7 +503,7 @@ public class Receiver_multicast {
 			    }
 			    
 			} else if ( para_test == 3 ) {
-			    Recepteur_thread_multi recep_thread = new Recepteur_thread_multi(src_port, sendIP, 1);
+			    Recepteur_thread_multi recep_thread = new Recepteur_thread_multi(src_port, sendIP, 1, false);
 			    recep_thread.start();
 			    
 			    for (int u = 1; u < 4000; u++) {
@@ -533,7 +536,7 @@ public class Receiver_multicast {
 		    number_of_ack++;
 		    // System.out.println("nb of symboles : " + total_symbols);
 		    System.out.println("nb reiceive packets: " + number_of_received_packets);
-		    System.out.println("nb re-send : " + re_send_for_a_lost);
+		    System.out.println((float)(100*re_send_for_a_lost)/452);
 		    int total_overhead = (number_of_received_packets - total_symbols) * 192;
 		    // System.out.println("Nombre total d’ACK : " +
 		    // number_of_ack);

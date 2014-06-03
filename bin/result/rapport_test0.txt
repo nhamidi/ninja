@@ -1,4 +1,4 @@
-Listening for file /home/tai/Bureau/test0.jpg (0 bytes) at port 5000
+Listening for file /home/tai/Bureau/test0_5.jpg (0 bytes) at port 5030
 
 # source symbols: 452
 # source blocks: 1
@@ -458,10 +458,85 @@ Waiting for packets...
     fin     452    maintenant      452
     fin     452    maintenant      453
     fin     452    maintenant      454
-          je decode
-
-Successfuint lly decoded block: 0 (in 2347 milliseconds)
+    fin     452    m
+Successfuint lly decoded block: 0 (in 4582 milliseconds)
            envoie ACK 1 bon
 nb reiceive packets: 454
 0.0
-Delai total d’envoi du message : 230217
+Delai total d’envoi du message : 23557
+aintenant      459
+    fin     452    maintenant      460
+    fin     452    maintenant      461
+    fin     452    maintenant      462
+    fin     452    maintenant      463
+    fin     452    maintenant      464
+    fin     452    maintenant      465
+    fin     452    maintenant      466
+    fin     452    maintenant      467
+    fin     452    maintenant      468
+    fin     452    maintenant      469
+    fin     452    maintenant      470
+    fin     452    maintenant      471
+    fin     452    maintenant      472
+    fin     452    maintenant      473
+    fin     452    maintenant      474
+    fin     452    maintenant      475
+    fin     452    maintenant      476
+    fin     452    maintenant      477
+          je decode
+
+Successfuint lly decoded block: 0 (in 8824 milliseconds)
+           envoie ACK 1 bon
+nb reiceive packets: 477
+0.0
+Delai total d’envoi du message : 28744
+aintenant      482
+    fin     452    maintenant      483
+    fin     452    maintenant      484
+    fin     452    maintenant      485
+    fin     452    maintenant      486
+    fin     452    maintenant      487
+    fin     452    maintenant      488
+    fin     452    maintenant      489
+    fin     452    maintenant      490
+    fin     452    maintenant      491
+    fin     452    maintenant      492
+    fin     452    maintenant      493
+    fin     452    maintenant      494
+    fin     452    maintenant      495
+    fin     452    maintenant      496
+    fin     452    maintenant      497
+    fin     452    maintenant      498
+    fin     452    maintenant      499
+    fin     452    m
+Successfuint lly decoded block: 0 (in 9184 milliseconds)
+           envoie ACK 1 bon
+nb reiceive packets: 499
+0.0
+Delai total d’envoi du message : 29992
+aintenant      504
+    fin     452    maintenant      505
+    fin     452    maintenant      506
+    fin     452    maintenant      507
+    fin     452    maintenant      508
+    fin     452    maintenant      509
+    fin     452    maintenant      510
+    fin     452    maintenant      511
+    fin     452    maintenant      512
+    fin     452    maintenant      513
+    fin     452    maintenant      514
+    fin     452    maintenant      515
+    fin     452    maintenant      516
+    fin     452    maintenant      517
+    fin     452    maintenant      518
+    fin     452    maintenant      519
+    fin     452    maintenant      520
+    fin     452    maintenant      521
+    fin     452    maintenant      522
+          je decode
+
+Successfuint lly decoded block: 0 (in 9073 milliseconds)
+           envoie ACK 1 bon
+nb reiceive packets: 522
+0.0
+Delai total d’envoi du message : 30837

@@ -510,7 +510,7 @@ public class Encoder {
 		st.append("\n Missing indexes:\n");
 		for (Integer i : missing_symbols)
 			st.append(i + ", ");
-		System.out.println(st.toString());
+		//System.out.println(st.toString());
 		/*
 		 * end print
 		 */

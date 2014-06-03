@@ -1,4 +1,4 @@
-Listening for file /home/tai/Bureau/test0.jpg (0 bytes) at port 5000
+Listening for file /home/tai/Bureau/test1_5.jpg (0 bytes) at port 5030
 
 # source symbols: 452
 # source blocks: 1
@@ -27,7 +27,6 @@ Waiting for packets...
     fin     452    maintenant      21
     fin     452    maintenant      22
     fin     452    maintenant      23
-    fin     452    maintenant      24
     fin     452    maintenant      25
     fin     452    maintenant      26
     fin     452    maintenant      27
@@ -43,12 +42,9 @@ Waiting for packets...
     fin     452    maintenant      37
     fin     452    maintenant      38
     fin     452    maintenant      39
-    fin     452    maintenant      40
     fin     452    maintenant      41
     fin     452    maintenant      42
     fin     452    maintenant      43
-    fin     452    maintenant      44
-    fin     452    maintenant      45
     fin     452    maintenant      46
     fin     452    maintenant      47
     fin     452    maintenant      48
@@ -73,7 +69,6 @@ Waiting for packets...
     fin     452    maintenant      67
     fin     452    maintenant      68
     fin     452    maintenant      69
-    fin     452    maintenant      70
     fin     452    maintenant      71
     fin     452    maintenant      72
     fin     452    maintenant      73
@@ -91,7 +86,6 @@ Waiting for packets...
     fin     452    maintenant      85
     fin     452    maintenant      86
     fin     452    maintenant      87
-    fin     452    maintenant      88
     fin     452    maintenant      89
     fin     452    maintenant      90
     fin     452    maintenant      91
@@ -110,11 +104,9 @@ Waiting for packets...
     fin     452    maintenant      104
     fin     452    maintenant      105
     fin     452    maintenant      106
-    fin     452    maintenant      107
     fin     452    maintenant      108
     fin     452    maintenant      109
     fin     452    maintenant      110
-    fin     452    maintenant      111
     fin     452    maintenant      112
     fin     452    maintenant      113
     fin     452    maintenant      114
@@ -159,11 +151,9 @@ Waiting for packets...
     fin     452    maintenant      153
     fin     452    maintenant      154
     fin     452    maintenant      155
-    fin     452    maintenant      156
     fin     452    maintenant      157
     fin     452    maintenant      158
     fin     452    maintenant      159
-    fin     452    maintenant      160
     fin     452    maintenant      161
     fin     452    maintenant      162
     fin     452    maintenant      163
@@ -171,18 +161,15 @@ Waiting for packets...
     fin     452    maintenant      165
     fin     452    maintenant      166
     fin     452    maintenant      167
-    fin     452    maintenant      168
     fin     452    maintenant      169
     fin     452    maintenant      170
     fin     452    maintenant      171
     fin     452    maintenant      172
     fin     452    maintenant      173
-    fin     452    maintenant      174
     fin     452    maintenant      175
     fin     452    maintenant      176
     fin     452    maintenant      177
     fin     452    maintenant      178
-    fin     452    maintenant      179
     fin     452    maintenant      180
     fin     452    maintenant      181
     fin     452    maintenant      182
@@ -212,14 +199,11 @@ Waiting for packets...
     fin     452    maintenant      206
     fin     452    maintenant      207
     fin     452    maintenant      208
-    fin     452    maintenant      209
     fin     452    maintenant      210
     fin     452    maintenant      211
     fin     452    maintenant      212
     fin     452    maintenant      213
-    fin     452    maintenant      214
     fin     452    maintenant      215
-    fin     452    maintenant      216
     fin     452    maintenant      217
     fin     452    maintenant      218
     fin     452    maintenant      219
@@ -230,12 +214,10 @@ Waiting for packets...
     fin     452    maintenant      224
     fin     452    maintenant      225
     fin     452    maintenant      226
-    fin     452    maintenant      227
     fin     452    maintenant      228
     fin     452    maintenant      229
     fin     452    maintenant      230
     fin     452    maintenant      231
-    fin     452    maintenant      232
     fin     452    maintenant      233
     fin     452    maintenant      234
     fin     452    maintenant      235
@@ -243,7 +225,6 @@ Waiting for packets...
     fin     452    maintenant      237
     fin     452    maintenant      238
     fin     452    maintenant      239
-    fin     452    maintenant      240
     fin     452    maintenant      241
     fin     452    maintenant      242
     fin     452    maintenant      243
@@ -255,24 +236,17 @@ Waiting for packets...
     fin     452    maintenant      249
     fin     452    maintenant      250
     fin     452    maintenant      251
-    fin     452    maintenant      252
     fin     452    maintenant      253
     fin     452    maintenant      254
-    fin     452    maintenant      255
     fin     452    maintenant      256
-    fin     452    maintenant      257
     fin     452    maintenant      258
-    fin     452    maintenant      259
     fin     452    maintenant      260
     fin     452    maintenant      261
-    fin     452    maintenant      262
     fin     452    maintenant      263
     fin     452    maintenant      264
     fin     452    maintenant      265
     fin     452    maintenant      266
     fin     452    maintenant      267
-    fin     452    maintenant      268
-    fin     452    maintenant      269
     fin     452    maintenant      270
     fin     452    maintenant      271
     fin     452    maintenant      272
@@ -281,11 +255,9 @@ Waiting for packets...
     fin     452    maintenant      275
     fin     452    maintenant      276
     fin     452    maintenant      277
-    fin     452    maintenant      278
     fin     452    maintenant      279
     fin     452    maintenant      280
     fin     452    maintenant      281
-    fin     452    maintenant      282
     fin     452    maintenant      283
     fin     452    maintenant      284
     fin     452    maintenant      285
@@ -294,12 +266,10 @@ Waiting for packets...
     fin     452    maintenant      288
     fin     452    maintenant      289
     fin     452    maintenant      290
-    fin     452    maintenant      291
     fin     452    maintenant      292
     fin     452    maintenant      293
     fin     452    maintenant      294
     fin     452    maintenant      295
-    fin     452    maintenant      296
     fin     452    maintenant      297
     fin     452    maintenant      298
     fin     452    maintenant      299
@@ -308,12 +278,10 @@ Waiting for packets...
     fin     452    maintenant      302
     fin     452    maintenant      303
     fin     452    maintenant      304
-    fin     452    maintenant      305
     fin     452    maintenant      306
     fin     452    maintenant      307
     fin     452    maintenant      308
     fin     452    maintenant      309
-    fin     452    maintenant      310
     fin     452    maintenant      311
     fin     452    maintenant      312
     fin     452    maintenant      313
@@ -326,9 +294,7 @@ Waiting for packets...
     fin     452    maintenant      320
     fin     452    maintenant      321
     fin     452    maintenant      322
-    fin     452    maintenant      323
     fin     452    maintenant      324
-    fin     452    maintenant      325
     fin     452    maintenant      326
     fin     452    maintenant      327
     fin     452    maintenant      328
@@ -362,26 +328,21 @@ Waiting for packets...
     fin     452    maintenant      356
     fin     452    maintenant      357
     fin     452    maintenant      358
-    fin     452    maintenant      359
     fin     452    maintenant      360
     fin     452    maintenant      361
     fin     452    maintenant      362
     fin     452    maintenant      363
     fin     452    maintenant      364
-    fin     452    maintenant      365
     fin     452    maintenant      366
     fin     452    maintenant      367
     fin     452    maintenant      368
     fin     452    maintenant      369
     fin     452    maintenant      370
-    fin     452    maintenant      371
     fin     452    maintenant      372
     fin     452    maintenant      373
     fin     452    maintenant      374
-    fin     452    maintenant      375
     fin     452    maintenant      376
     fin     452    maintenant      377
-    fin     452    maintenant      378
     fin     452    maintenant      379
     fin     452    maintenant      380
     fin     452    maintenant      381
@@ -400,9 +361,7 @@ Waiting for packets...
     fin     452    maintenant      394
     fin     452    maintenant      395
     fin     452    maintenant      396
-    fin     452    maintenant      397
     fin     452    maintenant      398
-    fin     452    maintenant      399
     fin     452    maintenant      400
     fin     452    maintenant      401
     fin     452    maintenant      402
@@ -450,7 +409,6 @@ Waiting for packets...
     fin     452    maintenant      444
     fin     452    maintenant      445
     fin     452    maintenant      446
-    fin     452    maintenant      447
     fin     452    maintenant      448
     fin     452    maintenant      449
     fin     452    maintenant      450
@@ -458,10 +416,63 @@ Waiting for packets...
     fin     452    maintenant      452
     fin     452    maintenant      453
     fin     452    maintenant      454
+          je peux pas decoder
+    fin     452    maintenant      456
+    fin     452    maintenant      457
+    fin     452    maintenant      459
+    fin     452    maintenant      460
+    fin     452    maintenant      461
+    fin     452    maintenant      462
+    fin     452    maintenant      463
+    fin     452    maintenant      464
+    fin     452    maintenant      465
+    fin     452    maintenant      466
+    fin     452    maintenant      467
+    fin     452    maintenant      468
+    fin     452    maintenant      469
+    fin     452    maintenant      470
+    fin     452    maintenant      471
+    fin     452    maintenant      472
+    fin     452    maintenant      473
+    fin     452    maintenant      474
+    fin     452    maintenant      475
+    fin     452    maintenant      476
+    fin     452    maintenant      477
+    fin     452    maintenant      478
+    fin     452    maintenant      480
+    fin     452    maintenant      481
+    fin     452    maintenant      482
+    fin     452    maintenant      483
+    fin     452    maintenant      484
+    fin     452    maintenant      485
+    fin     452    maintenant      486
+    fin     452    maintenant      487
+    fin     452    maintenant      488
+    fin     452    maintenant      489
+    fin     452    maintenant      490
+    fin     452    maintenant      491
+    fin     452    maintenant      492
+    fin     452    maintenant      493
+    fin     452    maintenant      494
+    fin     452    maintenant      495
+          je peux pas decoder
+    fin     452    maintenant      496
+    fin     452    maintenant      497
+    fin     452    maintenant      498
+    fin     452    maintenant      499
+    fin     452    maintenant      500
           je decode
 
-Successfuint lly decoded block: 0 (in 2347 milliseconds)
+Waiting for packets...
+    fin     1    maintenant      501
+    fin     1    maintenant      502
+    fin     1    maintenant      503
+    fin     1    maintenant      504
+    fin     1    maintenant      505
+          je decode
+
+Successfuint lly decoded block: 0 (in 5106 milliseconds)
            envoie ACK 1 bon
-nb reiceive packets: 454
-0.0
-Delai total d’envoi du message : 230217
+nb reiceive packets: 505
+9.955752
+Delai total d’envoi du message : 24635

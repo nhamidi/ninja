@@ -1,0 +1,103 @@
+#!/bin/bash 
+rm result/recept_result_*
+rm result/rapport_test1_*
+#rm result/resultat_bis*
+
+for ((i=1 ; i<20 ; i++))
+    do 
+    
+    
+    
+echo "$i"
+
+
+
+
+
+
+
+#Perte de 10% Redondance de 5%
+#java Receiver_multicast /home/tai/Bureau/test0_6.jpg 0 239.255.80.84 5033 0 7 1.05 >result/rapport_test0.txt &
+java Receiver_multicast /home/tai/Bureau/test1_6.jpg 0 239.255.80.84 5033 10 7 1.05 >result/rapport_test1_2.txt &
+java Sender_multicast /home/tai/Bureau/image_test2.jpg 2 239.255.80.84 5033 1 1.05 true >> result/resultat_bis2.txt &
+
+#Perte de 10% Redondance de 10%
+#java Receiver_multicast /home/tai/Bureau/test0_7.jpg 0 239.255.80.84 5036 0 7 1.10 >result/rapport_test0.txt &
+java Receiver_multicast /home/tai/Bureau/test1_7.jpg 0 239.255.80.84 5036 10 7 1.10 >result/rapport_test1_3.txt &
+java Sender_multicast /home/tai/Bureau/image_test2.jpg 2 239.255.80.84 5036 1 1.10 true >> result/resultat_bis3.txt &
+
+
+#Retard d'un ACK récepteur (4sec) 10% perte avec relance 2%
+#java Receiver_multicast /home/tai/Bureau/test0_3.jpg 0 239.255.80.84 5014 0 7 1.02 >rapport_test0.txt &
+#java Receiver_multicast /home/tai/Bureau/test1_3.jpg 0 239.255.80.84 5014 10 3 1.02 >rapport_test1_5.txt &
+#java Sender_multicast /home/tai/Bureau/image_test2.jpg 2 239.255.80.84 5014 2 1.02 true >> resultat_bis5.txt &
+
+
+
+#Perte de 10% Redondance de 15%
+#java Receiver_multicast /home/tai/Bureau/test0_8.jpg 0 239.255.80.84 5039 0 7 1.15 >result/rapport_test0.txt &
+java Receiver_multicast /home/tai/Bureau/test1_8.jpg 0 239.255.80.84 5039 10 7 1.15 >result/rapport_test1_4.txt &
+java Sender_multicast /home/tai/Bureau/image_test2.jpg 2 239.255.80.84 5039 1 1.15 true >> result/resultat_bis4.txt &
+
+#Perte de 10% Redondance de 0%
+#java Receiver_multicast /home/tai/Bureau/test0_5.jpg 0 239.255.80.84 5030 0 7 1.00 >result/rapport_test0.txt &
+java Receiver_multicast /home/tai/Bureau/test1_5.jpg 0 239.255.80.84 5030 10 7 1.00 >result/rapport_test1_1.txt &
+java Sender_multicast /home/tai/Bureau/image_test2.jpg 2 239.255.80.84 5030 1 1.00 true >> result/resultat_bis1.txt 
+
+
+
+
+
+# Reporte les resultats si bon
+for ((k=1 ; k<6 ; k++))
+    do 
+p=$k+4
+#resultat=$(cmp /home/tai/Bureau/test0_$k.txt /home/tai/Bureau/test1_$k.txt)
+#if [ -z "$resultat" ]; then
+#	cat resultat_bis$k.txt >> resultat_ter$k.txt
+#else
+#	rm resultat_bis$k.txt
+#fi
+
+
+rm -f /home/tai/Bureau/test0_$p.jpg /home/tai/Bureau/test1_$p.jpg
+
+grep "^[0-9]" result/rapport_test1_$k.txt >> result/recept_result_$k.txt
+
+done
+
+
+#Nettoie
+kill -9 $(ps aux | grep '[j]ava Receiver_multicast' | awk '{print $2}')
+kill -9 $(ps aux | grep '[j]ava Sender_multicast' | awk '{print $2}')
+
+
+done
+clear
+
+
+gnuplot << EOF
+ set terminal png truecolor    
+set key inside left top vertical Right noreverse enhanced autotitles box linetype -1 linewidth 1.000
+set output 'graph_lost_.png'
+set size 0.8,0.8
+set title "Simulation for 8456octets file with 10 % of lost "
+set ylabel "Overhead (in %)"
+set xlabel 'Redundancy Ratio in %'
+
+set autoscale x
+set autoscale y
+set key on outside right bmargin box title 'Title'
+plot "/home/tai/workspace/stage_pfe/bin/result/graph.txt" title 'Experimental Over-head' with linespoints, "/home/tai/workspace/stage_pfe/bin/result/graph_theo.txt" title 'Theoretical lost' with linespoints,  "/home/tai/workspace/stage_pfe/bin/result/graph_explost.txt" title 'Experimental lost' with linespoints
+  
+EOF
+#./rapport.sh
+
+
+
+
+
+
+
+
+

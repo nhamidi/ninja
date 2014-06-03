@@ -44,7 +44,7 @@ public class Sender_multicast {
     }
     
     public static void main(String[] args) throws Exception {
-	if ( args.length != 6 ) {
+	if ( args.length != 7 ) {
 	    StringBuilder s = new StringBuilder();
 	    s.append("Usage: \n");
 	    s.append("    java -jar Sender.jar pathToFile expectedLoss overhead destIP portNumber\n");
@@ -54,6 +54,7 @@ public class Sender_multicast {
 	    s.append("\n        - portNumber  : the port the receiver will be listening on.");
 	    s.append("\n        - nb of recv  : the number of receivers will be listening.");
 	    s.append("\n        - redondance  : Para de test.");
+	    s.append("\n        - historic    : if you want historic.");
 	    
 	    System.out.println(s.toString());
 	    System.exit(1);
@@ -63,6 +64,7 @@ public class Sender_multicast {
 	 * Test on parameters
 	 */
 	double redondance = Double.valueOf(args[5]);
+	Boolean historique = Boolean.valueOf(args[5]);
 	// open file and convert to bytes
 	String fileName = args[0];
 	File file = new File(fileName);
@@ -128,7 +130,7 @@ public class Sender_multicast {
 	    System.exit(-1);
 	}
 	
-	Recepteur_thread_multi reception_thread = new Recepteur_thread_multi(destPort + 1, destIP, nb_of_recv);
+	Recepteur_thread_multi reception_thread = new Recepteur_thread_multi(destPort + 1, destIP, nb_of_recv,historique);
 	
 	/**
 	 * End of the tests on the parameter
@@ -221,12 +223,9 @@ public class Sender_multicast {
 		try {
 		    // //////////////////////////////////////////////////////////
 		    // serialize and send each encoded symbol
-		    
-		    // //////////////////////////désequencement ACK
-		    // int k = Kt-10;
-		    // int k = Kt;
+
 		    int k = (int) Math.round((float) Kt * redondance) + 1;
-		    // System.out.println("                                                    "+k);
+		   //  System.out.println("                                                    "+k);
 		    
 		    for (int i = 0; i < no_symbols; i++) {
 			
@@ -249,10 +248,9 @@ public class Sender_multicast {
 			byte[] packet_id = { 0, 0, 0, 0 };
 			byte[] serialized_data_with_length = new byte[serialized_data.length + 2 * size_int];
 			nb_packet++;
-			// System.out.println("                                 lolllllllllllllllllll                            "+i);
+			
 			if ( i > k ) {
-			    // System.out.println("lolllllllllllllllllll                            "+i);
-			    // System.out.println("                            "+k);
+			    
 			    byte_array = intToByteArray(FLAG_PUSH);
 			    packet_id = intToByteArray(ID_PACKET);
 			    
@@ -276,7 +274,7 @@ public class Sender_multicast {
 			    // reception_thread.get_number_of_packets()*
 			    // redondance);
 			    k = k + reception_thread.get_number_of_packets();
-			     System.out.println("   j'ai fini                         "+k);
+			    // System.out.println("   j'ai fini                         "+k);
 			    reception_thread.reset_number_of_packets();
 			    
 			} else {
@@ -289,7 +287,7 @@ public class Sender_multicast {
 			    
 			    DatagramPacket sendPacket = new DatagramPacket(serialized_data_with_length, serialized_data_with_length.length, destIP, destPort);
 			    clientSocket.send(sendPacket);
-			     Thread.sleep(500);
+			     Thread.sleep(34);
 			    //Thread.sleep(1);
 			}
 		    }
