@@ -1,77 +1,79 @@
-#!/bin/bash 
-
-#faire un truc bien pour ce truc de merde
-
+#!/bin/bash -x
 #liste 
-
 #pwd pour les noms de dossier pas oublier le / final
-
 #resdir=result
 #mkdir -p $resdir
+###############  Test  ###############
+#initialise the variable 
+current_file=$(pwd)
+result_file=result
+simulation_file=simulation
 
-for ((t=1 ; t<6 ; t++))
-    do 
+graph_file=graph
+
+
+#clean for a new simulation
+rm -rf $current_file/$result_file/*
+rm -rf $current_file/$graph_file/*
 
 
 
 
-rm result/recept_result_his_*
-rm result/rapport_test1_*
-#rm result/resultat_bis_$t*
+#create the file
+mkdir -p $current_file/$result_file
+mkdir -p $current_file/$simulation_file
+mkdir -p $current_file/$graph_file
 
-for ((i=1 ; i<101 ; i++))
-    do 
+
+######################################
+
+
+
+
+######################################
+
+
+##########  Simulation  ##############
+file_name=('test1_1.jpg' 'test1_2.jpg' 'test1_3.jpg' 'test1_4.jpg')
+port_simul=('5033' '5036' '5039' '5030')
+redondance=('1.00' '1.05' '1.10' '1.15')
+rapport_test=('rapport_test1_1.txt' 'rapport_test1_2.txt' 'rapport_test1_3.txt' 'rapport_test1_4.txt')
+resultat=('resultat_bis1.txt' 'resultat_bis2.txt' 'resultat_bis3.txt' 'resultat_bis4.txt' )
+historic=('true' 'true' 'true' 'true')
+recep_lost=('recept_result_1' 'recept_result_2' 'recept_result_3' 'recept_result_4')
+file_simulation='/home/tai/Bureau/image_test2.jpg'
+
+
+#for ((i=1 ; i<2 ; i++))
+#    do 
     
-redlist=(0 5 10 15 20 25 30 35 40 45 50 55 60)
+	for ((j=0 ; j<4 ; j++))
+	    do 
+		java Receiver_multicast "$current_file/$simulation_file/${file_name[$j]}" 0 239.255.80.84 ${port_simul[$j]} 10 7 ${redondance[$j]} > "$current_file/$result_file/${rapport_test[$j]}" &
+		java Sender_multicast $file_simulation 2 239.255.80.84 ${port_simul[$j]} 1 ${redondance[$j]} ${historic[$j]} >> $current_file/$result_file/${resultat[$j]} 
 
 
-for r in ${redlist[@]} ; do
-case $t in
-	 
-	 1 )
-	 
-	  ;;
-	    4 )
-		;;
-	esac
+		grep "^[0-9]" "$current_file/$result_file/${rapport_test[$j]}" >> "$current_file/$result_file/${recep_lost[$j]}"
 
 
-/home/tai
 
+	done
 
-# Reporte les resultats si bon
-for ((k=1 ; k<6 ; k++))
-    do 
-p=$k+4
-
-
-rm -f /home/tai/Bureau/test0_$p.jpg /home/tai/Bureau/test1_$p.jpg
-
-grep "^[0-9]" result/rapport_test1_$k.txt >> result/recept_result_his_$k.txt
-
-done
-
+rm -rf "$current_file/$simulation_file/*"
 
 #Nettoie
 kill -9 $(ps aux | grep '[j]ava Receiver_multicast' | awk '{print $2}')
 kill -9 $(ps aux | grep '[j]ava Sender_multicast' | awk '{print $2}')
 
-
-done
-clear
+#done
 
 
-#Clean 
-rm /home/tai/workspace/stage_pfe/bin/result/his_graph.txt
-rm /home/tai/workspace/stage_pfe/bin/result/his_graph_theo.txt
-rm /home/tai/workspace/stage_pfe/bin/result/his_graph_explost.txt
-rm /home/tai/workspace/stage_pfe/bin/result/his_graph_ack.txt
-rm /home/tai/workspace/stage_pfe/bin/result/his_delai_ref.txt
-rm /home/tai/workspace/stage_pfe/bin/result/his_delai_bad.txt
-rm /home/tai/workspace/stage_pfe/bin/result/his_delai_dif.txt
+######################################
 
 
 
+
+##########  Get result  ##############
 
 
 
@@ -80,54 +82,35 @@ rm /home/tai/workspace/stage_pfe/bin/result/his_delai_dif.txt
 
 num=0
 max=1000
-for ((j=1 ; j<5 ; j++))
-    do 
-    num=`echo $(cat /home/tai/workspace/stage_pfe/bin/result/resultat_bis_$t$j.txt | wc -l) | bc -l`
+for ((j=0 ; j<5 ; j++))
+	do 
+	num=`echo $(cat $current_file/$result_file/${resultat[$j]} | wc -l) | bc -l`
 
-if [ $num -lt $max ] ; then
-max=$num
+	if [ $num -lt $max ] ; then
+		max=$num
 
-fi
+	fi
 done
 max=`echo $max/6 | bc `
-echo "                                                         $max"
 
 Calcul_lost() 
 {
-lost=0
-q=$1
-#u_0=$2
-u_0=`echo $2*$3 | bc -l`
-for ((o=1 ; o<4 ; o++))
-    do 
-
-    lost=`echo $lost+$u_0*$q^$o | bc -l`
-    
-    
-    done
-    lost_2=`echo $lost/452 | bc -l`
-    lost_2=`echo $lost_2*100 | bc -l`
-    echo $lost_2
-#return $lost_2
+	lost=0
+	q=$1
+	#u_0=$2
+	u_0=`echo $2*$3 | bc -l`
+	for ((o=1 ; o<4 ; o++))
+	do 
+		lost=`echo $lost+$u_0*$q^$o | bc -l`
+	done
+	lost_2=`echo $lost/452 | bc -l`
+	lost_2=`echo $lost_2*100 | bc -l`
+	echo $lost_2
 }
 
-#j=`echo Calcul_lost 0.1 452 | bc -l`
-#j=$(Calcul_lost 0.1 452)
-#j=#?
-#echo $j
 
-
-
-
-
-for ((o=1 ; o<5 ; o++))
-	    do 
-	    echo "              "
-	echo "$o            "
-	echo "                                                         $max"
-
-
-
+for ((j=0 ; j<5 ; j++))
+do
 	i=1
 	k=0
 	var1=0
@@ -138,62 +121,47 @@ for ((o=1 ; o<5 ; o++))
 	var6=0
 	while read line  
 		do   
-
 		if [ $k -gt $max ]
-		then break
+			then break
 		fi
-
-
-
-			if [ $i -eq 1 ]
-			then
-				k=$(($k+1))
+		case $i in
+			1 ) 	k=$(($k+1))
 				var1=$(($var1+$line))
-				i=$(($i+1))
-			 
-			elif [ $i -eq 2 ]
-			then
-				 var2=`echo $var2+$line | bc -l`
-				 
-				i=$(($i+1)) 
+				i=$(($i+1));;
 
-			elif [ $i -eq 3 ]
-			then
-				var3=$(($var3+$line))
-				i=$(($i+1)) 
+			2 )	 var2=`echo $var2+$line | bc -l`
+				i=$(($i+1));;
 
-			elif [ $i -eq 4 ]
-			then
-				var4=$(($var4+$line))
-				i=$(($i+1))
+			3 )	 var3=`echo $var3+$line | bc -l`
+				i=$(($i+1));;
 
-			elif [ $i -eq 5 ]
-			then
-				var5=$(($var5+$line))
-				i=$(($i+1))
-			elif [ $i -eq 6 ]
-			then
-				var6=`echo $var6+$line | bc -l`
-				i=1
-			fi
+			4 )	 var4=`echo $var4+$line | bc -l`
+				i=$(($i+1));;
 
-		done < /home/tai/workspace/stage_pfe/bin/result/resultat_bis_$t$o.txt
-	#done < /home/tai/workspace/stage_pfe/bin/resultat.txt
+			5 )	 var5=`echo $var5+$line | bc -l`
+				i=$(($i+1));;
+
+			6 )	 var5=`echo $var6+$line | bc -l`
+				i=1;;
+		esac	
+	done < $current_file/$result_file/${resultat[$j]}
+	###################
+
+
 
 
 	var7=1
 	compteur=0
-		while read line  
-		do 
-		
+	while read line  
+	do 
+
 		if [ $compteur -gt $max ]
-		then break
+			then break
 		fi
-			compteur=$(($compteur+1))
-			var7=`echo $var7+$line | bc -l`
+		compteur=$(($compteur+1))
+		var7=`echo $var7+$line | bc -l`
 
-		done < /home/tai/workspace/stage_pfe/bin/result/recept_result_his_$o.txt
-
+	done < "$current_file/$result_file/${recep_lost[$j]}"
 
 	var1=$(($var1/$max))
 	var2=`echo $var2/$max | bc -l` 
@@ -204,71 +172,56 @@ for ((o=1 ; o<5 ; o++))
 	var6=`echo $var6*100 | bc -l` 
 	var7=`echo $var7/$compteur | bc -l` 
 
-	echo "Over-head total(byte) : $var1"
-	echo "Over-head total(%) : $var2"
-	echo "Perte pour le mauvais (%) : $var7"
-	echo "Nombre total d’ACK (vu émetteur) : $var3"
-	echo "Délai total d’envoi du message bon : $var4"
-	echo "Délai total d’envoi du message mauvais : $var5"
-	echo "Pourcentage de délai : $var6"
 
+graph_name=('graph_over_head.txt' 'graph_exp_lost.txt' 'graph_ack.txt' 'graph_delai_ref.txt' 'graph_delai_bad.txt' 'graph_dif.txt')
+var_name=('$var2' '$var7' '$var3' '$var4' '$var5' '$var6')
+case $j in
+	    1 )
+	    	for ((k=0 ; k<6 ; k++))
+	    	do
+		echo  "0 ${var_name[$k]}" >> "$current_file/$graph_file/${graph_name[$k]}" 
+		done ;;
+	    2 )
+		for ((k=0 ; k<6 ; k++))
+	    	do
+		echo  "5 ${var_name[$k]}" >> "$current_file/$graph_file/${graph_name[$k]}" 
+		done ;;
+	    3 )
+		for ((k=0 ; k<6 ; k++))
+	    	do
+		echo  "10 ${var_name[$k]}" >> "$current_file/$graph_file/${graph_name[$k]}" 
+		done ;;
+	    4 )
+		for ((k=0 ; k<6 ; k++))
+	    	do
+		echo  "15 ${var_name[$k]}" >> "$current_file/$graph_file/${graph_name[$k]}" 
+		done ;;
+	esac
 
 
 	j_1=$(Calcul_lost 0.1 452 1.00)
 	j_2=$(Calcul_lost 0.1 452 1.05)
 	j_3=$(Calcul_lost 0.1 452 1.10)
 	j_4=$(Calcul_lost 0.1 452 1.15)
-
 	
-	case $o in
-	    1 )
-		echo  "0 $var2" >> /home/tai/workspace/stage_pfe/bin/result/his_graph.txt
-		echo  "0 $var7" >> /home/tai/workspace/stage_pfe/bin/result/his_graph_explost.txt
-		echo  "0 $var3" >> /home/tai/workspace/stage_pfe/bin/result/his_graph_ack.txt
-		echo  "0 $var4" >> /home/tai/workspace/stage_pfe/bin/result/his_delai_ref.txt
-		echo  "0 $var5" >> /home/tai/workspace/stage_pfe/bin/result/his_delai_bad.txt
-		echo  "0 $var6" >> /home/tai/workspace/stage_pfe/bin/result/his_delai_dif.txt
-		echo  "0 $j_1" >> /home/tai/workspace/stage_pfe/bin/result/his_graph_theo.txt ;;
-	    2 )
-		echo  "5 $var2" >> /home/tai/workspace/stage_pfe/bin/result/his_graph.txt 
-		echo  "5 $var7" >> /home/tai/workspace/stage_pfe/bin/result/his_graph_explost.txt 
-		echo  "5 $var3" >> /home/tai/workspace/stage_pfe/bin/result/his_graph_ack.txt
-		echo  "5 $var4" >> /home/tai/workspace/stage_pfe/bin/result/his_delai_ref.txt
-		echo  "5 $var5" >> /home/tai/workspace/stage_pfe/bin/result/his_delai_bad.txt
-		echo  "5 $var6" >> /home/tai/workspace/stage_pfe/bin/result/his_delai_dif.txt
-		echo  "5 $j_2" >> /home/tai/workspace/stage_pfe/bin/result/his_graph_theo.txt;;
-	    3 )
-		echo  "10 $var2" >> /home/tai/workspace/stage_pfe/bin/result/his_graph.txt 
-		echo  "10 $var7" >> /home/tai/workspace/stage_pfe/bin/result/his_graph_explost.txt
-		echo  "10 $var3" >> /home/tai/workspace/stage_pfe/bin/result/his_graph_ack.txt
-		echo  "10 $var4" >> /home/tai/workspace/stage_pfe/bin/result/his_delai_ref.txt
-		echo  "10 $var5" >> /home/tai/workspace/stage_pfe/bin/result/his_delai_bad.txt
-		echo  "10 $var6" >> /home/tai/workspace/stage_pfe/bin/result/his_delai_dif.txt
-		echo  "10 $j_3" >> /home/tai/workspace/stage_pfe/bin/result/his_graph_theo.txt;;
-	    4 )
-		echo  "15 $var2" >> /home/tai/workspace/stage_pfe/bin/result/his_graph.txt 
-		echo  "15 $var7" >> /home/tai/workspace/stage_pfe/bin/result/his_graph_explost.txt
-		echo  "15 $var3" >> /home/tai/workspace/stage_pfe/bin/result/his_graph_ack.txt
-		echo  "15 $var4" >> /home/tai/workspace/stage_pfe/bin/result/his_delai_ref.txt
-		echo  "15 $var5" >> /home/tai/workspace/stage_pfe/bin/result/his_delai_bad.txt
-		echo  "15 $var6" >> /home/tai/workspace/stage_pfe/bin/result/his_delai_dif.txt
-		echo  "15 $j_4" >> /home/tai/workspace/stage_pfe/bin/result/his_graph_theo.txt;;
-	esac
-
-
-
-
-
-
-
-
-	echo $k
-
-done
+	echo  "0 $j_1" >> "$current_file/$graph_file/graph_theo.txt"
+	echo  "5 $j_2" >> "$current_file/$graph_file/graph_theo.txt"
+	echo  "10 $j_3" >> "$current_file/$graph_file/graph_theo.txt"
+	echo  "15 $j_4" >> "$current_file/$graph_file/graph_theo.txt"
 
 
 
 done
+###################
+
+
+
+
+
+
+
+
+
 
 
 

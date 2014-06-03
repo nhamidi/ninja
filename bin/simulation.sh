@@ -26,14 +26,6 @@ java Sender_multicast /home/tai/Bureau/image_test2.jpg 2 239.255.80.84 5033 1 1.
 java Receiver_multicast /home/tai/Bureau/test1_7.jpg 0 239.255.80.84 5036 10 7 1.10 >result/rapport_test1_3.txt &
 java Sender_multicast /home/tai/Bureau/image_test2.jpg 2 239.255.80.84 5036 1 1.10 true >> result/resultat_bis3.txt &
 
-
-#Retard d'un ACK récepteur (4sec) 10% perte avec relance 2%
-#java Receiver_multicast /home/tai/Bureau/test0_3.jpg 0 239.255.80.84 5014 0 7 1.02 >rapport_test0.txt &
-#java Receiver_multicast /home/tai/Bureau/test1_3.jpg 0 239.255.80.84 5014 10 3 1.02 >rapport_test1_5.txt &
-#java Sender_multicast /home/tai/Bureau/image_test2.jpg 2 239.255.80.84 5014 2 1.02 true >> resultat_bis5.txt &
-
-
-
 #Perte de 10% Redondance de 15%
 #java Receiver_multicast /home/tai/Bureau/test0_8.jpg 0 239.255.80.84 5039 0 7 1.15 >result/rapport_test0.txt &
 java Receiver_multicast /home/tai/Bureau/test1_8.jpg 0 239.255.80.84 5039 10 7 1.15 >result/rapport_test1_4.txt &
