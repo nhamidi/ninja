@@ -313,12 +313,14 @@ public class Receiver_multicast {
 		    // If the packets is lost
 		    ////////////////////////////////////////////
 		    Thread.sleep(30);
-		    if ( packet_is_lost(canalloss) ) {
-			re_send_for_a_lost++;
-			recv--;
-			compteur_utils_packet--;
-			continue;
-		    }
+		    ////////////////////////////////////////////
+		    
+		    
+		    
+		    
+		    
+		    
+		    //////////////////////////////
 		    packetData = new byte[receivePacket.getData().length - size_int * 2];
 		    
 		    byte[] flag_push = new byte[size_int];
@@ -330,7 +332,13 @@ public class Receiver_multicast {
 		    
 		    id_data_packet = byte_array_to_int(data_id);
 		    flag = byte_array_to_int(flag_push);
-		    
+		    System.out.println("                                                  "+flag);
+		    if ( packet_is_lost(canalloss) ) {
+			re_send_for_a_lost++;
+			recv--;
+			compteur_utils_packet--;
+			continue;
+		    }
 		    
 		    if ( ((nb_of_utils_packet - 4) < compteur_utils_packet) && para_test == 6 ) {
 			para_test++;
@@ -340,7 +348,7 @@ public class Receiver_multicast {
 		    }
 		    
 		    packetData = parameter_test(packetData, para_test);
-		    System.out.println("    fin     "+nb_of_utils_packet+"    maintenant      "+ compteur);
+		    
 		    
 		    if ( flag == FLAG_PUSH && para_test == 2 ) {
 			System.out.println("          je decode");

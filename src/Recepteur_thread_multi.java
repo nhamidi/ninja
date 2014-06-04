@@ -97,9 +97,13 @@ public class Recepteur_thread_multi extends Thread {
     public int get_nb_ack() {
 	return this.nb_ack;
     }
+    public void set_time_simu() {
+	this.before = System.currentTimeMillis();
+    }
+    
     
     public void run() {
-	before = System.currentTimeMillis();
+	
 	
 	while (true) {
 	    byte[] receiveData = new byte[51024];

@@ -161,15 +161,6 @@ public class Sender_multicast {
 	// partition the data into source blocks
 	source_blocks = encoder.partition();
 	no_blocks = source_blocks.length;
-	// System.out.println("# source blocks: " + no_blocks);
-	
-	/*
-	 * try { System.out .println("\nPress 'Enter' to continue and start sending the file."); System.in.read(); } catch (IOException e2) {
-	 * e2.printStackTrace(); }
-	 */
-	
-	// boolean test1=true;
-	// creation of the listenning socket in a thread
 	int nb_packet = -2;
 	reception_thread.start();
 	
@@ -193,23 +184,14 @@ public class Sender_multicast {
 	    
 	    // allocate memory for all the encoded symbols
 	    encoded_symbols = new EncodingPacket[no_blocks];
-	    // EncodingPacket[] encoded_symbols_reparation = new
-	    // EncodingPacket[no_blocks];
-	    /*
-	     * encode each block and send the respective encoded symbols
-	     */
+
 	    for (int block = 0; block < no_blocks; block++) {
 		// the block we'll be encoding+sending
 		SourceBlock sb = source_blocks[block];
 		if ( !reception_thread.get_status_end_loop() ) {
 		    break;
 		}
-		
-		// /////////////////////////////////////////////////////
-		// System.out.println("Sending block: " + block + " K: "
-		// + sb.getK());
-		// ///////////////////////////////////////////////////////////////////////////////:problem
-		// encode 'sb'
+
 		encoded_symbols[block] = encoder.encode(sb);
 		
 		EncodingSymbol[] symbols = encoded_symbols[block].getEncoding_symbols();
@@ -225,7 +207,8 @@ public class Sender_multicast {
 		    // serialize and send each encoded symbol
 
 		    int k = (int) Math.round((float) Kt * redondance) + 1;
-		   //  System.out.println("                                                    "+k);
+		    
+		    reception_thread.set_time_simu();
 		    
 		    for (int i = 0; i < no_symbols; i++) {
 			
@@ -287,7 +270,7 @@ public class Sender_multicast {
 			    
 			    DatagramPacket sendPacket = new DatagramPacket(serialized_data_with_length, serialized_data_with_length.length, destIP, destPort);
 			    clientSocket.send(sendPacket);
-			     Thread.sleep(34);
+			     Thread.sleep(37);
 			    //Thread.sleep(1);
 			}
 		    }
