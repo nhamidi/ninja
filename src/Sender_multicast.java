@@ -271,7 +271,7 @@ public class Sender_multicast {
 			    DatagramPacket sendPacket = new DatagramPacket(serialized_data_with_length, serialized_data_with_length.length, destIP, destPort);
 			    clientSocket.send(sendPacket);
 			     Thread.sleep(37);
-			    //Thread.sleep(1);
+			    
 			}
 		    }
 		} catch (IOException e) {
@@ -294,11 +294,14 @@ public class Sender_multicast {
 	int total_overhead = (nb_packet - Kt) * 192;
 	float total_overhead_pourcent = 100 * ((float) total_overhead / (float) (Kt * 192));
 	nb_packet = nb_packet + reception_thread.get_nb_ack();
-	/*
-	 * System.out.println("Overhead : " + total_overhead + " octets soit :" + total_overhead_pourcent + "%"); System.out.println("Nombre total d’ACK : " +
-	 * reception_thread.get_nb_ack()); System.out.println("Delai total d’envoi au premie récepteur: " + reception_thread.get_time_1());
-	 * System.out.println("Delai total d’envoi : " + reception_thread.get_time_2());
-	 */
+	/////////////////// For the RTT
+	for (int i=0 ; i<=reception_thread.get_nb_ack();i++){
+	    Thread.sleep(500);
+	}
+	
+	
+	
+	
 	long time_2 = System.currentTimeMillis() - before;
 	System.out.println(total_overhead);
 	System.out.println(total_overhead_pourcent);

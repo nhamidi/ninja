@@ -1,132 +1,194 @@
+numéros receptionné       18
+numéros receptionné       27
+numéros receptionné       0
+numéros receptionné       1
+numéros receptionné       -2
+10752
+12.38938
+5
+21692
+21692
+0.0
+numéros receptionné       22
+numéros receptionné       2
+numéros receptionné       1
+numéros receptionné       -2
+6336
+7.300885
+4
+20724
+20724
+0.0
+numéros receptionné       30
+numéros receptionné       0
+numéros receptionné       1
+numéros receptionné       -2
+7872
+9.070797
+4
+21051
+21051
+0.0
+numéros receptionné       26
+numéros receptionné       0
+numéros receptionné       1
+numéros receptionné       -2
 7104
 8.185841
-5
-25214
-25214
-0.0
-8064
-9.292035
-5
-25439
-25439
-0.0
-9600
-11.061947
 4
-23188
-23188
+20939
+20939
 0.0
-7680
-8.849558
-5
-25341
-25341
-0.0
-6912
-7.964602
+numéros receptionné       30
+numéros receptionné       2
+numéros receptionné       1
+numéros receptionné       -2
+7872
+9.070797
 4
-22725
-22725
+21088
+21088
 0.0
-6144
-7.079646
-4
-22521
-22521
-0.0
-6912
-7.964602
-4
-22737
-22737
-0.0
-4800
-5.5309734
-4
-22298
-22298
-0.0
-6144
-7.079646
-4
-22465
-22465
-0.0
-7488
-8.628319
-4
-22868
-22868
-0.0
-7488
-8.628319
-5
-25307
-25307
-0.0
+numéros receptionné       17
+numéros receptionné       5
+numéros receptionné       0
+numéros receptionné       2
+numéros receptionné       -1
+numéros receptionné       -2
 7296
 8.40708
-4
-22754
-22754
+6
+23043
+23043
 0.0
+numéros receptionné       21
+numéros receptionné       1
+numéros receptionné       1
+numéros receptionné       -2
+6144
+7.079646
+4
+20696
+20696
+0.0
+numéros receptionné       26
+numéros receptionné       2
+numéros receptionné       1
+numéros receptionné       -2
+7104
+8.185841
+4
+20941
+20941
+0.0
+numéros receptionné       15
+numéros receptionné       -1
+numéros receptionné       -2
+4032
+4.6460176
+3
+22223
+22223
+0.0
+numéros receptionné       26
+numéros receptionné       2
+numéros receptionné       1
+numéros receptionné       -2
+7104
+8.185841
+4
+21158
+21158
+0.0
+numéros receptionné       21
+numéros receptionné       1
+numéros receptionné       1
+numéros receptionné       -2
+6144
+7.079646
+4
+20738
+20738
+0.0
+numéros receptionné       17
+numéros receptionné       0
+numéros receptionné       1
+numéros receptionné       -2
 5376
 6.19469
 4
-22426
-22426
+20589
+20589
 0.0
-6336
-7.300885
+numéros receptionné       18
+numéros receptionné       0
+numéros receptionné       1
+numéros receptionné       -2
+5568
+6.415929
 4
-22626
-22626
+20606
+20606
 0.0
-5952
-6.858407
-3
-24026
-24026
-0.0
-6528
-7.5221243
-4
-22838
-22838
-0.0
-6720
-7.743363
-4
-22815
-22815
-0.0
-7296
-8.40708
-4
-23249
-23249
-0.0
-4800
-5.5309734
-4
-22392
-22392
-0.0
-6336
-7.300885
-4
-22578
-22578
-0.0
-6528
-7.5221243
-4
-23007
-23007
-0.0
+numéros receptionné       25
+numéros receptionné       3
+numéros receptionné       1
+numéros receptionné       -2
 6912
 7.964602
 4
-22636
-22636
+20881
+20881
+0.0
+numéros receptionné       18
+numéros receptionné       1
+numéros receptionné       -1
+numéros receptionné       1
+numéros receptionné       -2
+6528
+7.5221243
+5
+22803
+22803
+0.0
+numéros receptionné       24
+numéros receptionné       1
+numéros receptionné       1
+numéros receptionné       -2
+6720
+7.743363
+4
+20869
+20869
+0.0
+numéros receptionné       21
+numéros receptionné       0
+numéros receptionné       1
+numéros receptionné       -1
+numéros receptionné       -2
+7104
+8.185841
+5
+22941
+22941
+0.0
+numéros receptionné       24
+numéros receptionné       1
+numéros receptionné       1
+numéros receptionné       -2
+6720
+7.743363
+4
+20857
+20857
+0.0
+numéros receptionné       17
+numéros receptionné       1
+numéros receptionné       1
+numéros receptionné       -2
+38016
+43.80531
+4
+247444
+247444
 0.0

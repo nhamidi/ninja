@@ -65,8 +65,8 @@ public class Emetteur_thread_multi extends Thread {
 	
 	message = new DatagramPacket(parameter_test(contenuMessage), contenuMessage.length, groupeIP, port);
 	
-	// Thread.sleep(1);
-	Thread.sleep(500);
+	
+	Thread.sleep(37);
 	socketEmission.send(message);
     }
 }

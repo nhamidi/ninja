@@ -238,6 +238,9 @@ public class Receiver_multicast {
 	int KL = KZ.get(1);
 	int KS = KZ.get(2);
 	int ZL = KZ.get(3);
+	System.out.println("                        ZL                    "+ZL);
+	System.out.println("                        KL                    "+KL);
+	System.out.println("                        KS                    "+KS);
 	
 	/**
 	 * built of the socket
@@ -245,6 +248,7 @@ public class Receiver_multicast {
 	 */
 	// sending_thread.start();
 	// create socket and wait for packets
+	int l=0;
 	int re_send_for_a_lost = 0;
 	int number_of_received_packets = 0;
 	
@@ -281,7 +285,6 @@ public class Receiver_multicast {
 		    // allocate some memory for receiving the packets
 		    if ( para_test == 5 && (nb_of_utils_packet - 2) >= compteur_utils_packet ) {
 			if ( (nb_of_utils_packet - 2) == compteur_utils_packet ) {
-			    // compteur_utils_packet=0;
 			    para_test++;
 			}
 			continue;
@@ -296,6 +299,7 @@ public class Receiver_multicast {
 		    serverSocket.setSoTimeout(reception_timer);
 		    try {
 			number_of_received_packets++;
+			l++;
 			serverSocket.receive(receivePacket);
 			// System.out.println("                 Socket ");
 			
@@ -398,18 +402,19 @@ public class Receiver_multicast {
 	    
 	    // order received packets
 	    int maxESI = -1;
-	    
-	    for (EncodingSymbol es : received_packets)
+	   
+	    for (EncodingSymbol es : received_packets){
+		
 		if ( es.getESI() > maxESI )
 		    maxESI = es.getESI();
-	    
+	    }
 	    Iterator<EncodingSymbol> it = received_packets.iterator();
 	    EncodingSymbol[][] aux = new EncodingSymbol[no_blocks][maxESI + 1];
+	    
 	    while (it.hasNext()) {
 		EncodingSymbol pack = it.next();
 		aux[pack.getSBN()][pack.getESI()] = pack;
 	    }
-	    
 	    /**
 	     * decoding
 	     */
@@ -424,7 +429,6 @@ public class Receiver_multicast {
 	    
 	    // for each block
 	    for (int sblock = 0; sblock < no_blocks; sblock++) {
-		//System.out.println("\nDecoding block: " + sblock);
 		try {
 		    // get the time before decoding
 		    
@@ -454,9 +458,7 @@ public class Receiver_multicast {
 		    int nb_packets_lost = Integer.parseInt(e.getMessage());
 		    compteur_utils_packet = 0;
 		    sending_thread.set_ACK_NACK(nb_packets_lost);
-		     nb_of_utils_packet = nb_packets_lost;
-		    // nb_packets_lost * redondance);
-		   // nb_of_utils_packet = (int) Math.round((float) nb_packets_lost * (1 + ((float) nb_packets_lost / (float) nb_of_utils_packet)));
+		    nb_of_utils_packet = nb_packets_lost;
 		    
 		    // re_send_for_a_lost=0;
 		    
@@ -515,8 +517,6 @@ public class Receiver_multicast {
 			    recep_thread.start();
 			    
 			    for (int u = 1; u < 4000; u++) {
-				// System.out.println("numéros affichés              "
-				// + recep_thread.get_number_of_packets());
 				if ( recep_thread.get_number_of_packets() == FLAG_PUSH ) {
 				    break;
 				}
@@ -538,6 +538,13 @@ public class Receiver_multicast {
 			    
 			}
 		    }
+		    /////////////////////////// RTT 
+		    for (int i = 1; i < l; i++) {
+		//	Thread.sleep(500);
+		    }
+		    
+		    
+		    
 		    long time = System.currentTimeMillis() - before_2;
 		    
 		    Files.write(file.toPath(), decoded_data);
