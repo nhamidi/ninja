@@ -508,8 +508,8 @@ Waiting for packets...
                                                   999999999
           je decode
 
-Successfuint lly decoded block: 0 (in 2140 milliseconds)
+Successfuint lly decoded block: 0 (in 2125 milliseconds)
            envoie ACK 1 bon
 nb reiceive packets: 499
-4.8672566
-Delai total d’envoi du message : 21047
+7.079646
+Delai total d’envoi du message : 21068

@@ -482,6 +482,15 @@ Waiting for packets...
                                                   86692
                                                   86692
                                                   86692
+                                                  86692
+                                                  86692
+                                                  86692
+                                                  86692
+                                                  86692
+                                                  86692
+                                                  86692
+                                                  86692
+                                                  86692
                                                   999999999
           je peux pas decoder
                                                   86692
@@ -499,8 +508,8 @@ Waiting for packets...
                                                   999999999
           je decode
 
-Successfuint lly decoded block: 0 (in 2172 milliseconds)
+Successfuint lly decoded block: 0 (in 2176 milliseconds)
            envoie ACK 1 bon
-nb reiceive packets: 485
-5.3097343
-Delai total d’envoi du message : 20677
+nb reiceive packets: 494
+7.079646
+Delai total d’envoi du message : 21034

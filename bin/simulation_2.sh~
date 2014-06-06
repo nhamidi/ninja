@@ -100,7 +100,7 @@ Calcul_lost()
 }
 #result_simu=('lost' 'overhead_octet' 'overhead_pourcent' 'nb_ack' 'time_good' 'time_bad' 'difference_time')
 
-for ((j=0 ; j<5 ; j++))
+for ((j=0 ; j<4 ; j++))
 do
 	i=1
 	k=0
@@ -118,27 +118,27 @@ do
 		case $i in
 			1 ) 	k=$(($k+1))
 				var1=$(($var1+$line))
-				echo "$line" >> "$current_file/$result_file/$result_file/${historic[0]}_overhead_octet.txt"
+				echo $line >> $current_file/$result_file/${historic[0]}_overhead_octet_$j.txt
 				i=$(($i+1));;
 
 			2 )	 var2=`echo $var2+$line | bc -l`
-				echo $line >> $current_file/$result_file/$result_file/${historic[0]}_overhead_pourcent.txt
+				echo $line >> $current_file/$result_file/${historic[0]}_overhead_pourcent_$j.txt
 				i=$(($i+1));;
 
 			3 )	 var3=`echo $var3+$line | bc -l`
-				echo $line >> $current_file/$result_file/$result_file/${historic[0]}_nb_ack.txt
+				echo $line >> $current_file/$result_file/${historic[0]}_nb_ack_$j.txt
 				i=$(($i+1));;
 
 			4 )	 var4=`echo $var4+$line | bc -l`
-				echo $line >> $current_file/$result_file/$result_file/${historic[0]}_time_good.txt
+				echo $line >> $current_file/$result_file/${historic[0]}_time_good_$j.txt
 				i=$(($i+1));;
 
 			5 )	 var5=`echo $var5+$line | bc -l`
-				echo $line >> $current_file/$result_file/$result_file/${historic[0]}_time_bad.txt
+				echo $line >> $current_file/$result_file/${historic[0]}_time_bad_$j.txt
 				i=$(($i+1));;
 
 			6 )	 var5=`echo $var6+$line | bc -l`
-				echo $line >> $current_file/$result_file/$result_file/${historic[0]}_difference_time.txt
+				echo $line >> $current_file/$result_file/${historic[0]}_difference_time_$j.txt
 				i=1;;
 		esac	
 	done < $current_file/$result_file/resultat_bis_${historic[0]}_$j.txt
@@ -179,31 +179,32 @@ do
 	var6=`echo $var6*100 | bc -l` 
 	var7=`echo $var7/$compteur | bc -l` 
 
+#    Calcul interval confience
 
 #graph_name=('graph_over_head.txt' 'graph_exp_lost.txt' 'graph_ack.txt' 'graph_delai_ref.txt' 'graph_delai_bad.txt' 'graph_dif.txt')
 #var_name=('var2' 'var7' 'var3' 'var4' 'var5' 'var6')
 case $j in
-	    1 )	echo  "0 $var2" >> $current_file/$graph_file/_${historic[0]}_graph_over_head.txt
+	    0 )	echo  "0 $var2" >> $current_file/$graph_file/_${historic[0]}_graph_over_head.txt
 	    	echo  "0 $var7" >> $current_file/$graph_file/_${historic[0]}_graph_exp_lost.txt
 	        echo  "0 $var3" >> $current_file/$graph_file/_${historic[0]}_graph_ack.txt
 	    	echo  "0 $var4" >> $current_file/$graph_file/_${historic[0]}_graph_delai_ref.txt
 	    	echo  "0 $var5" >> $current_file/$graph_file/_${historic[0]}_graph_delai_bad.txt
 	    	echo  "0 $var6" >> $current_file/$graph_file/_${historic[0]}_graph_dif.txt;;
-	    2 )
+	    1 )
 		echo  "5 $var2" >> $current_file/$graph_file/_${historic[0]}_graph_over_head.txt
 	    	echo  "5 $var7" >> $current_file/$graph_file/_${historic[0]}_graph_exp_lost.txt
 	        echo  "5 $var3" >> $current_file/$graph_file/_${historic[0]}_graph_ack.txt
 	    	echo  "5 $var4" >> $current_file/$graph_file/_${historic[0]}_graph_delai_ref.txt
 	    	echo  "5 $var5" >> $current_file/$graph_file/_${historic[0]}_graph_delai_bad.txt
 	    	echo  "5 $var6" >> $current_file/$graph_file/_${historic[0]}_graph_dif.txt;;
-	    3 )
+	    2 )
 		echo  "10 $var2" >> $current_file/$graph_file/_${historic[0]}_graph_over_head.txt
 	    	echo  "10 $var7" >> $current_file/$graph_file/_${historic[0]}_graph_exp_lost.txt
 	        echo  "10 $var3" >> $current_file/$graph_file/_${historic[0]}_graph_ack.txt
 	    	echo  "10 $var4" >> $current_file/$graph_file/_${historic[0]}_graph_delai_ref.txt
 	    	echo  "10 $var5" >> $current_file/$graph_file/_${historic[0]}_graph_delai_bad.txt
 	    	echo  "10 $var6" >> $current_file/$graph_file/_${historic[0]}_graph_dif.txt;;
-	    4 )
+	    3 )
 		echo  "15 $var2" >> $current_file/$graph_file/_${historic[0]}_graph_over_head.txt
 	    	echo  "15 $var7" >> $current_file/$graph_file/_${historic[0]}_graph_exp_lost.txt
 	        echo  "15 $var3" >> $current_file/$graph_file/_${historic[0]}_graph_ack.txt
