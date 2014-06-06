@@ -506,10 +506,17 @@ Waiting for packets...
                                                   86692
                                                   86692
                                                   999999999
+Socket bloquée
+                                                  86692
+                                                  86692
+                                                  86692
+                                                  86692
+                                                  999999999
           je decode
+                                               lol                  473
 
-Successfuint lly decoded block: 0 (in 2125 milliseconds)
+Successfuint lly decoded block: 0 (in 2098 milliseconds)
            envoie ACK 1 bon
-nb reiceive packets: 499
-7.079646
-Delai total d’envoi du message : 21068
+nb reiceive packets: 505
+5.7522125
+Delai total d’envoi du message : 22195

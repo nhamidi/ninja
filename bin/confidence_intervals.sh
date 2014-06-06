@@ -28,6 +28,7 @@ while read line
 		std_dev=`echo "$std_dev+($moy-$line)^2" | bc -l`	
 		compteur=$(($compteur+1))
 	done < $file
+	
 std_dev=`echo $std_dev/$compteur | bc -l`
 std_dev=`echo "sqrt($std_dev)" | bc -l`
 echo $std_dev

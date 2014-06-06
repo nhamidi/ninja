@@ -243,7 +243,7 @@ public class Sender_multicast {
 			    System.arraycopy(serialized_data, 0, serialized_data_with_length, size_int * 2, serialized_data.length);
 			    DatagramPacket sendPacket = new DatagramPacket(serialized_data_with_length, serialized_data_with_length.length, destIP, destPort);
 			    clientSocket.send(sendPacket);
-			    for (int u = 1; u < 5000; u++) {
+			    for (int u = 1; u < 4000; u++) {
 				if ( reception_thread.get_need_more() ) {
 				    
 				    reception_thread.set_need_more(false);

@@ -1,5 +1,5 @@
-#!/bin/bash -xv
-#rm resultat.txt
+#!/bin/bash -
+rm resultat.txt
 rm recept_result.txt
 for ((i=1 ; i<2 ; i++))
     do 

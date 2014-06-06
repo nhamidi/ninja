@@ -253,7 +253,8 @@ public class Receiver_multicast {
 	int number_of_received_packets = 0;
 	
 	boolean successfulDecoding = false;
-	Set<EncodingSymbol> received_packets = new HashSet<EncodingSymbol>();
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	Treatment treatment_thread = new Treatment(500);
 	//int nb_of_utils_packet = (int) Math.round((float) total_symbols * redondance);
 	 int nb_of_utils_packet =total_symbols;
 	
@@ -295,7 +296,7 @@ public class Receiver_multicast {
 		    
 		    DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 		    // set the time to wait before close the socket
-		    int reception_timer = 2000;
+		    int reception_timer = 1000;
 		    serverSocket.setSoTimeout(reception_timer);
 		    try {
 			number_of_received_packets++;
@@ -316,7 +317,7 @@ public class Receiver_multicast {
 		    }
 		    // If the packets is lost
 		    ////////////////////////////////////////////
-		    Thread.sleep(30);
+		    
 		    ////////////////////////////////////////////
 		    
 		    
@@ -343,6 +344,11 @@ public class Receiver_multicast {
 			compteur_utils_packet--;
 			continue;
 		    }
+		    // For the RTT
+		    
+		    treatment_thread.add_packet(packetData);
+		    
+		    
 		    
 		    if ( ((nb_of_utils_packet - 4) < compteur_utils_packet) && para_test == 6 ) {
 			para_test++;
@@ -380,14 +386,7 @@ public class Receiver_multicast {
 			continue;
 		    }
 		    
-		    ByteArrayInputStream bis = new ByteArrayInputStream(packetData);
-		    ObjectInput in = null;
-		    try {
-			in = new ObjectInputStream(bis);
-			received_packets.add((EncodingSymbol) in.readObject());
-		    } catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		    }
+		    
 		    
 		}
 		
@@ -402,7 +401,8 @@ public class Receiver_multicast {
 	    
 	    // order received packets
 	    int maxESI = -1;
-	   
+	    Set<EncodingSymbol> received_packets=treatment_thread.get_encoding_symbol();
+	    System.out.println("                                               lol                  "+received_packets.size());
 	    for (EncodingSymbol es : received_packets){
 		
 		if ( es.getESI() > maxESI )
@@ -539,11 +539,9 @@ public class Receiver_multicast {
 			}
 		    }
 		    /////////////////////////// RTT 
-		    for (int i = 1; i < l; i++) {
-		//	Thread.sleep(500);
-		    }
-		    
-		    
+		
+		    treatment_thread.set_end_boucle();
+		    treatment_thread.join();
 		    
 		    long time = System.currentTimeMillis() - before_2;
 		    

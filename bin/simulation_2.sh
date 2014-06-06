@@ -1,8 +1,4 @@
 #!/bin/bash -x
-#liste 
-#pwd pour les noms de dossier pas oublier le / final
-#resdir=result
-#mkdir -p $resdir
 ###############  Test  ###############
 #initialise the variable 
 current_file=$(pwd)
@@ -31,32 +27,30 @@ mkdir -p $current_file/$graph_file
 
 port_simul=('5033' '5036' '5039' '5030')
 redondance=('1.05' '1.10' '1.15' '1.00')
+#$j donne les redondances
 historic=('true')
 file_simulation='/home/tai/Bureau/image_test2.jpg'
 
 
-#for ((i=1 ; i<2 ; i++))
-#    do 
+for ((i=1 ; i<20 ; i++))
+    do 
     
 	for ((j=0 ; j<4 ; j++))
 	    do 
 		java Receiver_multicast "$current_file/$simulation_file/test1_$j.jpg" 0 239.255.80.84 ${port_simul[$j]} 5 7 ${redondance[$j]} > "$current_file/$result_file/rapport_test1_$j.txt" &
 		java Sender_multicast $file_simulation 2 239.255.80.84 ${port_simul[$j]} 1 ${redondance[$j]} ${historic[0]} >> "$current_file/$result_file/resultat_bis_${historic[0]}_$j.txt"
 
-
+		kill -9 $(ps aux | grep '[j]ava Receiver_multicast' | awk '{print $2}')
+		kill -9 $(ps aux | grep '[j]ava Sender_multicast' | awk '{print $2}')
+		
 		grep "^[0-9]" "$current_file/$result_file/rapport_test1_$j.txt" >> "$current_file/$result_file/recept_result_${historic[0]}_$j.txt"
 
-
+		
 
 	done
 
 rm -rf "$current_file/$simulation_file/*"
-
-#Nettoie
-kill -9 $(ps aux | grep '[j]ava Receiver_multicast' | awk '{print $2}')
-kill -9 $(ps aux | grep '[j]ava Sender_multicast' | awk '{print $2}')
-
-#done
+done
 
 
 ######################################
@@ -162,11 +156,11 @@ do
 	done < "$current_file/$result_file/recept_result_${historic[0]}_$j.txt"
 	
 	
-#	for ((i=0 ; i<7 ; i++))
-#	do
-#	./confidence_intervals.sh $current_file/$result_file/${historic[0]}_${result_simu[$i]}.txt >> $current_file/$graph_file/yo.txt	
-#	./confidence_intervals.sh $current_file/$result_file/${historic[0]}_${result_simu[$i]}.txt >> $current_file/$graph_file/${historic[0]}_${result_simu[$i]}.txt
-#	done
+	for ((i=0 ; i<7 ; i++))
+	do
+	./confidence_intervals.sh $current_file/$result_file/${historic[0]}_${result_simu[$i]}.txt >> $current_file/$graph_file/yo.txt	
+	./confidence_intervals.sh $current_file/$result_file/${historic[0]}_${result_simu[$i]}.txt >> $current_file/$graph_file/${historic[0]}_${result_simu[$i]}.txt
+	done
 	
 	
 
@@ -178,6 +172,13 @@ do
 	var6=`echo $var6/$max | bc -l` 
 	var6=`echo $var6*100 | bc -l` 
 	var7=`echo $var7/$compteur | bc -l` 
+	
+	
+	
+	
+	
+	
+	
 
 #    Calcul interval confience
 
@@ -232,35 +233,19 @@ echo  "15 $j_4" >> "$current_file/$graph_file/graph_theo.txt"
 
 ###################
 
-# Graph des courbes + interval confience 
 
 ##########  Draw graph  ##############
-
-
-##gnuplot << EOF
-## set terminal png truecolor    
-##set key inside left top vertical Right noreverse enhanced autotitles box linetype -1 linewidth 1.000
-##set output 'graph_lost_.png'
-##set size 0.8,0.8
-##set title "Simulation for 8456octets file with 10 % of lost "
-##set ylabel "Overhead (in %)"
-##set xlabel 'Redundancy Ratio in %'
-
-##set autoscale x
-##set autoscale y
-##set key on outside right bmargin box title 'Title'
-##plot "/home/tai/workspace/stage_pfe/bin/result/graph.txt" title 'Experimental Over-head' with linespoints, 
-  
-  
-  
+gnuplot << EOF
+ set terminal png truecolor    
+set key inside left top vertical Right noreverse enhanced autotitles box linetype -1 linewidth 1.000
+set output 'graph_lost_.png'
+set size 0.8,0.8
+set title "Simulation for 8456octets file with 10 % of lost "
+set ylabel "Overhead (in %)"
+set xlabel 'Redundancy Ratio in %'
+set autoscale x
+set autoscale y
+set key on outside right bmargin box title 'Title'
+plot "/home/tai/workspace/stage_pfe/bin/result/graph.txt" title 'Experimental Over-head' with linespoints, 
   ##yerrorlines
-
-
-
-##EOF
-
-
-
-
-
-
+EOF
