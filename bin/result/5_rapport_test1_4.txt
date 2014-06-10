@@ -1,0 +1,2 @@
+Listening for file /home/tai/workspace/stage_pfe/bin/simulation/test1_4.jpg (0 bytes) at port 5040
+

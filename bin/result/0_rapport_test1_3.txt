@@ -1,4 +1,4 @@
-Listening for file /home/tai/Bureau/test1.jpg (0 bytes) at port 5001
+Listening for file /home/tai/workspace/stage_pfe/bin/simulation/test1_3.jpg (0 bytes) at port 5030
 
 # source symbols: 452
 # source blocks: 1
@@ -460,8 +460,6 @@ Waiting for packets...
                                                   86692
                                                   86692
                                                   86692
-                                                  999999999
-          je peux pas decoder
                                                   86692
                                                   86692
                                                   86692
@@ -485,54 +483,16 @@ Waiting for packets...
                                                   86692
                                                   86692
                                                   86692
-                                                  86692
-                                                  86692
-                                                  86692
-                                                  86692
-                                                  86692
-                                                  86692
-                                                  86692
-                                                  86692
-                                                  86692
-                                                  86692
-                                                  86692
-                                                  86692
-                                                  86692
-                                                  86692
-                                                  999999999
-          je peux pas decoder
-                                                  86692
-                                                  86692
-                                                  86692
-                                                  86692
-                                                  999999999
-          je decode
-                                               lol                  441
-
-Waiting for packets...
-                                                  86692
-                                                  86692
-                                                  86692
-                                                  86692
-                                                  86692
-                                                  86692
-                                                  86692
-                                                  86692
-                                                  86692
-                                                  86692
-                                                  86692
-                                                  999999999
-          je peux pas decoder
                                                   86692
                                                   86692
                                                   86692
                                                   86692
                                                   999999999
           je decode
-                                               lol                  457
+                                               lol                  467
 
-Successfuint lly decoded block: 0 (in 2105 milliseconds)
+Successfuint lly decoded block: 0 (in 2147 milliseconds)
            envoie ACK 1 bon
-nb reiceive packets: 514
-9.955752
-Delai total d’envoi du message : 21562
+nb reiceive packets: 481
+0.0
+Delai total d’envoi du message : 20363
