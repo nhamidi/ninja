@@ -1,0 +1,15 @@
+Listening for file /home/tai/workspace/stage_pfe/bin/simulation/test1_9.jpg (0 bytes) at port 5050
+
+# source symbols: 452
+# source blocks: 1
+
+Waiting for packets...
+Socket bloquée
+          je decode
+                                    nb of packet pop'up: 487
+
+Successfuint lly decoded block: 0 (in 2391 milliseconds)
+           envoie ACK 1 bon
+nb reiceive packets: 550
+12.61062
+Delai total d’envoi du message : 24134

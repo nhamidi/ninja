@@ -10,11 +10,12 @@ import RQLibrary.EncodingSymbol;
 public class Treatment extends Thread {
     byte[][] matrice;
     long[] temps = new long[1000];
-    private static final Set<EncodingSymbol> received_packets = new HashSet<EncodingSymbol>() ;
+    private final Set<EncodingSymbol> received_packets = new HashSet<EncodingSymbol>();
     int RTT;
     boolean start;
     boolean boucle;
     int nb;
+    
     
     Treatment(int rtt) {
 	
@@ -23,27 +24,31 @@ public class Treatment extends Thread {
 	for (int i = 0; i < temps.length; i++) {
 	    temps[i] = 0;
 	}
-	nb=0;
-	start=true;
-	boucle=true;
+	nb = 0;
+	start = true;
+	boucle = true;
 	start();
 	
     }
+    int get_nb() {
+	return this.nb;
+    }
     
-    void set_end_boucle(){
-	boucle=false;
+    void set_end_boucle() {
+	boucle = false;
     }
     
     public void run() {
+	// look and compare all time if > RTT pop it
 	while (boucle) {
 	    for (int i = 0; i < temps.length; i++) {
 		
 		if ( temps[i] != 0 ) {
-		   
-		    if (  System.currentTimeMillis() - temps[i] > 500 ) {
+		    
+		    if ( System.currentTimeMillis() - temps[i] > 500 ) {
 			ByteArrayInputStream bis = new ByteArrayInputStream(matrice[i]);
-			//System.out.println(bis.toString());
 			try {
+			    nb++;
 			    temps[i] = 0;
 			    ObjectInput in = new ObjectInputStream(bis);
 			    
@@ -55,12 +60,11 @@ public class Treatment extends Thread {
 			    e.printStackTrace();
 			}
 			
-			
 		    }
 		}
 		
 	    }
-
+	    
 	    try {
 		Thread.sleep(10);
 	    } catch (InterruptedException e) {
@@ -73,10 +77,10 @@ public class Treatment extends Thread {
     }
     
     void add_packet(byte[] packet) {
-	nb++;
-	if (start){
-	    matrice=new byte[1000][packet.length];
-	    start=!start;
+	// Add a packet and write the entering time
+	if ( start ) {
+	    matrice = new byte[1000][packet.length];
+	    start = !start;
 	}
 	for (int i = 0; i < temps.length; i++) {
 	    if ( temps[i] == 0 ) {

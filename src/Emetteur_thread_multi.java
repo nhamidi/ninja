@@ -35,36 +35,20 @@ public class Emetteur_thread_multi extends Thread {
 	this.parameter_test = parameter;
     }
     
-    public byte[] parameter_test(byte[] Message_before) {
-	byte[] Message_after = new byte[size_int];
-	byte[] Message_temp = new byte[size_int];
-	
-	switch (this.parameter_test) {
-	case 1:
-	    Message_after = Message_before;
-	    break;
-	default:
-	    Message_after = Message_before;
-	}
-	
-	return Message_after;
-    }
-    
     public void run() {
 	try {
-	    // send_thing();
 	} catch (Exception exc) {
 	    System.out.println(exc);
 	}
     }
     
     void send_thing() throws Exception {
+	
 	byte[] contenuMessage = new byte[size_int];
 	DatagramPacket message;
 	System.arraycopy(this.ACK_NACK, 0, contenuMessage, 0, size_int);
 	
-	message = new DatagramPacket(parameter_test(contenuMessage), contenuMessage.length, groupeIP, port);
-	
+	message = new DatagramPacket(contenuMessage, contenuMessage.length, groupeIP, port);
 	
 	Thread.sleep(37);
 	socketEmission.send(message);

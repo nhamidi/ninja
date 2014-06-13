@@ -37,7 +37,6 @@ public class Sender_multicast {
     static Random randomGenerator = new Random();
     final static int ID_PACKET = randomGenerator.nextInt(100);
     
-    // final static double redondance = 1.00;
     
     public static final byte[] intToByteArray(int value) {
 	return new byte[] { (byte) (value >>> 24), (byte) (value >>> 16), (byte) (value >>> 8), (byte) value };
@@ -133,20 +132,12 @@ public class Sender_multicast {
 	Recepteur_thread_multi reception_thread = new Recepteur_thread_multi(destPort + 1, destIP, nb_of_recv,historique);
 	
 	/**
-	 * End of the tests on the parameter
-	 */
-	// System.out.println("Transmiting file " + fileName + " to "
-	// + destIP.toString() + ":" + destPort + "\n");
-	
-	/**
 	 * preparation for the encoding
 	 */
 	
 	// create a new Encoder instance (usually one per file)
 	Encoder encoder = new Encoder(data, percentageLoss, overhead);
-	// System.out.println("# repair symbols: " +
-	// encoder.getNumRepairSymbols()
-	// + " (per block)");
+	
 	// array that will contain the encoded symbols
 	EncodingPacket[] encoded_symbols = null;
 	
@@ -156,12 +147,12 @@ public class Sender_multicast {
 	
 	// total number of source symbols (for all source blocks)
 	int Kt = encoder.getKt();
-	// System.out.println("# source symbols: " + Kt);
 	
 	// partition the data into source blocks
 	source_blocks = encoder.partition();
 	no_blocks = source_blocks.length;
-	int nb_packet = -2;
+	int nb_packet = -5;
+	//start the thread 
 	reception_thread.start();
 	
 	reception_thread.set_total_number_of_packets((int) Math.round((float) length_of_the_file / 192));
@@ -203,10 +194,9 @@ public class Sender_multicast {
 		byte[] serialized_data = null;
 		
 		try {
-		    // //////////////////////////////////////////////////////////
 		    // serialize and send each encoded symbol
 
-		    int k = (int) Math.round((float) Kt * redondance) + 1;
+		    int k = (int) Math.round((float) Kt * redondance);
 		    
 		    reception_thread.set_time_simu();
 		    
@@ -233,7 +223,7 @@ public class Sender_multicast {
 			nb_packet++;
 			
 			if ( i > k ) {
-			    
+			    // if it is the last one packet
 			    byte_array = intToByteArray(FLAG_PUSH);
 			    packet_id = intToByteArray(ID_PACKET);
 			    
@@ -243,6 +233,7 @@ public class Sender_multicast {
 			    System.arraycopy(serialized_data, 0, serialized_data_with_length, size_int * 2, serialized_data.length);
 			    DatagramPacket sendPacket = new DatagramPacket(serialized_data_with_length, serialized_data_with_length.length, destIP, destPort);
 			    clientSocket.send(sendPacket);
+			    //Sender timer
 			    for (int u = 1; u < 4000; u++) {
 				if ( reception_thread.get_need_more() ) {
 				    
@@ -252,15 +243,12 @@ public class Sender_multicast {
 				
 				Thread.sleep(1);
 			    }
-			    
-			    // k = k + (int) Math.round((float)
-			    // reception_thread.get_number_of_packets()*
-			    // redondance);
 			    k = k + reception_thread.get_number_of_packets();
 			    // System.out.println("   j'ai fini                         "+k);
 			    reception_thread.reset_number_of_packets();
 			    
 			} else {
+			    //if you send a normal packet
 			    byte_array = intToByteArray(length_of_the_file);
 			    packet_id = intToByteArray(ID_PACKET);
 			    System.arraycopy(byte_array, 0, serialized_data_with_length, 0, size_int);
@@ -271,7 +259,6 @@ public class Sender_multicast {
 			    DatagramPacket sendPacket = new DatagramPacket(serialized_data_with_length, serialized_data_with_length.length, destIP, destPort);
 			    clientSocket.send(sendPacket);
 			     Thread.sleep(37);
-			    
 			}
 		    }
 		} catch (IOException e) {
@@ -294,20 +281,13 @@ public class Sender_multicast {
 	int total_overhead = (nb_packet - Kt) * 192;
 	float total_overhead_pourcent = 100 * ((float) total_overhead / (float) (Kt * 192));
 	nb_packet = nb_packet + reception_thread.get_nb_ack();
-	/////////////////// For the RTT
-	for (int i=0 ; i<=reception_thread.get_nb_ack();i++){
-	    Thread.sleep(500);
-	}
-	
-	
-	
-	
+
 	long time_2 = System.currentTimeMillis() - before;
 	System.out.println(total_overhead);
 	System.out.println(total_overhead_pourcent);
 	System.out.println(reception_thread.get_nb_ack());
-	System.out.println(reception_thread.get_time_1());
-	System.out.println(reception_thread.get_time_2());
+	System.out.println((float) reception_thread.get_time_1()/1000);
+	System.out.println((float) reception_thread.get_time_2()/1000);
 	System.out.println((float) ((float) reception_thread.get_time_2() - (float) reception_thread.get_time_1()) / (float) reception_thread.get_time_1());
 	// System.out.println(time_2);
 	

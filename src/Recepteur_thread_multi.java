@@ -30,7 +30,7 @@ public class Recepteur_thread_multi extends Thread {
 	this.need_more = false;
 	this.socketReception = new MulticastSocket(port);
 	this.socketReception.joinGroup(groupeIP);
-	this.number_of_packets = 5;
+	this.number_of_packets = 2;
 	this.end_reception = 1;
 	this.packetData = 0;
 	this.nb_of_receiver = nb_of_recv;
@@ -71,7 +71,6 @@ public class Recepteur_thread_multi extends Thread {
 	if ( this.number_of_packets < nb_packets ) {
 	    
 	    if ( this.historic ) {
-		// this.number_of_packets = (int) Math.round((float) ((nb_packets*this.total_symb) + nb_packets* nb_packets)/ (this.total_symb*nb_packets));
 		this.number_of_packets = (int) Math.round((((float) nb_packets / (float) this.total_symb) + 1) * (float) nb_packets);
 	    } else
 		this.number_of_packets = nb_packets;
@@ -83,7 +82,7 @@ public class Recepteur_thread_multi extends Thread {
     }
     
     public void reset_number_of_packets() {
-	this.number_of_packets = 5;
+	this.number_of_packets = 1;
     }
     
     public long get_time_1() {
@@ -97,13 +96,12 @@ public class Recepteur_thread_multi extends Thread {
     public int get_nb_ack() {
 	return this.nb_ack;
     }
+    
     public void set_time_simu() {
 	this.before = System.currentTimeMillis();
     }
     
-    
     public void run() {
-	
 	
 	while (true) {
 	    byte[] receiveData = new byte[51024];
@@ -115,13 +113,12 @@ public class Recepteur_thread_multi extends Thread {
 		byte[] packetData_2 = receivePacket.getData();
 		for (int l = 0; l < size_int; l++) {
 		    this.packetData = (this.packetData << 8) + (packetData_2[l] & 0xff);
-		    
 		}
 		this.need_more = false;
 	    } catch (Exception exc) {
 		System.out.println(exc);
 	    }
-	    // System.out.println("numéros receptionné       " + this.packetData);
+	   // System.out.println("On a recu :                "+this.packetData);
 	    this.nb_ack++;
 	    
 	    if ( this.packetData == FLAG_PUSH ) {
@@ -132,15 +129,11 @@ public class Recepteur_thread_multi extends Thread {
 	    if ( this.packetData == NACK ) {
 		this.need_more = true;
 		set_number_of_packets(1);
-		// nb_ack++;
 		continue;
 	    }
 	    
 	    if ( this.packetData == ACK ) {
-		// this.packetData = -5;
 		
-		// set_number_of_packets(0);
-		// nb_ack++;
 		if ( time_1 == 0 ) {
 		    time_1 = System.currentTimeMillis() - before;
 		}
@@ -153,8 +146,6 @@ public class Recepteur_thread_multi extends Thread {
 		}
 	    } else {
 		set_number_of_packets(this.packetData);
-		
-		// nb_ack++;
 	    }
 	}
     }

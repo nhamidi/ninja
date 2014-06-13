@@ -1,0 +1,60 @@
+Listening for file /home/tai/workspace/stage_pfe/bin/simulation/test1_4.jpg (0 bytes) at port 5040
+
+# source symbols: 452
+# source blocks: 1
+
+Waiting for packets...
+          je peux pas decoder
+          je peux pas decoder
+          je decode
+                                    nb of packet pop'up: 442
+
+Waiting for packets...
+          je decode
+                                    nb of packet pop'up: 444
+
+Waiting for packets...
+          je decode
+                                    nb of packet pop'up: 445
+
+Waiting for packets...
+          je decode
+                                    nb of packet pop'up: 446
+
+Waiting for packets...
+          je decode
+                                    nb of packet pop'up: 446
+
+Waiting for packets...
+          je decode
+                                    nb of packet pop'up: 447
+
+Waiting for packets...
+          je decode
+                                    nb of packet pop'up: 448
+
+Waiting for packets...
+          je decode
+                                    nb of packet pop'up: 449
+
+Waiting for packets...
+          je decode
+                                    nb of packet pop'up: 450
+
+Waiting for packets...
+          je decode
+                                    nb of packet pop'up: 451
+
+Waiting for packets...
+          je decode
+                                    nb of packet pop'up: 451
+
+Waiting for packets...
+          je decode
+                                    nb of packet pop'up: 452
+
+Successfuint lly decoded block: 0 (in 2212 milliseconds)
+           envoie ACK 1 bon
+nb reiceive packets: 509
+12.38938
+Delai total d’envoi du message : 21947
