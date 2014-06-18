@@ -8,6 +8,7 @@ port_simul=('5033' '5036' '5039' '5030' '5040' '5042' '5044' '5046' '5048' '5050
 redondance=('1.00' '1.02' '1.04' '1.06' '1.08' '1.10' '1.12' '1.16' '1.18' '1.20')
 perte=('0' '1' '5' '10' '15' '20')
 perte_theo=('0' '0.01' '0.05' '0.10' '0.15' '0.20')
+nb_symbol=834
 
 #$j donne les redondances
 historic=('false')
@@ -16,8 +17,8 @@ file_simulation='/home/tai/Bureau/image_test2.jpg'
 rm -rf $current_file/$graph_file/*
 #for ((k=0 ; k<5 ; k++))
 #do
+k=3
 
-k=2
 
 
 #Get the max of experience
@@ -39,16 +40,17 @@ echo $max
 
 Calcul_lost() 
 {
+	
 	lost=0
 	q=$1
+	p=`echo 1-$q | bc -l`
 	#u_0=$2
 	u_0=`echo $2*$3 | bc -l`
-	for ((o=1 ; o<4 ; o++))
-	do 
-		lost=`echo $lost+$u_0*$q^$o | bc -l`
-	done
-	lost_2=`echo $lost/53 | bc -l`
+	lost=`echo $u_0/$p  | bc -l`
+	lost=`echo $lost-$nb_symbol  | bc -l`
+	lost_2=`echo $lost/$u_0 | bc -l`
 	lost_2=`echo $lost_2*100 | bc -l`
+	
 	echo $lost_2
 }
 perte_name=( 'perte_de_0' 'perte_de_1' 'perte_de_5' 'perte_de_10' 'perte_de_15' 'perte_de_20')
@@ -207,18 +209,19 @@ done
 
 
 
-j_1=$(Calcul_lost ${perte_theo[$k]} 53 1.00)
-j_2=$(Calcul_lost ${perte_theo[$k]} 53 1.02)
-j_3=$(Calcul_lost ${perte_theo[$k]} 53 1.04)
-j_4=$(Calcul_lost ${perte_theo[$k]} 53 1.06)
-j_5=$(Calcul_lost ${perte_theo[$k]} 53 1.08)
-j_6=$(Calcul_lost ${perte_theo[$k]} 53 1.10)
-j_7=$(Calcul_lost ${perte_theo[$k]} 53 1.12)
-j_8=$(Calcul_lost ${perte_theo[$k]} 53 1.14)
-j_9=$(Calcul_lost ${perte_theo[$k]} 53 1.16)
-j_10=$(Calcul_lost ${perte_theo[$k]} 53 1.18)
-j_11=$(Calcul_lost ${perte_theo[$k]} 53 1.20)
-j_12=$(Calcul_lost ${perte_theo[$k]} 53 1.22)
+j_1=$(Calcul_lost ${perte_theo[$k]} $nb_symbol 1.00)
+j_2=$(Calcul_lost ${perte_theo[$k]} $nb_symbol 1.00)
+j_3=$(Calcul_lost ${perte_theo[$k]} $nb_symbol 1.00)
+j_4=$(Calcul_lost ${perte_theo[$k]} $nb_symbol 1.00)
+j_5=$(Calcul_lost ${perte_theo[$k]} $nb_symbol 1.00)
+j_6=$(Calcul_lost ${perte_theo[$k]} $nb_symbol 1.00)
+j_7=$(Calcul_lost ${perte_theo[$k]} $nb_symbol 1.00)
+j_8=$(Calcul_lost ${perte_theo[$k]} $nb_symbol 1.00)
+j_9=$(Calcul_lost ${perte_theo[$k]} $nb_symbol 1.00)
+j_10=$(Calcul_lost ${perte_theo[$k]} $nb_symbol 1.00)
+j_11=$(Calcul_lost ${perte_theo[$k]} $nb_symbol 1.00)
+j_12=$(Calcul_lost ${perte_theo[$k]} $nb_symbol 1.00)
+j_13=$(Calcul_lost ${perte_theo[$k]} $nb_symbol 1.00)
 
 echo  "0 $j_1 0" >> "$current_file/$graph_file/_${perte[$k]}_graph_theo.txt"
 echo  "2 $j_2 0" >> "$current_file/$graph_file/_${perte[$k]}_graph_theo.txt"
@@ -232,6 +235,7 @@ echo  "16 $j_9 0" >> "$current_file/$graph_file/_${perte[$k]}_graph_theo.txt"
 echo  "18 $j_10 0" >> "$current_file/$graph_file/_${perte[$k]}_graph_theo.txt"
 echo  "20 $j_11 0" >> "$current_file/$graph_file/_${perte[$k]}_graph_theo.txt"
 echo  "22 $j_12 0" >> "$current_file/$graph_file/_${perte[$k]}_graph_theo.txt"
+echo  "24 $j_13 0" >> "$current_file/$graph_file/_${perte[$k]}_graph_theo.txt"
 
 
 ###########################Graph
@@ -239,7 +243,7 @@ gnuplot << EOF
 set terminal png truecolor    
 set key inside left top vertical Right 
 set output 'figure/graph_lost_over_head_bis_$k.png'
-set title "Simulation for 8456octets file with ${perte[$k]} % of lost "
+set title "Simulation for 159985 octets file with ${perte[$k]} % of lost and a RTT=1sec"
 set ylabel "Overhead (in %)"
 set xlabel 'Redundancy Ratio in %'
 set autoscale x
@@ -255,7 +259,7 @@ gnuplot << EOF
 set terminal png truecolor    
 set key inside left top vertical Right
 set output 'figure/graph_lost_nb_ack_bis_$k.png'
-set title "Simulation for 8456octets file with ${perte[$k]} % of lost "
+set title "Simulation for 159985 octets file with ${perte[$k]} % of lost and a RTT=1sec"
 set ylabel "Nb of ack"
 set xlabel 'Redundancy Ratio in %'
 set autoscale x
@@ -269,8 +273,8 @@ gnuplot << EOF
 set terminal png truecolor    
 set key inside left top vertical Right
 set output 'figure/graph_lost_delay_bis_$k.png'
-set title "Simulation for 8456octets file with ${perte[$k]} % of lost "
-set ylabel "Delay in milliseconds"
+set title "Simulation for 159985 octets file with ${perte[$k]} % of lost and a RTT=1sec"
+set ylabel "Delay in seconds"
 set xlabel 'Redundancy Ratio in %'
 set autoscale x
 set autoscale y

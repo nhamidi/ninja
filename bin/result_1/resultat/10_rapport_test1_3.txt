@@ -1,0 +1,17 @@
+Listening for file /home/tai/workspace/stage_pfe/bin/simulation/test1_3.txt (0 bytes) at port 5030
+
+# source symbols: 834
+# source blocks: 1
+
+Waiting for packets...
+          je peux pas decoder
+          je peux pas decoder
+          je peux pas decoder
+          je decode
+                                    nb of packet pop'up: 835
+
+Successfuint lly decoded block: 0 (in 10312 milliseconds)
+           envoie ACK 1 bon
+nb reiceive packets: 923
+19.469027
+Delai total d’envoi du message : 45871

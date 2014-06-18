@@ -3,7 +3,9 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.SocketException;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
@@ -30,6 +32,28 @@ public class Receiver_multicast {
     
     final static int FLAG_PUSH = 999999999;
     final static int FLAG_STOP = 111111111;
+    
+    public static void print_in_file(long message,int port){
+	try {
+		File file = new File("/home/tai/workspace/stage_pfe/bin/histo/time_division_r_final.txt");
+
+		// if file doesnt exists, then create it
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+
+		FileWriter fw = new FileWriter(file.getAbsoluteFile(),true);
+		BufferedWriter bw = new BufferedWriter(fw);
+		bw.write( String.valueOf(message)+"\n");
+		bw.close();
+
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+    }
+    
+    
+    
     
     // Simulate a lost of the canal
     public static boolean packet_is_lost(float percentageLoss) {
@@ -152,7 +176,7 @@ public class Receiver_multicast {
 	    System.err.println("Invalid network loss percentage. (must be a float in [0.0, 100.0[)");
 	    System.exit(-1);
 	}
-	
+	boolean lol=true;
 	int para_test = Integer.valueOf(args[5]);
 	
 	Emetteur_thread_multi sending_thread = new Emetteur_thread_multi(sendIP, src_port + 1);
@@ -163,6 +187,9 @@ public class Receiver_multicast {
 	 * preparation for the decoding
 	 */
 	sending_thread.start();
+	// the RTT
+	int RTT = 5000;
+	Treatment treatment_thread = new Treatment(RTT);
 	
 	/**
 	 * Get the first packet to get the size of the file
@@ -182,6 +209,15 @@ public class Receiver_multicast {
 	
 	serverSocket_for_the_size.receive(receivePacket_for_the_size);
 	
+	
+	if (lol){
+		print_in_file(System.currentTimeMillis(),src_port);
+		lol=false;
+	    }
+		
+	
+	
+	
 	// get the packet's payload
 	byte[] packetData_for_the_size = receivePacket_for_the_size.getData();
 	for (int i = 0; i < size_int; i++) {
@@ -189,7 +225,7 @@ public class Receiver_multicast {
 	}
 	byte[] first_packet_data = new byte[receivePacket_for_the_size.getData().length - size_int * 2];
 	System.arraycopy(receivePacket_for_the_size.getData(), size_int * 2, first_packet_data, 0, first_packet_data.length);
-	
+	treatment_thread.add_packet(first_packet_data);
 	serverSocket_for_the_size.close();
 	
 	// create a new Encoder instance (usually one per file) and for that
@@ -224,13 +260,14 @@ public class Receiver_multicast {
 	
 	boolean successfulDecoding = false;
 	
-	// the RTT
-	int RTT = 500;
-	Treatment treatment_thread = new Treatment(RTT);
+	
+	
 	int nb_of_utils_packet = total_symbols;
 	int compteur_utils_packet = 0;
 	long before_2 = System.currentTimeMillis();
 	int id_data_packet;
+	
+	
 	
 	while (!successfulDecoding) {
 	    MulticastSocket serverSocket = null;
@@ -268,7 +305,7 @@ public class Receiver_multicast {
 		    
 		    DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 		    // set the timeout for the receiver
-		    int reception_timer = 1000;
+		    int reception_timer = 10000;
 		    serverSocket.setSoTimeout(reception_timer);
 		    try {
 			number_of_received_packets++;
@@ -302,6 +339,9 @@ public class Receiver_multicast {
 			continue;
 		    }
 		    // Add packet to the rtt queue
+		    
+		    System.out.println(packetData.length);
+		    
 		    
 		    treatment_thread.add_packet(packetData);
 		    
@@ -359,7 +399,9 @@ public class Receiver_multicast {
 	    
 	    
 	    
-	    
+	   // print_in_file("\n apres sortie traitement   \n",src_port);
+	   
+	    print_in_file(System.currentTimeMillis(),src_port);
 	    
 	    received_packets = treatment_thread.get_encoding_symbol();
 	    
@@ -369,7 +411,7 @@ public class Receiver_multicast {
 	    
 	    
 	    System.out.println("                                    nb of packet pop'up: " + received_packets.size());
-	    
+		
 	    // order received packets
 	    for (EncodingSymbol es : received_packets) {
 		
@@ -412,6 +454,8 @@ public class Receiver_multicast {
 		    long after = System.currentTimeMillis();
 		    
 		    long diff = (long) (after - before);
+		   // print_in_file(" \n apres décodage \n",src_port);
+		    print_in_file(System.currentTimeMillis(),src_port);
 		    System.out.println("\nSuccessfuint lly decoded block: " + sblock + " (in " + diff + " milliseconds)");
 		    
 		} catch (SingularMatrixException e) {
@@ -458,6 +502,7 @@ public class Receiver_multicast {
 	    // the
 	    // data
 	    if ( successfulDecoding ) {
+		
 		decoded_data = encoder.unPartition(blocks);
 		// and finally, write the decoded data to the file
 		File file = new File(fileName);
@@ -513,10 +558,10 @@ public class Receiver_multicast {
 		    Files.write(file.toPath(), decoded_data);
 		    // Print the result
 		    System.out.println("nb reiceive packets: " + number_of_received_packets);
-		    System.out.println((float) (100 * re_send_for_a_lost) / 452);
+		    System.out.println((float) (100 * re_send_for_a_lost) / 834);
 		    int total_overhead = (number_of_received_packets - total_symbols) * 192;
 		    
-		    System.out.println("Delai total d’envoi du message : " + time);
+		    System.out.println("Delai total d’envoi du message : " +time);
 		    break;
 		    
 		} catch (IOException e) {

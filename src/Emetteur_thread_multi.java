@@ -20,6 +20,12 @@ public class Emetteur_thread_multi extends Thread {
 	socketEmission = new MulticastSocket();
     }
     
+    
+    
+    
+    
+    
+    
     public byte[] get_ACK_NACK() {
 	return this.ACK_NACK;
     }

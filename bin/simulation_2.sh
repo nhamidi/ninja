@@ -9,7 +9,7 @@ graph_file=graph
 
 #clean for a new simulation
 rm -rf $current_file/$result_file/*
-rm -rf $current_file/$graph_file/*
+#rm -rf $current_file/$graph_file/*
 rm -rf $current_file/$simulation_file/*
 
 
@@ -34,31 +34,31 @@ historic=('false')
 file_simulation='/home/tai/Bureau/test.txt'
 
 
-for ((k=0 ; k<6 ; k++))
-do
-
-for ((i=0 ; i<20 ; i++))
+#for ((k=0 ; k<6 ; k++))
+#do
+k=3
+for ((i=0 ; i<10 ; i++))
     do 
    
 	for ((j=0 ; j<13 ; j++))
 	    do 
 		java Receiver_multicast "$current_file/$simulation_file/test1_$j.txt" 0 239.255.80.84 ${port_simul[$j]} ${perte[$k]} 7 ${redondance[$j]} > "$current_file/$result_file/${perte[$k]}_rapport_test1_$j.txt" &
-		java Sender_multicast $file_simulation 2 239.255.80.84 ${port_simul[$j]} 1 ${redondance[$j]} ${historic[0]} >> "$current_file/$result_file/resultat_bis_${perte[$k]}_${historic[0]}_$j.txt" &
-		sleep 100
+		java Sender_multicast $file_simulation 2 239.255.80.84 ${port_simul[$j]} 1 ${redondance[$j]} ${historic[0]} >> "$current_file/$result_file/resultat_bis_${perte[$k]}_${historic[0]}_$j.txt" 
+		#sleep 60
 		kill -9 $(ps aux | grep '[j]ava Receiver_multicast' | awk '{print $2}')
 		kill -9 $(ps aux | grep '[j]ava Sender_multicast' | awk '{print $2}')		
 		grep "^[0-9]" "$current_file/$result_file/${perte[$k]}_rapport_test1_$j.txt" >> "$current_file/$result_file/recept_result_${perte[$k]}_${historic[0]}_$j.txt"
 	done
 
 rm -rf "$current_file/$simulation_file/*"
-
-sendEmail -f teststagetatabuen@gmail.com -t hamidinassim1@gmail.com -u sujet -m “simulation is on i=$i and k=$k” -s smtp.gmail.com:587 -o tls=yes -xu teststagetatabuen -xp azerty5*
+#wget --no-check-certificate "https://smsapi.free-mobile.fr/sendmsg?user=15616416&pass=9GIY8fLsVu4NQe&msg=fait%20${i}%20sur%2010"
+#sendEmail -f teststagetatabuen@gmail.com -t hamidinassim1@gmail.com -u sujet -m “simulation is on i=$i and k=$k” -s smtp.gmail.com:587 -o tls=yes -xu teststagetatabuen -xp azerty5*
 
 #wget --no-check-certificate "https://smsapi.free-mobile.fr/sendmsg?user=15616416&pass=9GIY8fLsVu4NQe&msg=hello"
 done
 
-wget --no-check-certificate "https://smsapi.free-mobile.fr/sendmsg?user=15616416&pass=9GIY8fLsVu4NQe&msg=fait%20$k"
-done
+#wget --no-check-certificate "https://smsapi.free-mobile.fr/sendmsg?user=15616416&pass=9GIY8fLsVu4NQe&msg=fait%20${k}%20sur%206"
+#done
 
 ######################################
 

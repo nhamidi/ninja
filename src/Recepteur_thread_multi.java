@@ -1,3 +1,6 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -23,6 +26,7 @@ public class Recepteur_thread_multi extends Thread {
     private int nb_ack;
     private long before;
     private boolean need_more;
+    private double redondancy;
     
     public Recepteur_thread_multi(int port, InetAddress groupeIP, int nb_of_recv, boolean historic) throws IOException {
 	// this.port = port;
@@ -39,7 +43,31 @@ public class Recepteur_thread_multi extends Thread {
 	this.time_2 = 0;
 	this.nb_ack = 0;
 	this.historic = historic;
+	redondancy = 1.00;
 	
+    }
+    
+    public static void print_in_file(String message) {
+	try {
+	    File file = new File("/home/tai/workspace/stage_pfe/bin/time_division_final.txt");
+	    
+	    // if file doesnt exists, then create it
+	    if ( !file.exists() ) {
+		file.createNewFile();
+	    }
+	    
+	    FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
+	    BufferedWriter bw = new BufferedWriter(fw);
+	    bw.write(message + "\n");
+	    bw.close();
+	    
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
+    }
+    
+    public void set_redondancy(double val) {
+	this.redondancy = val;
     }
     
     public boolean get_need_more() {
@@ -118,8 +146,15 @@ public class Recepteur_thread_multi extends Thread {
 	    } catch (Exception exc) {
 		System.out.println(exc);
 	    }
-	   // System.out.println("On a recu :                "+this.packetData);
+	    // System.out.println("On a recu :                "+this.packetData);
 	    this.nb_ack++;
+	    
+	    try {
+		Thread.sleep(5000);
+	    } catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
 	    
 	    if ( this.packetData == FLAG_PUSH ) {
 		set_number_of_packets(this.packetData);
@@ -142,6 +177,8 @@ public class Recepteur_thread_multi extends Thread {
 		    this.number_of_packets = 0;
 		    this.change_status_end_loop();
 		    time_2 = System.currentTimeMillis() - before;
+		    print_in_file("\n");
+		    print_in_file(String.valueOf(System.currentTimeMillis()));
 		    break;
 		}
 	    } else {
