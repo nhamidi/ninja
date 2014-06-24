@@ -243,7 +243,7 @@ gnuplot << EOF
 set terminal png truecolor    
 set key inside left top vertical Right 
 set output 'figure/graph_lost_over_head_bis_$k.png'
-set title "Simulation for 159985 octets file with ${perte[$k]} % of lost and a RTT=1sec"
+set title "Simulation for 159985 octets file with ${perte[$k]} % of lost and a RTT=10sec"
 set ylabel "Overhead (in %)"
 set xlabel 'Redundancy Ratio in %'
 set autoscale x
@@ -259,7 +259,7 @@ gnuplot << EOF
 set terminal png truecolor    
 set key inside left top vertical Right
 set output 'figure/graph_lost_nb_ack_bis_$k.png'
-set title "Simulation for 159985 octets file with ${perte[$k]} % of lost and a RTT=1sec"
+set title "Simulation for 159985 octets file with ${perte[$k]} % of lost and a RTT=10sec"
 set ylabel "Nb of ack"
 set xlabel 'Redundancy Ratio in %'
 set autoscale x
@@ -273,7 +273,7 @@ gnuplot << EOF
 set terminal png truecolor    
 set key inside left top vertical Right
 set output 'figure/graph_lost_delay_bis_$k.png'
-set title "Simulation for 159985 octets file with ${perte[$k]} % of lost and a RTT=1sec"
+set title "Simulation for 159985 octets file with ${perte[$k]} % of lost and a RTT=10sec"
 set ylabel "Delay in seconds"
 set xlabel 'Redundancy Ratio in %'
 set autoscale x

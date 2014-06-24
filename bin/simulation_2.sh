@@ -1,4 +1,4 @@
-#!/bin/bash -xv
+#!/bin/bash
 ###############  Test  ###############
 #initialise the variable 
 current_file=$(pwd)
@@ -34,10 +34,10 @@ historic=('false')
 file_simulation='/home/tai/Bureau/test.txt'
 
 
-#for ((k=0 ; k<6 ; k++))
-#do
-k=3
-for ((i=0 ; i<10 ; i++))
+for ((k=0 ; k<6 ; k++))
+do
+
+for ((i=0 ; i<2 ; i++))
     do 
    
 	for ((j=0 ; j<13 ; j++))
@@ -58,7 +58,7 @@ rm -rf "$current_file/$simulation_file/*"
 done
 
 #wget --no-check-certificate "https://smsapi.free-mobile.fr/sendmsg?user=15616416&pass=9GIY8fLsVu4NQe&msg=fait%20${k}%20sur%206"
-#done
+done
 
 ######################################
 

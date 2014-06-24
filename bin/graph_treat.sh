@@ -15,9 +15,9 @@ historic=('false')
 file_simulation='/home/tai/Bureau/image_test2.jpg'
 
 rm -rf $current_file/$graph_file/*
-#for ((k=0 ; k<5 ; k++))
-#do
-k=3
+for ((k=0 ; k<5 ; k++))
+do
+#k=3
 
 
 
@@ -286,7 +286,7 @@ EOF
 
 
 
-#done
+done
 
 
 

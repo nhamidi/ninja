@@ -277,7 +277,7 @@ set title "Simulation for 159985 octets file with ${perte[$k]} % of lost and a R
 set ylabel "Delay in seconds"
 set xlabel 'Redundancy Ratio in %'
 set autoscale x
-set autoscale y
+set yrange [40:]
 plot '/home/tai/workspace/stage_pfe/bin/result_1/graph/_false_perte_de_${perte[$k]}_graph_delay_ref.txt' using 1:2:3 notitle with yerrorbars, '/home/tai/workspace/stage_pfe/bin/result_1/graph/_false_perte_de_${perte[$k]}_graph_delay_ref.txt' using 1:2:3 title 'Experimental delay' w l 
  
  

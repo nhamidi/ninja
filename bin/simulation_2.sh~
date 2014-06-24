@@ -34,17 +34,17 @@ historic=('false')
 file_simulation='/home/tai/Bureau/test.txt'
 
 
-#for ((k=0 ; k<6 ; k++))
-#do
-k=3
-for ((i=0 ; i<10 ; i++))
+for ((k=0 ; k<6 ; k++))
+do
+
+for ((i=0 ; i<2 ; i++))
     do 
    
 	for ((j=0 ; j<13 ; j++))
 	    do 
 		java Receiver_multicast "$current_file/$simulation_file/test1_$j.txt" 0 239.255.80.84 ${port_simul[$j]} ${perte[$k]} 7 ${redondance[$j]} > "$current_file/$result_file/${perte[$k]}_rapport_test1_$j.txt" &
 		java Sender_multicast $file_simulation 2 239.255.80.84 ${port_simul[$j]} 1 ${redondance[$j]} ${historic[0]} >> "$current_file/$result_file/resultat_bis_${perte[$k]}_${historic[0]}_$j.txt" 
-		sleep 60
+		#sleep 60
 		kill -9 $(ps aux | grep '[j]ava Receiver_multicast' | awk '{print $2}')
 		kill -9 $(ps aux | grep '[j]ava Sender_multicast' | awk '{print $2}')		
 		grep "^[0-9]" "$current_file/$result_file/${perte[$k]}_rapport_test1_$j.txt" >> "$current_file/$result_file/recept_result_${perte[$k]}_${historic[0]}_$j.txt"
@@ -58,7 +58,7 @@ rm -rf "$current_file/$simulation_file/*"
 done
 
 #wget --no-check-certificate "https://smsapi.free-mobile.fr/sendmsg?user=15616416&pass=9GIY8fLsVu4NQe&msg=fait%20${k}%20sur%206"
-#done
+done
 
 ######################################
 
