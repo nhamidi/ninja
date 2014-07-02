@@ -7,12 +7,12 @@ Waiting for packets...
           je decode
                                     nb of packet pop'up: 835
            envoie ACK 1 bon
-   apres le tri    18
+   apres le tri    14
    replace 1    250
-   generate lt    10602
-   fin decodage    10668
+   generate lt    10718
+   fin decodage    10783
 
-Successfuint lly decoded block: 0 (in 10670 milliseconds)
+Successfuint lly decoded block: 0 (in 10785 milliseconds)
 nb reiceive packets: 987
-17.386091
-Delai total d’envoi du message : 37490
+17.026379
+Delai total d’envoi du message : 37267

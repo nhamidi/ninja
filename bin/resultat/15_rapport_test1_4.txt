@@ -5,15 +5,16 @@ Listening for file /home/tai/workspace/stage_pfe/bin/simulation/test1_4.txt (0 b
 
 Waiting for packets...
           je peux pas decoder
+Socket bloquée
           je decode
-                                    nb of packet pop'up: 835
+                                    nb of packet pop'up: 841
            envoie ACK 1 bon
-   apres le tri    15
-   replace 1    252
-   generate lt    10500
-   fin decodage    10563
+   apres le tri    14
+   replace 1    242
+   generate lt    11094
+   fin decodage    11158
 
-Successfuint lly decoded block: 0 (in 10565 milliseconds)
-nb reiceive packets: 976
-16.666666
-Delai total d’envoi du message : 42067
+Successfuint lly decoded block: 0 (in 11159 milliseconds)
+nb reiceive packets: 992
+17.026379
+Delai total d’envoi du message : 57436

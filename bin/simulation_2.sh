@@ -36,8 +36,8 @@ historic=('true')
 file_simulation='/home/tai/Bureau/test.txt'
 
 
-#for ((k=0 ; k<6 ; k++))
-#do
+for ((k=0 ; k<6 ; k++))
+do
 
 k=4
 for ((i=0 ; i<5 ; i++))
@@ -69,7 +69,7 @@ rm -rf "$current_file/$simulation_file/*"
 done
 
 #wget --no-check-certificate "https://smsapi.free-mobile.fr/sendmsg?user=15616416&pass=9GIY8fLsVu4NQe&msg=fait%20${k}%20sur%206"
-#done
+done
 
 
 

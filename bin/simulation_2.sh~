@@ -8,7 +8,7 @@ graph_file=graph
 
 
 #clean for a new simulation
-#rm -rf $current_file/$result_file/*
+rm -rf $current_file/$result_file/*
 #rm -rf $current_file/$graph_file/*
 rm -rf $current_file/$simulation_file/*
 rm $current_file/histo/time_division_r_final.txt
