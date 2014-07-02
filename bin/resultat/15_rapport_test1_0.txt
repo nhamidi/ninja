@@ -8,7 +8,12 @@ Waiting for packets...
           je decode
                                     nb of packet pop'up: 835
            envoie ACK 1 bon
-   apres le tri    13
+   apres le tri    11
+   replace 1    261
+   generate lt    10663
+   fin decodage    10739
 
-Waiting for packets...
-Socket bloquée
+Successfuint lly decoded block: 0 (in 10741 milliseconds)
+nb reiceive packets: 1002
+19.184652
+Delai total d’envoi du message : 42675

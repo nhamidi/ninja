@@ -8,5 +8,6 @@ Waiting for packets...
           je decode
                                     nb of packet pop'up: 835
            envoie ACK 1 bon
-   apres le tri    11
-   replace 1    253
+   apres le tri    14
+   replace 1    258
+   generate lt    10650
