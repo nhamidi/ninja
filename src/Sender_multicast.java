@@ -41,30 +41,54 @@ public class Sender_multicast {
     static Random randomGenerator = new Random();
     final static int ID_PACKET = randomGenerator.nextInt(100);
     
-    
     public static final byte[] intToByteArray(int value) {
 	return new byte[] { (byte) (value >>> 24), (byte) (value >>> 16), (byte) (value >>> 8), (byte) value };
     }
     
-    public static void print_in_file(String message){
-	try {
-		File file = new File("/home/tai/workspace/stage_pfe/bin/time_division_final.txt");
-
-		// if file doesnt exists, then create it
-		if (!file.exists()) {
-			file.createNewFile();
-		}
-
-		FileWriter fw = new FileWriter(file.getAbsoluteFile(),true);
-		BufferedWriter bw = new BufferedWriter(fw);
-		bw.write(message+"\n");
-		bw.close();
-
-	} catch (IOException e) {
-		e.printStackTrace();
+    public static final int byte_array_to_int(byte[] byte_array) {
+	int interger = 0;
+	for (int i = 0; i < size_int; i++) {
+	    interger = (interger << 8) + (byte_array[i] & 0xff);
 	}
+	return interger;
     }
     
+    public static final byte[] packet_maker(int flag, int id_packet,EncodingSymbol symbols) {
+	byte[] byte_flag = intToByteArray(flag);
+	byte[] packet_id = intToByteArray(id_packet);
+	byte[] SNB =intToByteArray(symbols.getSBN());
+	byte[] ESI =intToByteArray(symbols.getESI());
+	byte[] final_packet = new byte[symbols.getData().length + 4 * size_int];
+	//Header for the code
+	System.arraycopy(byte_flag, 0, final_packet, 0, size_int);
+	System.arraycopy(packet_id, 0, final_packet, size_int, size_int);
+	System.arraycopy(SNB, 0, final_packet, size_int*2, size_int);
+	System.arraycopy(ESI, 0, final_packet, size_int*3, size_int);
+	//Put the data
+	System.arraycopy(symbols.getData(), 0, final_packet, size_int*4, symbols.getData().length);
+	return final_packet;
+    }
+    
+    
+    
+    public static void print_in_file(String message, int port) {
+	try {
+	    File file = new File("/home/tai/workspace/stage_pfe/bin/histo/time_division_final_s"+port+".txt");
+	    
+	    // if file doesnt exists, then create it
+	    if ( !file.exists() ) {
+		file.createNewFile();
+	    }
+	    
+	    FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
+	    BufferedWriter bw = new BufferedWriter(fw);
+	    bw.write(message + "\n");
+	    bw.close();
+	    
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
+    }
     
     public static void main(String[] args) throws Exception {
 	if ( args.length != 7 ) {
@@ -86,8 +110,9 @@ public class Sender_multicast {
 	/**
 	 * Test on parameters
 	 */
+	long before_2 = System.currentTimeMillis();
 	double redondance = Double.valueOf(args[5]);
-	Boolean historique = Boolean.valueOf(args[5]);
+	Boolean historique = Boolean.valueOf(args[6]);
 	// open file and convert to bytes
 	String fileName = args[0];
 	File file = new File(fileName);
@@ -103,7 +128,7 @@ public class Sender_multicast {
 	}
 	
 	// check loss
-	float percentageLoss = 99;
+	float percentageLoss = 50;
 	
 	// check overhead
 	int overhead = -1;
@@ -153,7 +178,7 @@ public class Sender_multicast {
 	    System.exit(-1);
 	}
 	
-	Recepteur_thread_multi reception_thread = new Recepteur_thread_multi(destPort + 1, destIP, nb_of_recv,historique);
+	Recepteur_thread_multi reception_thread = new Recepteur_thread_multi(destPort + 1, destIP, nb_of_recv, historique);
 	
 	/**
 	 * preparation for the encoding
@@ -176,15 +201,13 @@ public class Sender_multicast {
 	source_blocks = encoder.partition();
 	no_blocks = source_blocks.length;
 	int nb_packet = -1;
-	//start the thread 
+	// start the thread
 	reception_thread.start();
+	long temps = System.currentTimeMillis()-before_2;
 	
+	int normal_redundancy = (int) Math.round((((float) length_of_the_file / 192) * redondance) - ((float) length_of_the_file / 192));
 	
-	int normal_redundancy=(int) Math.round((((float) length_of_the_file / 192)*redondance)-((float) length_of_the_file / 192));
-	    
-	
-	
-	reception_thread.set_total_number_of_packets((int) Math.round((float) length_of_the_file / 192));
+	reception_thread.set_total_number_of_packets((int) Math.round((float) length_of_the_file / 192)+1);
 	long before = System.currentTimeMillis();
 	while (reception_thread.get_status_end_loop()) {
 	    
@@ -204,32 +227,35 @@ public class Sender_multicast {
 	    
 	    // allocate memory for all the encoded symbols
 	    encoded_symbols = new EncodingPacket[no_blocks];
-
+	    
 	    for (int block = 0; block < no_blocks; block++) {
 		// the block we'll be encoding+sending
 		SourceBlock sb = source_blocks[block];
 		if ( !reception_thread.get_status_end_loop() ) {
 		    break;
 		}
-
+		
 		encoded_symbols[block] = encoder.encode(sb);
 		
 		EncodingSymbol[] symbols = encoded_symbols[block].getEncoding_symbols();
+		
+		   
+		
 		int no_symbols = symbols.length;
 		/*
 		 * serialize and send the encoded symbols
 		 */
 		ObjectOutput out = null;
 		byte[] serialized_data = null;
-		boolean lol=true;
+		boolean lol = true;
 		
 		try {
 		    // serialize and send each encoded symbol
-
-		    int k = (int) Math.round((float) Kt * redondance);
+		    
+		    int k = (int) Math.round((float) Kt * redondance) + 2;
 		    
 		    reception_thread.set_time_simu();
-		    
+		    byte[] test_1=null;
 		    for (int i = 0; i < no_symbols; i++) {
 			
 			// see the current state of the receiver
@@ -238,11 +264,23 @@ public class Sender_multicast {
 			}
 			// simple serialization
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			
 			out = new ObjectOutputStream(bos);
 			out.writeObject(symbols[i]);
 			serialized_data = bos.toByteArray();
 			out.close();
 			bos.close();
+			
+			test_1=symbols[i].getData();
+			 byte [] test=new byte [4];
+			// System.out.println("    SBN     "+symbols[i].getSBN()+"      ESI    "+ symbols[i].getESI()+ "  data    "+test_1.length);
+			/*    for (int j = 0; j < serialized_data.length; j++) {
+				System.out.println(serialized_data[j]);
+				
+				
+			    }
+			    */
+			
 			// setup an UDP packet with the serialized symbol
 			// and
 			// the destination info
@@ -251,23 +289,31 @@ public class Sender_multicast {
 			byte[] packet_id = { 0, 0, 0, 0 };
 			byte[] serialized_data_with_length = new byte[serialized_data.length + 2 * size_int];
 			nb_packet++;
-			if (lol){
-			    print_in_file(String.valueOf(System.currentTimeMillis()));
-			    lol=false;
+			if ( lol ) {
+			    print_in_file(String.valueOf(System.currentTimeMillis()),destPort);
+			    lol = false;
 			}
 			
 			if ( i > k ) {
 			    // if it is the last one packet
+			    /*
 			    byte_array = intToByteArray(FLAG_PUSH);
 			    packet_id = intToByteArray(ID_PACKET);
 			    
 			    System.arraycopy(byte_array, 0, serialized_data_with_length, 0, size_int);
 			    System.arraycopy(packet_id, 0, serialized_data_with_length, size_int, size_int);
-			    
 			    System.arraycopy(serialized_data, 0, serialized_data_with_length, size_int * 2, serialized_data.length);
 			    DatagramPacket sendPacket = new DatagramPacket(serialized_data_with_length, serialized_data_with_length.length, destIP, destPort);
+			    */
+			    
+			    byte[] data_ready=packet_maker(FLAG_PUSH,ID_PACKET,symbols[i]);
+			    
+			    
+			    DatagramPacket sendPacket = new DatagramPacket(data_ready, data_ready.length, destIP, destPort);
+				   
+			    
 			    clientSocket.send(sendPacket);
-			    //Sender timer
+			    // Sender timer
 			    for (int u = 1; u < 10000; u++) {
 				if ( reception_thread.get_need_more() ) {
 				    
@@ -278,21 +324,26 @@ public class Sender_multicast {
 				Thread.sleep(1);
 			    }
 			    k = k + reception_thread.get_number_of_packets();
-			 //   k = k + reception_thread.get_number_of_packets() + normal_redundancy;
+			    // k = k + reception_thread.get_number_of_packets() + normal_redundancy;
 			    reception_thread.reset_number_of_packets();
 			    
 			} else {
-			    //if you send a normal packet
+			    // if you send a normal packet
+			    /*
 			    byte_array = intToByteArray(length_of_the_file);
 			    packet_id = intToByteArray(ID_PACKET);
 			    System.arraycopy(byte_array, 0, serialized_data_with_length, 0, size_int);
 			    System.arraycopy(packet_id, 0, serialized_data_with_length, size_int, size_int);
 			    
 			    System.arraycopy(serialized_data, 0, serialized_data_with_length, size_int * 2, serialized_data.length);
-			    
 			    DatagramPacket sendPacket = new DatagramPacket(serialized_data_with_length, serialized_data_with_length.length, destIP, destPort);
+			    */
+			    
+			    byte[] data_ready=packet_maker(length_of_the_file,ID_PACKET,symbols[i]);
+			    DatagramPacket sendPacket = new DatagramPacket(data_ready, data_ready.length, destIP, destPort);
+				   
 			    clientSocket.send(sendPacket);
-			     Thread.sleep(37);
+			    Thread.sleep(26);
 			}
 		    }
 		} catch (IOException e) {
@@ -320,8 +371,8 @@ public class Sender_multicast {
 	System.out.println(total_overhead);
 	System.out.println(total_overhead_pourcent);
 	System.out.println(reception_thread.get_nb_ack());
-	System.out.println((float) reception_thread.get_time_1()/1000);
-	System.out.println((float) reception_thread.get_time_2()/1000);
+	System.out.println((float) reception_thread.get_time_1() / 1000);
+	System.out.println((float) reception_thread.get_time_2() / 1000);
 	System.out.println((float) ((float) reception_thread.get_time_2() - (float) reception_thread.get_time_1()) / (float) reception_thread.get_time_1());
 	// System.out.println(time_2);
 	

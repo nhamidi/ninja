@@ -13,6 +13,7 @@ import java.util.Random;
 
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.util.ConcurrentModificationException;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -24,7 +25,8 @@ import RQLibrary.SingularMatrixException;
 import RQLibrary.SourceBlock;
 
 public class Receiver_multicast {
-    private static Set<EncodingSymbol> received_packets = null;
+    private static Set<EncodingSymbol> received_packets_2 = new HashSet<EncodingSymbol>();
+    
     final static int size_int = 4;
     final static int ACK = -2;
     final static int NACK = -1;
@@ -33,27 +35,24 @@ public class Receiver_multicast {
     final static int FLAG_PUSH = 999999999;
     final static int FLAG_STOP = 111111111;
     
-    public static void print_in_file(long message,int port){
+    public static void print_in_file(long message, int port) {
 	try {
-		File file = new File("/home/tai/workspace/stage_pfe/bin/histo/time_division_r_final.txt");
-
-		// if file doesnt exists, then create it
-		if (!file.exists()) {
-			file.createNewFile();
-		}
-
-		FileWriter fw = new FileWriter(file.getAbsoluteFile(),true);
-		BufferedWriter bw = new BufferedWriter(fw);
-		bw.write( String.valueOf(message)+"\n");
-		bw.close();
-
+	    File file = new File("/home/tai/workspace/stage_pfe/bin/histo/time_division_r_final"+port+".txt");
+	    
+	    // if file doesnt exists, then create it
+	    if ( !file.exists() ) {
+		file.createNewFile();
+	    }
+	    
+	    FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
+	    BufferedWriter bw = new BufferedWriter(fw);
+	    bw.write(String.valueOf(message) + "\n");
+	    bw.close();
+	    
 	} catch (IOException e) {
-		e.printStackTrace();
+	    e.printStackTrace();
 	}
     }
-    
-    
-    
     
     // Simulate a lost of the canal
     public static boolean packet_is_lost(float percentageLoss) {
@@ -79,7 +78,7 @@ public class Receiver_multicast {
 	MulticastSocket socketReception;
 	socketReception = new MulticastSocket(port);
 	socketReception.joinGroup(groupeIP);
-	byte[] receiveData = new byte[51024];
+	byte[] receiveData = new byte[500];
 	DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 	
 	try {
@@ -176,7 +175,7 @@ public class Receiver_multicast {
 	    System.err.println("Invalid network loss percentage. (must be a float in [0.0, 100.0[)");
 	    System.exit(-1);
 	}
-	boolean lol=true;
+	boolean lol = true;
 	int para_test = Integer.valueOf(args[5]);
 	
 	Emetteur_thread_multi sending_thread = new Emetteur_thread_multi(sendIP, src_port + 1);
@@ -203,20 +202,16 @@ public class Receiver_multicast {
 	    System.err.println("Error opening socket.");
 	    System.exit(1);
 	}
-	byte[] receiveData_for_the_size = new byte[51024];
+	byte[] receiveData_for_the_size = new byte[500];
 	// create a UDP packet
 	DatagramPacket receivePacket_for_the_size = new DatagramPacket(receiveData_for_the_size, receiveData_for_the_size.length);
 	
 	serverSocket_for_the_size.receive(receivePacket_for_the_size);
 	
-	
-	if (lol){
-		print_in_file(System.currentTimeMillis(),src_port);
-		lol=false;
-	    }
-		
-	
-	
+	if ( lol ) {
+	    print_in_file(System.currentTimeMillis(), src_port);
+	    lol = false;
+	}
 	
 	// get the packet's payload
 	byte[] packetData_for_the_size = receivePacket_for_the_size.getData();
@@ -227,7 +222,6 @@ public class Receiver_multicast {
 	System.arraycopy(receivePacket_for_the_size.getData(), size_int * 2, first_packet_data, 0, first_packet_data.length);
 	treatment_thread.add_packet(first_packet_data);
 	serverSocket_for_the_size.close();
-	
 	// create a new Encoder instance (usually one per file) and for that
 	// get the file size
 	Encoder encoder = new Encoder((int) fileSize);
@@ -260,14 +254,10 @@ public class Receiver_multicast {
 	
 	boolean successfulDecoding = false;
 	
-	
-	
 	int nb_of_utils_packet = total_symbols;
 	int compteur_utils_packet = 0;
 	long before_2 = System.currentTimeMillis();
 	int id_data_packet;
-	
-	
 	
 	while (!successfulDecoding) {
 	    MulticastSocket serverSocket = null;
@@ -284,14 +274,16 @@ public class Receiver_multicast {
 		// wait for all the symbols that we need...
 		int flag = 0;
 		total_symbols = total_symbols * 2;
+		
+		int b = 1;
 		for (int recv = 0; recv < total_symbols; recv++) {
-		    
+		    b++;
 		    
 		    compteur_utils_packet++;
 		    /**
 		     * reception of the response and add noise
 		     */
-		    //
+		    // test of a delay in a ack
 		    if ( para_test == 5 && (nb_of_utils_packet - 2) >= compteur_utils_packet ) {
 			if ( (nb_of_utils_packet - 2) == compteur_utils_packet ) {
 			    para_test++;
@@ -300,12 +292,12 @@ public class Receiver_multicast {
 		    }
 		    
 		    // allocate some memory for receiving the packets
-		    byte[] receiveData = new byte[51024];
+		    byte[] receiveData = new byte[500];
 		    byte[] packetData;
 		    
 		    DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
 		    // set the timeout for the receiver
-		    int reception_timer = 10000;
+		    int reception_timer = 2 * RTT;
 		    serverSocket.setSoTimeout(reception_timer);
 		    try {
 			number_of_received_packets++;
@@ -338,10 +330,9 @@ public class Receiver_multicast {
 			compteur_utils_packet--;
 			continue;
 		    }
+		    
+		    // System.out.println("  flag push     "+flag+"   id packet   "+id_data_packet);
 		    // Add packet to the rtt queue
-		    
-		    System.out.println(packetData.length);
-		    
 		    
 		    treatment_thread.add_packet(packetData);
 		    
@@ -362,7 +353,8 @@ public class Receiver_multicast {
 		    
 		    // got a flag and enough packets decode
 		    if ( flag == FLAG_PUSH ) {
-			if ( nb_of_utils_packet < compteur_utils_packet ) {
+			//System.out.println(nb_of_utils_packet + " ce que j'ai besoin " + compteur_utils_packet + " ce que j'ai vraiment " + b);
+			if ( nb_of_utils_packet <= compteur_utils_packet ) {
 			    System.out.println("          je decode");
 			    break;
 			}
@@ -386,54 +378,59 @@ public class Receiver_multicast {
 	    /**
 	     * organize into source blocks
 	     */
-	    
+	   
 	    int maxESI = -1;
 	    
+	    while (nb_of_utils_packet >= treatment_thread.get_nb()) {
+		Thread.sleep(10);
+	    }
 	    
-	    while ( nb_of_utils_packet >= treatment_thread.get_nb() ) {
-		    Thread.sleep(10);
-		}
-	    
-	    
-	    
-	    
-	    
-	    
-	   // print_in_file("\n apres sortie traitement   \n",src_port);
-	   
-	    print_in_file(System.currentTimeMillis(),src_port);
-	    
-	    received_packets = treatment_thread.get_encoding_symbol();
-	    
-	    
-	    
-	    
-	    
+	    // print_in_file("\n apres sortie traitement   \n",src_port);
+	    print_in_file(System.currentTimeMillis(), src_port);
+	    final Set<EncodingSymbol> received_packets = treatment_thread.get_encoding_symbol();
 	    
 	    System.out.println("                                    nb of packet pop'up: " + received_packets.size());
-		
-	    // order received packets
-	    for (EncodingSymbol es : received_packets) {
-		
-		if ( es.getESI() > maxESI )
-		    maxESI = es.getESI();
-	    }
-	    Iterator<EncodingSymbol> it = received_packets.iterator();
-	    EncodingSymbol[][] aux = new EncodingSymbol[no_blocks][maxESI + 1];
+	    sending_thread.set_ACK_NACK(ACK);
+	    sending_thread.send_thing();
+	    System.out.println("           envoie ACK 1 bon");
 	    
-	    while (it.hasNext()) {
-		EncodingSymbol pack = it.next();
-		aux[pack.getSBN()][pack.getESI()] = pack;
+	    // order received packets
+	    received_packets_2 = received_packets;
+	    EncodingSymbol[][] aux_2= null;
+	    EncodingSymbol[][] aux;
+	    try{
+	    synchronized (received_packets) {
+		
+		for (EncodingSymbol es : received_packets) {
+		    
+		    if ( es.getESI() > maxESI )
+			maxESI = es.getESI();
+		}
+		
+		Iterator<EncodingSymbol> it = received_packets.iterator();
+		aux_2 = new EncodingSymbol[no_blocks][maxESI + 1];
+		
+		while (it.hasNext()) {
+		    EncodingSymbol pack = it.next();
+		    aux_2[pack.getSBN()][pack.getESI()] = pack;
+		}
 	    }
+	    }
+	    catch(ConcurrentModificationException e)
+	    {
+		e.printStackTrace();
+	    }
+	    aux = aux_2;
+	    
 	    /**
 	     * decoding
 	     */
-	    
-	    // where the decoded data will be stored
+	 // where the decoded data will be stored
 	    byte[] decoded_data = null;
-	    
-	    // where the source blocks will be stored
 	    SourceBlock[] blocks = new SourceBlock[no_blocks];
+	    boolean decodage=true;
+	    if (decodage){
+	    
 	    
 	    successfulDecoding = true;
 	    
@@ -454,8 +451,8 @@ public class Receiver_multicast {
 		    long after = System.currentTimeMillis();
 		    
 		    long diff = (long) (after - before);
-		   // print_in_file(" \n apres décodage \n",src_port);
-		    print_in_file(System.currentTimeMillis(),src_port);
+		    // print_in_file(" \n apres décodage \n",src_port);
+		    print_in_file(System.currentTimeMillis(), src_port);
 		    System.out.println("\nSuccessfuint lly decoded block: " + sblock + " (in " + diff + " milliseconds)");
 		    
 		} catch (SingularMatrixException e) {
@@ -491,11 +488,12 @@ public class Receiver_multicast {
 			continue;
 		    } else
 			sending_thread.send_thing();
-		    continue;
+		    continue; // where the source blocks will be stored
 		}
 		if ( successfulDecoding )
 		    continue;
 		
+	    }
 	    }
 	    
 	    // if the decoding was successful for all blocks, we can unpartition
@@ -511,43 +509,21 @@ public class Receiver_multicast {
 		    if ( file.exists() )
 			file.createNewFile();
 		    
-		    while (true) {
-			// Lost of an ACK
-			if ( para_test == 1 ) {
-			    if ( look_for_the_answer(sendIP, src_port) == FLAG_PUSH ) {
-				sending_thread.set_ACK_NACK(ACK);
-				sending_thread.send_thing();
-				System.out.println("           envoie ACK 1 mauvais");
-				break;
-			    }
-			    
-			    // Retard of an ACK 4 sec
-			} else if ( para_test == 3 ) {
-			    Recepteur_thread_multi recep_thread = new Recepteur_thread_multi(src_port, sendIP, 1, false);
-			    recep_thread.start();
-			    
-			    for (int u = 1; u < 4000; u++) {
-				if ( recep_thread.get_number_of_packets() == FLAG_PUSH ) {
-				    break;
-				}
-				
-				Thread.sleep(1);
-			    }
-			    sending_thread.set_ACK_NACK(ACK);
-			    sending_thread.send_thing();
-			    System.out.println("           envoie ACK 1 mauvais 3");
-			    recep_thread.join();
-			    break;
-			}
-			// If no lost
-			else {
-			    sending_thread.set_ACK_NACK(ACK);
-			    sending_thread.send_thing();
-			    System.out.println("           envoie ACK 1 bon");
-			    break;
-			    
-			}
-		    }
+		    /*
+		     * while (true) { // Lost of an ACK if ( para_test == 1 ) { if ( look_for_the_answer(sendIP, src_port) == FLAG_PUSH ) {
+		     * sending_thread.set_ACK_NACK(ACK); sending_thread.send_thing(); System.out.println("           envoie ACK 1 mauvais"); break; }
+		     * 
+		     * // Retard of an ACK 4 sec } else if ( para_test == 3 ) { Recepteur_thread_multi recep_thread = new Recepteur_thread_multi(src_port,
+		     * sendIP, 1, false); recep_thread.start();
+		     * 
+		     * for (int u = 1; u < 4000; u++) { if ( recep_thread.get_number_of_packets() == FLAG_PUSH ) { break; }
+		     * 
+		     * Thread.sleep(1); } sending_thread.set_ACK_NACK(ACK); sending_thread.send_thing();
+		     * System.out.println("           envoie ACK 1 mauvais 3"); recep_thread.join(); break; } // If no lost else {
+		     * sending_thread.set_ACK_NACK(ACK); sending_thread.send_thing(); System.out.println("           envoie ACK 1 bon"); break;
+		     * 
+		     * } }
+		     */
 		    
 		    // Terminate the thread
 		    treatment_thread.set_end_boucle();
@@ -561,7 +537,7 @@ public class Receiver_multicast {
 		    System.out.println((float) (100 * re_send_for_a_lost) / 834);
 		    int total_overhead = (number_of_received_packets - total_symbols) * 192;
 		    
-		    System.out.println("Delai total d’envoi du message : " +time);
+		    System.out.println("Delai total d’envoi du message : " + time);
 		    break;
 		    
 		} catch (IOException e) {

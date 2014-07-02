@@ -12,7 +12,7 @@ public class Recepteur_thread_multi extends Thread {
     final static int size_int = 4;
     final static int ACK = -2;
     final static int NACK = -1;
-    // private int port;
+     private int port;
     private MulticastSocket socketReception;
     private boolean end_loop;
     private boolean historic;
@@ -29,12 +29,12 @@ public class Recepteur_thread_multi extends Thread {
     private double redondancy;
     
     public Recepteur_thread_multi(int port, InetAddress groupeIP, int nb_of_recv, boolean historic) throws IOException {
-	// this.port = port;
+	 this.port = port;
 	this.end_loop = true;
 	this.need_more = false;
 	this.socketReception = new MulticastSocket(port);
 	this.socketReception.joinGroup(groupeIP);
-	this.number_of_packets = 2;
+	this.number_of_packets = 5;
 	this.end_reception = 1;
 	this.packetData = 0;
 	this.nb_of_receiver = nb_of_recv;
@@ -47,9 +47,9 @@ public class Recepteur_thread_multi extends Thread {
 	
     }
     
-    public static void print_in_file(String message) {
+    public static void print_in_file(String message,int port) {
 	try {
-	    File file = new File("/home/tai/workspace/stage_pfe/bin/time_division_final.txt");
+	    File file = new File("/home/tai/workspace/stage_pfe/bin/histo/time_division_final"+port+".txt");
 	    
 	    // if file doesnt exists, then create it
 	    if ( !file.exists() ) {
@@ -99,7 +99,10 @@ public class Recepteur_thread_multi extends Thread {
 	if ( this.number_of_packets < nb_packets ) {
 	    
 	    if ( this.historic ) {
-		this.number_of_packets = (int) Math.round((((float) nb_packets / (float) this.total_symb) + 1) * (float) nb_packets);
+		//System.out.println("             "+nb_packets+ "       "+this.total_symb);
+		//System.out.println("      Plost                "+ ((float) nb_packets / (float) this.total_symb));
+		this.number_of_packets = (int) Math.round((((float) nb_packets / (float) this.total_symb) + 1) * (float) nb_packets)+5;
+		
 	    } else
 		this.number_of_packets = nb_packets;
 	    
@@ -110,7 +113,7 @@ public class Recepteur_thread_multi extends Thread {
     }
     
     public void reset_number_of_packets() {
-	this.number_of_packets = 1;
+	this.number_of_packets = 10;
     }
     
     public long get_time_1() {
@@ -146,7 +149,7 @@ public class Recepteur_thread_multi extends Thread {
 	    } catch (Exception exc) {
 		System.out.println(exc);
 	    }
-	    // System.out.println("On a recu :                "+this.packetData);
+	   //  System.out.println("On a recu :                "+this.packetData);
 	    this.nb_ack++;
 	    
 	    try {
@@ -177,8 +180,7 @@ public class Recepteur_thread_multi extends Thread {
 		    this.number_of_packets = 0;
 		    this.change_status_end_loop();
 		    time_2 = System.currentTimeMillis() - before;
-		    print_in_file("\n");
-		    print_in_file(String.valueOf(System.currentTimeMillis()));
+		    print_in_file(String.valueOf(System.currentTimeMillis()),port);
 		    break;
 		}
 	    } else {

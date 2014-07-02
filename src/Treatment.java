@@ -8,14 +8,14 @@ import java.util.Set;
 import RQLibrary.EncodingSymbol;
 
 public class Treatment extends Thread {
+    final static int size_int = 4;
     byte[][] matrice;
     long[] temps = new long[1000];
-    private final Set<EncodingSymbol> received_packets = new HashSet<EncodingSymbol>();
+    private  final Set<EncodingSymbol> received_packets = new HashSet<EncodingSymbol>();
     int RTT;
     boolean start;
     boolean boucle;
     int nb;
-    
     
     Treatment(int rtt) {
 	
@@ -30,6 +30,7 @@ public class Treatment extends Thread {
 	start();
 	
     }
+    
     int get_nb() {
 	return this.nb;
     }
@@ -38,13 +39,22 @@ public class Treatment extends Thread {
 	boucle = false;
     }
     
+    public static final int byte_array_to_int(byte[] byte_array) {
+	int interger = 0;
+	for (int i = 0; i < size_int; i++) {
+	    interger = (interger << 8) + (byte_array[i] & 0xff);
+	}
+	return interger;
+    }
+    
     public void run() {
 	// look and compare all time if > RTT pop it
 	while (boucle) {
 	    for (int i = 0; i < temps.length; i++) {
 		
 		if ( temps[i] != 0 ) {
-		    
+		   
+		    /*
 		    if ( System.currentTimeMillis() - temps[i] > 500 ) {
 			ByteArrayInputStream bis = new ByteArrayInputStream(matrice[i]);
 			try {
@@ -60,7 +70,17 @@ public class Treatment extends Thread {
 			    e.printStackTrace();
 			}
 			
-		    }
+		    }*/
+		    
+		   if ( System.currentTimeMillis() - temps[i] > 500 ) {
+			  
+			nb++;
+			temps[i] = 0;
+			
+			received_packets.add((EncodingSymbol) treat_packet(matrice[i]));
+			
+		    } 
+		
 		}
 		
 	    }
@@ -74,6 +94,22 @@ public class Treatment extends Thread {
 	    
 	}
 	
+    }
+    
+    EncodingSymbol treat_packet(byte[] packet) {
+	int T=192;
+	byte[] sbn = new byte[4];
+	byte[] esi = new byte[4];
+	byte[] data = new byte[T];
+	
+	System.arraycopy(packet, 0, sbn, 0, size_int);
+	System.arraycopy(packet, size_int, esi, 0, size_int);
+	System.arraycopy(packet, size_int * 2, data, 0, T);
+	//System.out.println("      SBN      "+byte_array_to_int(sbn)+"            ESI                "+byte_array_to_int(esi));
+	
+	EncodingSymbol symbols = new EncodingSymbol(byte_array_to_int(sbn), byte_array_to_int(esi), data);
+	
+	return symbols;
     }
     
     void add_packet(byte[] packet) {
@@ -90,11 +126,15 @@ public class Treatment extends Thread {
 	    }
 	    
 	}
-	
+				
     }
     
     Set<EncodingSymbol> get_encoding_symbol() {
-	return received_packets;
+	Set<EncodingSymbol> tmp = new HashSet<EncodingSymbol>();
+	synchronized(received_packets){
+	tmp.addAll(received_packets);
+	}
+	return tmp;
 	
     }
     
