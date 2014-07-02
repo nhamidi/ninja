@@ -1,0 +1,1 @@
+Redundancy time-to-send-the-first-packet time-to-recv-the-first-packet time-to-send-all-the-packets time-to-decode time-to-recv-the-last-ack
