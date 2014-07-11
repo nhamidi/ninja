@@ -71,9 +71,9 @@ public class Receiver_for_the_test extends Thread {
 		 * System.out.println(s.toString()); System.exit(1); }
 		 */
 
-		Emetteur_thread_multi sending_thread = null;
+		EmetteurThreadMulti sending_thread = null;
 		try {
-			sending_thread = new Emetteur_thread_multi(sendIP, srcPort + 1);
+			sending_thread = new EmetteurThreadMulti(sendIP, srcPort + 1);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -203,7 +203,7 @@ public class Receiver_for_the_test extends Thread {
 
 					} catch (java.net.SocketTimeoutException e) {
 						// call the sending thread
-						sending_thread.set_ACK_NACK(49);
+						sending_thread.setAckType(49);
 						try {
 							sending_thread.send_thing();
 						} catch (Exception e1) {
@@ -311,7 +311,7 @@ public class Receiver_for_the_test extends Thread {
 				} catch (SingularMatrixException e) {
 					System.out.println("\nDecoding failed!");
 					successfulDecoding = false;
-					sending_thread.set_ACK_NACK(49);
+					sending_thread.setAckType(49);
 					try {
 						sending_thread.send_thing();
 					} catch (Exception e1) {
@@ -325,7 +325,7 @@ public class Receiver_for_the_test extends Thread {
 					int nb_packets_lost = Integer.parseInt(e.getMessage());
 
 					// /////pb transforme le int en tableaux de byte
-					sending_thread.set_ACK_NACK(nb_packets_lost);
+					sending_thread.setAckType(nb_packets_lost);
 					successfulDecoding = false;
 					try {
 						sending_thread.send_thing();
@@ -355,7 +355,7 @@ public class Receiver_for_the_test extends Thread {
 						file.createNewFile();
 					Thread.sleep(1000);
 					Files.write(file.toPath(), decoded_data);
-					sending_thread.set_ACK_NACK((byte) 48);
+					sending_thread.setAckType((byte) 48);
 					sending_thread.send_thing();
 					sending_thread.join();
 					number_of_ack++;

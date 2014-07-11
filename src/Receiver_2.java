@@ -174,9 +174,9 @@
 
 			int para_test = Integer.valueOf(args[5]);
 
-			Emetteur_thread_multi sending_thread = new Emetteur_thread_multi(
+			EmetteurThreadMulti sending_thread = new EmetteurThreadMulti(
 					sendIP, src_port + 1);
-			sending_thread.set_parameter_test(para_test);
+			sending_thread.setParameterTest(para_test);
 
 			// Recepteur_thread Reception_thread = new Recepteur_thread(src_port+2);
 			/**
@@ -248,7 +248,7 @@
 
 						} catch (java.net.SocketTimeoutException e) {
 							// call the sending thread
-							sending_thread.set_ACK_NACK(NACK);
+							sending_thread.setAckType(NACK);
 
 							sending_thread.send_thing();
 							System.out.println("Socket bloquée");
@@ -298,7 +298,7 @@
 								break;
 							}
 							System.out.println("          je peux pas decoder");
-							sending_thread.set_ACK_NACK((nb_of_utils_packet
+							sending_thread.setAckType((nb_of_utils_packet
 									- compteur_utils_packet));
 							sending_thread.send_thing();
 							recv--;
@@ -318,7 +318,7 @@
 
 				
 				while (true) {
-					sending_thread.set_ACK_NACK(ACK);
+					sending_thread.setAckType(ACK);
 					sending_thread.send_thing();
 					System.out.println("           envoie ACK 1 bon");
 					break;

@@ -11,11 +11,13 @@ public class Treatment extends Thread {
     final static int size_int = 4;
     byte[][] matrice;
     long[] temps = new long[1000];
-    private  final Set<EncodingSymbol> received_packets = new HashSet<EncodingSymbol>();
+    private final Set<EncodingSymbol> receivedPackets = new HashSet<EncodingSymbol>();
     int RTT;
     boolean start;
     boolean boucle;
     int nb;
+    int nbRecv;
+    int ESI;
     
     Treatment(int rtt) {
 	
@@ -25,17 +27,28 @@ public class Treatment extends Thread {
 	    temps[i] = 0;
 	}
 	nb = 0;
+	nbRecv = 0;
 	start = true;
 	boucle = true;
+	ESI=1;
 	start();
 	
     }
     
-    int get_nb() {
+    int getESI() {
+	return this.ESI;
+    }
+    
+    
+    int getNb() {
 	return this.nb;
     }
     
-    void set_end_boucle() {
+    int getNbRecv() {
+	return this.nbRecv;
+    }
+    
+    void setEndBoucle() {
 	boucle = false;
     }
     
@@ -53,51 +66,25 @@ public class Treatment extends Thread {
 	    for (int i = 0; i < temps.length; i++) {
 		
 		if ( temps[i] != 0 ) {
-		   
-		    /*
-		    if ( System.currentTimeMillis() - temps[i] > 500 ) {
-			ByteArrayInputStream bis = new ByteArrayInputStream(matrice[i]);
-			try {
-			    nb++;
-			    temps[i] = 0;
-			    ObjectInput in = new ObjectInputStream(bis);
-			    
-			    received_packets.add((EncodingSymbol) in.readObject());
-			} catch (ClassNotFoundException e) {
-			    e.printStackTrace();
-			} catch (IOException e) {
-			    // TODO Auto-generated catch block
-			    e.printStackTrace();
-			}
-			
-		    }*/
-		    
-		   if ( System.currentTimeMillis() - temps[i] > 500 ) {
-			  
-			nb++;
+		   // if ( System.currentTimeMillis() - temps[i] > 500 ) {
+		   if ( System.currentTimeMillis() - temps[i] > this.RTT ) {
+			nbRecv++;
 			temps[i] = 0;
-			
-			received_packets.add((EncodingSymbol) treat_packet(matrice[i]));
-			
-		    } 
-		
+			receivedPackets.add((EncodingSymbol) treat_packet(matrice[i]));
+		    }
 		}
-		
 	    }
-	    
 	    try {
 		Thread.sleep(10);
 	    } catch (InterruptedException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
-	    }
-	    
-	}
-	
+	    }   
+	}	
     }
     
     EncodingSymbol treat_packet(byte[] packet) {
-	int T=192;
+	int T = 192;
 	byte[] sbn = new byte[4];
 	byte[] esi = new byte[4];
 	byte[] data = new byte[T];
@@ -105,8 +92,8 @@ public class Treatment extends Thread {
 	System.arraycopy(packet, 0, sbn, 0, size_int);
 	System.arraycopy(packet, size_int, esi, 0, size_int);
 	System.arraycopy(packet, size_int * 2, data, 0, T);
-	//System.out.println("      SBN      "+byte_array_to_int(sbn)+"            ESI                "+byte_array_to_int(esi));
-	
+	// System.out.println("      SBN      "+byte_array_to_int(sbn)+"            ESI                "+byte_array_to_int(esi));
+	this.ESI=byte_array_to_int(esi);
 	EncodingSymbol symbols = new EncodingSymbol(byte_array_to_int(sbn), byte_array_to_int(esi), data);
 	
 	return symbols;
@@ -114,10 +101,12 @@ public class Treatment extends Thread {
     
     void add_packet(byte[] packet) {
 	// Add a packet and write the entering time
+	nb++;
 	if ( start ) {
 	    matrice = new byte[1000][packet.length];
 	    start = !start;
 	}
+	
 	for (int i = 0; i < temps.length; i++) {
 	    if ( temps[i] == 0 ) {
 		temps[i] = System.currentTimeMillis();
@@ -126,13 +115,13 @@ public class Treatment extends Thread {
 	    }
 	    
 	}
-				
+	
     }
     
     Set<EncodingSymbol> get_encoding_symbol() {
 	Set<EncodingSymbol> tmp = new HashSet<EncodingSymbol>();
-	synchronized(received_packets){
-	tmp.addAll(received_packets);
+	synchronized (receivedPackets) {
+	    tmp.addAll(receivedPackets);
 	}
 	return tmp;
 	

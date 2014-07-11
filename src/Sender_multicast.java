@@ -36,62 +36,46 @@ import RQLibrary.EncodingSymbol;
 import RQLibrary.SourceBlock;
 
 public class Sender_multicast {
-    final static int FLAG_PUSH = 999999999;
-    final static int size_int = 4;
+    
     static Random randomGenerator = new Random();
     final static int ID_PACKET = randomGenerator.nextInt(100);
     
-    public static final byte[] intToByteArray(int value) {
-	return new byte[] { (byte) (value >>> 24), (byte) (value >>> 16), (byte) (value >>> 8), (byte) value };
+   
+    
+    public static final double redundancy_in_line(double current_lost,double lost) {
+	float alpha = (float) 0.2;
+	if(current_lost==1000)
+	    current_lost=0.0;
+	current_lost=current_lost/1000;
+	System.out.println("je suce " + current_lost);
+	if ( current_lost < (lost + 0.001) && current_lost > (lost - 0.001) ) {
+	    // branlas
+	} else
+	    lost = lost + alpha * (current_lost - lost);
+	System.out.println("je suce pour " + lost);
+	return lost;
     }
     
-    public static final int byte_array_to_int(byte[] byte_array) {
-	int interger = 0;
-	for (int i = 0; i < size_int; i++) {
-	    interger = (interger << 8) + (byte_array[i] & 0xff);
-	}
-	return interger;
-    }
-    
-    public static final byte[] packet_maker(int flag, int id_packet,EncodingSymbol symbols) {
-	byte[] byte_flag = intToByteArray(flag);
-	byte[] packet_id = intToByteArray(id_packet);
-	byte[] SNB =intToByteArray(symbols.getSBN());
-	byte[] ESI =intToByteArray(symbols.getESI());
-	byte[] final_packet = new byte[symbols.getData().length + 4 * size_int];
-	//Header for the code
-	System.arraycopy(byte_flag, 0, final_packet, 0, size_int);
-	System.arraycopy(packet_id, 0, final_packet, size_int, size_int);
-	System.arraycopy(SNB, 0, final_packet, size_int*2, size_int);
-	System.arraycopy(ESI, 0, final_packet, size_int*3, size_int);
-	//Put the data
-	System.arraycopy(symbols.getData(), 0, final_packet, size_int*4, symbols.getData().length);
+    public static final byte[] packet_maker(int flag, int id_packet, EncodingSymbol symbols) {
+	byte[] byte_flag = Utils.intToByteArray(flag);
+	byte[] packet_id = Utils.intToByteArray(id_packet);
+	byte[] SNB = Utils.intToByteArray(symbols.getSBN());
+	byte[] ESI = Utils.intToByteArray(symbols.getESI());
+	byte[] final_packet = new byte[symbols.getData().length + 4 * Utils.IntegerSize];
+	// Header for the code
+	System.arraycopy(byte_flag, 0, final_packet, 0, Utils.IntegerSize);
+	System.arraycopy(packet_id, 0, final_packet, Utils.IntegerSize, Utils.IntegerSize);
+	System.arraycopy(SNB, 0, final_packet, Utils.IntegerSize * 2, Utils.IntegerSize);
+	System.arraycopy(ESI, 0, final_packet, Utils.IntegerSize * 3, Utils.IntegerSize);
+	// Put the data
+	System.arraycopy(symbols.getData(), 0, final_packet, Utils.IntegerSize * 4, symbols.getData().length);
 	return final_packet;
     }
     
     
     
-    public static void print_in_file(String message, int port) {
-	try {
-	    File file = new File("/home/tai/workspace/stage_pfe/bin/histo/time_division_final_s"+port+".txt");
-	    
-	    // if file doesnt exists, then create it
-	    if ( !file.exists() ) {
-		file.createNewFile();
-	    }
-	    
-	    FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
-	    BufferedWriter bw = new BufferedWriter(fw);
-	    bw.write(message + "\n");
-	    bw.close();
-	    
-	} catch (IOException e) {
-	    e.printStackTrace();
-	}
-    }
-    
     public static void main(String[] args) throws Exception {
-	if ( args.length != 7 ) {
+	if ( args.length != 8 ) {
 	    StringBuilder s = new StringBuilder();
 	    s.append("Usage: \n");
 	    s.append("    java -jar Sender.jar pathToFile expectedLoss overhead destIP portNumber\n");
@@ -102,6 +86,7 @@ public class Sender_multicast {
 	    s.append("\n        - nb of recv  : the number of receivers will be listening.");
 	    s.append("\n        - redondance  : Para de test.");
 	    s.append("\n        - historic    : if you want historic.");
+	    s.append("\n        - historic in line    : if you want historic in line.");
 	    
 	    System.out.println(s.toString());
 	    System.exit(1);
@@ -110,9 +95,11 @@ public class Sender_multicast {
 	/**
 	 * Test on parameters
 	 */
+	double lost=Utils.LOST;
 	long before_2 = System.currentTimeMillis();
 	double redondance = Double.valueOf(args[5]);
 	Boolean historique = Boolean.valueOf(args[6]);
+	Boolean historique_inline = Boolean.valueOf(args[7]);
 	// open file and convert to bytes
 	String fileName = args[0];
 	File file = new File(fileName);
@@ -128,7 +115,7 @@ public class Sender_multicast {
 	}
 	
 	// check loss
-	float percentageLoss = 50;
+	float percentageLoss = 99;
 	
 	// check overhead
 	int overhead = -1;
@@ -178,7 +165,7 @@ public class Sender_multicast {
 	    System.exit(-1);
 	}
 	
-	Recepteur_thread_multi reception_thread = new Recepteur_thread_multi(destPort + 1, destIP, nb_of_recv, historique);
+	RecepteurThreadMulti reception_thread = new RecepteurThreadMulti(destPort + 1, destIP, nb_of_recv, historique);
 	
 	/**
 	 * preparation for the encoding
@@ -203,11 +190,15 @@ public class Sender_multicast {
 	int nb_packet = -1;
 	// start the thread
 	reception_thread.start();
-	long temps = System.currentTimeMillis()-before_2;
+	long temps = System.currentTimeMillis() - before_2;
 	
-	int normal_redundancy = (int) Math.round((((float) length_of_the_file / 192) * redondance) - ((float) length_of_the_file / 192));
+	int normal_redundancy = (int) Math.round((((float) length_of_the_file / Utils.SYMB_LENGTH) * redondance) - ((float) length_of_the_file / Utils.SYMB_LENGTH));
+	boolean oneTime = true;
+	if ( oneTime ) {
+	    reception_thread.set_total_number_of_packets((int) Math.round((float) length_of_the_file / Utils.SYMB_LENGTH) + 1);
+	    oneTime = false;
+	}
 	
-	reception_thread.set_total_number_of_packets((int) Math.round((float) length_of_the_file / 192)+1);
 	long before = System.currentTimeMillis();
 	while (reception_thread.get_status_end_loop()) {
 	    
@@ -239,78 +230,81 @@ public class Sender_multicast {
 		
 		EncodingSymbol[] symbols = encoded_symbols[block].getEncoding_symbols();
 		
-		   
-		
 		int no_symbols = symbols.length;
 		/*
 		 * serialize and send the encoded symbols
 		 */
-		ObjectOutput out = null;
-		byte[] serialized_data = null;
-		boolean lol = true;
+		/*ObjectOutput out = null;
+		byte[] serialized_data = null;*/
+		boolean oneTimeBis = true;
 		
 		try {
+		    
+		    
 		    // serialize and send each encoded symbol
 		    
 		    int k = (int) Math.round((float) Kt * redondance) + 2;
 		    
 		    reception_thread.set_time_simu();
-		    byte[] test_1=null;
+		    //byte[] test_1 = null;
+		    int histo_count = 0;
+		   
+		    int nb_packet_send = 0;
+		    
 		    for (int i = 0; i < no_symbols; i++) {
+			histo_count++;
+			nb_packet_send++;
+			
+			int nb_of_packet_lost = reception_thread.get_number_of_packets();
+			if ( historique_inline && nb_of_packet_lost != 0 ) {
+			    
+			    //double history = (double) nb_of_packet_lost / (double) 1000;
+			    
+			    double history = redundancy_in_line(nb_of_packet_lost,lost);
+			    
+			    reception_thread.reset_number_of_packets();
+			    k = (int) Math.round(history * nb_packet_send + history * nb_packet_send * (history + 1) + (Kt - nb_packet_send) * (history + 1)
+				    + (Kt - nb_packet_send));
+			    // System.out.println("            " + nb_of_packet_lost + "    history    " + history
+			    // + "     nb_packet_send   " + nb_packet_send + "  Kt   " + Kt);
+			    nb_packet_send = 0;
+			}
 			
 			// see the current state of the receiver
 			if ( !reception_thread.get_status_end_loop() ) {
 			    break;
 			}
 			// simple serialization
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			/*ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			
 			out = new ObjectOutputStream(bos);
 			out.writeObject(symbols[i]);
 			serialized_data = bos.toByteArray();
 			out.close();
 			bos.close();
+			*/
 			
-			test_1=symbols[i].getData();
-			 byte [] test=new byte [4];
-			// System.out.println("    SBN     "+symbols[i].getSBN()+"      ESI    "+ symbols[i].getESI()+ "  data    "+test_1.length);
-			/*    for (int j = 0; j < serialized_data.length; j++) {
-				System.out.println(serialized_data[j]);
-				
-				
-			    }
-			    */
+			//test_1 = symbols[i].getData();
+			//byte[] test = new byte[4];
 			
 			// setup an UDP packet with the serialized symbol
 			// and
 			// the destination info
 			
-			byte[] byte_array = { 0, 0, 0, 0 };
-			byte[] packet_id = { 0, 0, 0, 0 };
-			byte[] serialized_data_with_length = new byte[serialized_data.length + 2 * size_int];
+			// byte[] byte_array = { 0, 0, 0, 0 };
+			// byte[] packet_id = { 0, 0, 0, 0 };
+			// byte[] serialized_data_with_length = new byte[serialized_data.length + 2 * Utils.IntegerSize];
 			nb_packet++;
-			if ( lol ) {
-			    print_in_file(String.valueOf(System.currentTimeMillis()),destPort);
-			    lol = false;
+			if ( oneTimeBis ) {
+			    Utils.printInFile(String.valueOf(System.currentTimeMillis()), destPort,5);
+			    oneTimeBis = false;
 			}
 			
 			if ( i > k ) {
-			    // if it is the last one packet
-			    /*
-			    byte_array = intToByteArray(FLAG_PUSH);
-			    packet_id = intToByteArray(ID_PACKET);
 			    
-			    System.arraycopy(byte_array, 0, serialized_data_with_length, 0, size_int);
-			    System.arraycopy(packet_id, 0, serialized_data_with_length, size_int, size_int);
-			    System.arraycopy(serialized_data, 0, serialized_data_with_length, size_int * 2, serialized_data.length);
-			    DatagramPacket sendPacket = new DatagramPacket(serialized_data_with_length, serialized_data_with_length.length, destIP, destPort);
-			    */
-			    
-			    byte[] data_ready=packet_maker(FLAG_PUSH,ID_PACKET,symbols[i]);
-			    
+			    byte[] data_ready = packet_maker(Utils.FLAG_PUSH, ID_PACKET, symbols[i]);
 			    
 			    DatagramPacket sendPacket = new DatagramPacket(data_ready, data_ready.length, destIP, destPort);
-				   
 			    
 			    clientSocket.send(sendPacket);
 			    // Sender timer
@@ -324,26 +318,20 @@ public class Sender_multicast {
 				Thread.sleep(1);
 			    }
 			    k = k + reception_thread.get_number_of_packets();
-			    // k = k + reception_thread.get_number_of_packets() + normal_redundancy;
 			    reception_thread.reset_number_of_packets();
 			    
+			} else if ( historique_inline && ((Utils.BIT_RATE * histo_count) > Utils.INLINE_REDON_RATE) ) {
+			    byte[] data_ready = packet_maker(Utils.FLAG_PUSH, ID_PACKET, symbols[i]);
+			    DatagramPacket sendPacket = new DatagramPacket(data_ready, data_ready.length, destIP, destPort);
+			    clientSocket.send(sendPacket);
+			    histo_count = 0;
 			} else {
 			    // if you send a normal packet
-			    /*
-			    byte_array = intToByteArray(length_of_the_file);
-			    packet_id = intToByteArray(ID_PACKET);
-			    System.arraycopy(byte_array, 0, serialized_data_with_length, 0, size_int);
-			    System.arraycopy(packet_id, 0, serialized_data_with_length, size_int, size_int);
-			    
-			    System.arraycopy(serialized_data, 0, serialized_data_with_length, size_int * 2, serialized_data.length);
-			    DatagramPacket sendPacket = new DatagramPacket(serialized_data_with_length, serialized_data_with_length.length, destIP, destPort);
-			    */
-			    
-			    byte[] data_ready=packet_maker(length_of_the_file,ID_PACKET,symbols[i]);
+			    byte[] data_ready = packet_maker(length_of_the_file, ID_PACKET, symbols[i]);
 			    DatagramPacket sendPacket = new DatagramPacket(data_ready, data_ready.length, destIP, destPort);
-				   
+			    
 			    clientSocket.send(sendPacket);
-			    Thread.sleep(26);
+			    Thread.sleep(Utils.BIT_RATE);
 			}
 		    }
 		} catch (IOException e) {
@@ -364,8 +352,8 @@ public class Sender_multicast {
 	    }
 	}
 	
-	int total_overhead = (nb_packet - Kt) * 192;
-	float total_overhead_pourcent = 100 * ((float) total_overhead / (float) (Kt * 192));
+	int total_overhead = (nb_packet - Kt) * Utils.SYMB_LENGTH;
+	float total_overhead_pourcent = 100 * ((float) total_overhead / (float) (Kt * Utils.SYMB_LENGTH));
 	nb_packet = nb_packet + reception_thread.get_nb_ack();
 	long time_2 = System.currentTimeMillis() - before;
 	System.out.println(total_overhead);
