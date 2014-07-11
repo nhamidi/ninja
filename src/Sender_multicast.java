@@ -42,34 +42,34 @@ public class Sender_multicast {
     
    
     
-    public static final double redundancy_in_line(double current_lost,double lost) {
+    public static final double redundancyInLine(double currentLost,double lost) {
 	float alpha = (float) 0.2;
-	if(current_lost==1000)
-	    current_lost=0.0;
-	current_lost=current_lost/1000;
-	System.out.println("je suce " + current_lost);
-	if ( current_lost < (lost + 0.001) && current_lost > (lost - 0.001) ) {
+	if(currentLost==1000)
+	    currentLost=0.0;
+	currentLost=currentLost/1000;
+	System.out.println("je suce " + currentLost);
+	if ( currentLost < (lost + 0.001) && currentLost > (lost - 0.001) ) {
 	    // branlas
 	} else
-	    lost = lost + alpha * (current_lost - lost);
+	    lost = lost + alpha * (currentLost - lost);
 	System.out.println("je suce pour " + lost);
 	return lost;
     }
     
-    public static final byte[] packet_maker(int flag, int id_packet, EncodingSymbol symbols) {
-	byte[] byte_flag = Utils.intToByteArray(flag);
-	byte[] packet_id = Utils.intToByteArray(id_packet);
+    public static final byte[] packetMaker(int flag, int idPacket, EncodingSymbol symbols) {
+	byte[] byteFlag = Utils.intToByteArray(flag);
+	byte[] packetId = Utils.intToByteArray(idPacket);
 	byte[] SNB = Utils.intToByteArray(symbols.getSBN());
 	byte[] ESI = Utils.intToByteArray(symbols.getESI());
-	byte[] final_packet = new byte[symbols.getData().length + 4 * Utils.IntegerSize];
+	byte[] finalPacket = new byte[symbols.getData().length + 4 * Utils.IntegerSize];
 	// Header for the code
-	System.arraycopy(byte_flag, 0, final_packet, 0, Utils.IntegerSize);
-	System.arraycopy(packet_id, 0, final_packet, Utils.IntegerSize, Utils.IntegerSize);
-	System.arraycopy(SNB, 0, final_packet, Utils.IntegerSize * 2, Utils.IntegerSize);
-	System.arraycopy(ESI, 0, final_packet, Utils.IntegerSize * 3, Utils.IntegerSize);
+	System.arraycopy(byteFlag, 0, finalPacket, 0, Utils.IntegerSize);
+	System.arraycopy(packetId, 0, finalPacket, Utils.IntegerSize, Utils.IntegerSize);
+	System.arraycopy(SNB, 0, finalPacket, Utils.IntegerSize * 2, Utils.IntegerSize);
+	System.arraycopy(ESI, 0, finalPacket, Utils.IntegerSize * 3, Utils.IntegerSize);
 	// Put the data
-	System.arraycopy(symbols.getData(), 0, final_packet, Utils.IntegerSize * 4, symbols.getData().length);
-	return final_packet;
+	System.arraycopy(symbols.getData(), 0, finalPacket, Utils.IntegerSize * 4, symbols.getData().length);
+	return finalPacket;
     }
     
     
@@ -99,11 +99,11 @@ public class Sender_multicast {
 	long before_2 = System.currentTimeMillis();
 	double redondance = Double.valueOf(args[5]);
 	Boolean historique = Boolean.valueOf(args[6]);
-	Boolean historique_inline = Boolean.valueOf(args[7]);
+	Boolean historiqueInline = Boolean.valueOf(args[7]);
 	// open file and convert to bytes
 	String fileName = args[0];
 	File file = new File(fileName);
-	int length_of_the_file = (int) file.length();
+	int lengthOfTheFile = (int) file.length();
 	
 	byte[] data = null;
 	try {
@@ -142,10 +142,10 @@ public class Sender_multicast {
 	    System.err.println("invalid IP");
 	    System.exit(1);
 	}
-	int nb_of_recv;
+	int nbOfRecv;
 	
-	nb_of_recv = Integer.valueOf(args[4]);
-	if ( nb_of_recv < 0 ) {
+	nbOfRecv = Integer.valueOf(args[4]);
+	if ( nbOfRecv < 0 ) {
 	    System.err.println("Invalid number of user (must be above 0)");
 	    System.exit(-1);
 	}
@@ -165,7 +165,7 @@ public class Sender_multicast {
 	    System.exit(-1);
 	}
 	
-	RecepteurThreadMulti reception_thread = new RecepteurThreadMulti(destPort + 1, destIP, nb_of_recv, historique);
+	RecepteurThreadMulti receptionThread = new RecepteurThreadMulti(destPort + 1, destIP, nbOfRecv, historique);
 	
 	/**
 	 * preparation for the encoding
@@ -175,32 +175,32 @@ public class Sender_multicast {
 	Encoder encoder = new Encoder(data, percentageLoss, overhead);
 	
 	// array that will contain the encoded symbols
-	EncodingPacket[] encoded_symbols = null;
+	EncodingPacket[] encodedSymbols = null;
 	
 	// array of source blocks
-	SourceBlock[] source_blocks = null;
-	int no_blocks;
+	SourceBlock[] sourceBlocks = null;
+	int noBlocks;
 	
 	// total number of source symbols (for all source blocks)
 	int Kt = encoder.getKt();
 	
 	// partition the data into source blocks
-	source_blocks = encoder.partition();
-	no_blocks = source_blocks.length;
-	int nb_packet = -1;
+	sourceBlocks = encoder.partition();
+	noBlocks = sourceBlocks.length;
+	int nbPacket = -1;
 	// start the thread
-	reception_thread.start();
-	long temps = System.currentTimeMillis() - before_2;
+	receptionThread.start();
+	//long temps = System.currentTimeMillis() - before_2;
 	
-	int normal_redundancy = (int) Math.round((((float) length_of_the_file / Utils.SYMB_LENGTH) * redondance) - ((float) length_of_the_file / Utils.SYMB_LENGTH));
+	//int normal_redundancy = (int) Math.round((((float) lengthOfTheFile / Utils.SYMB_LENGTH) * redondance) - ((float) lengthOfTheFile / Utils.SYMB_LENGTH));
 	boolean oneTime = true;
 	if ( oneTime ) {
-	    reception_thread.set_total_number_of_packets((int) Math.round((float) length_of_the_file / Utils.SYMB_LENGTH) + 1);
+	    receptionThread.setTotalNumberOfPackets((int) Math.round((float) lengthOfTheFile / Utils.SYMB_LENGTH) + 1);
 	    oneTime = false;
 	}
 	
 	long before = System.currentTimeMillis();
-	while (reception_thread.get_status_end_loop()) {
+	while (receptionThread.getStatusEndLoop()) {
 	    
 	    /**
 	     * built of the socket
@@ -217,20 +217,20 @@ public class Sender_multicast {
 	    }
 	    
 	    // allocate memory for all the encoded symbols
-	    encoded_symbols = new EncodingPacket[no_blocks];
+	    encodedSymbols = new EncodingPacket[noBlocks];
 	    
-	    for (int block = 0; block < no_blocks; block++) {
+	    for (int block = 0; block < noBlocks; block++) {
 		// the block we'll be encoding+sending
-		SourceBlock sb = source_blocks[block];
-		if ( !reception_thread.get_status_end_loop() ) {
+		SourceBlock sb = sourceBlocks[block];
+		if ( !receptionThread.getStatusEndLoop() ) {
 		    break;
 		}
 		
-		encoded_symbols[block] = encoder.encode(sb);
+		encodedSymbols[block] = encoder.encode(sb);
 		
-		EncodingSymbol[] symbols = encoded_symbols[block].getEncoding_symbols();
+		EncodingSymbol[] symbols = encodedSymbols[block].getEncoding_symbols();
 		
-		int no_symbols = symbols.length;
+		int noSymbols = symbols.length;
 		/*
 		 * serialize and send the encoded symbols
 		 */
@@ -245,33 +245,33 @@ public class Sender_multicast {
 		    
 		    int k = (int) Math.round((float) Kt * redondance) + 2;
 		    
-		    reception_thread.set_time_simu();
+		    receptionThread.setTimeSimu();
 		    //byte[] test_1 = null;
-		    int histo_count = 0;
+		    int histoCount = 0;
 		   
-		    int nb_packet_send = 0;
+		    int nbPacketSend = 0;
 		    
-		    for (int i = 0; i < no_symbols; i++) {
-			histo_count++;
-			nb_packet_send++;
+		    for (int i = 0; i < noSymbols; i++) {
+			histoCount++;
+			nbPacketSend++;
 			
-			int nb_of_packet_lost = reception_thread.get_number_of_packets();
-			if ( historique_inline && nb_of_packet_lost != 0 ) {
+			int nbOfPacketLost = receptionThread.getNumberOfPackets();
+			if ( historiqueInline && nbOfPacketLost != 0 ) {
 			    
 			    //double history = (double) nb_of_packet_lost / (double) 1000;
 			    
-			    double history = redundancy_in_line(nb_of_packet_lost,lost);
+			    double history = redundancyInLine(nbOfPacketLost,lost);
 			    
-			    reception_thread.reset_number_of_packets();
-			    k = (int) Math.round(history * nb_packet_send + history * nb_packet_send * (history + 1) + (Kt - nb_packet_send) * (history + 1)
-				    + (Kt - nb_packet_send));
+			    receptionThread.resetNumberOfPackets();
+			    k = (int) Math.round(history * nbPacketSend + history * nbPacketSend * (history + 1) + (Kt - nbPacketSend) * (history + 1)
+				    + (Kt - nbPacketSend));
 			    // System.out.println("            " + nb_of_packet_lost + "    history    " + history
 			    // + "     nb_packet_send   " + nb_packet_send + "  Kt   " + Kt);
-			    nb_packet_send = 0;
+			    nbPacketSend = 0;
 			}
 			
 			// see the current state of the receiver
-			if ( !reception_thread.get_status_end_loop() ) {
+			if ( !receptionThread.getStatusEndLoop() ) {
 			    break;
 			}
 			// simple serialization
@@ -294,7 +294,7 @@ public class Sender_multicast {
 			// byte[] byte_array = { 0, 0, 0, 0 };
 			// byte[] packet_id = { 0, 0, 0, 0 };
 			// byte[] serialized_data_with_length = new byte[serialized_data.length + 2 * Utils.IntegerSize];
-			nb_packet++;
+			nbPacket++;
 			if ( oneTimeBis ) {
 			    Utils.printInFile(String.valueOf(System.currentTimeMillis()), destPort,5);
 			    oneTimeBis = false;
@@ -302,33 +302,33 @@ public class Sender_multicast {
 			
 			if ( i > k ) {
 			    
-			    byte[] data_ready = packet_maker(Utils.FLAG_PUSH, ID_PACKET, symbols[i]);
+			    byte[] dataReady = packetMaker(Utils.FLAG_PUSH, ID_PACKET, symbols[i]);
 			    
-			    DatagramPacket sendPacket = new DatagramPacket(data_ready, data_ready.length, destIP, destPort);
+			    DatagramPacket sendPacket = new DatagramPacket(dataReady, dataReady.length, destIP, destPort);
 			    
 			    clientSocket.send(sendPacket);
 			    // Sender timer
 			    for (int u = 1; u < 10000; u++) {
-				if ( reception_thread.get_need_more() ) {
+				if ( receptionThread.getNeedMore() ) {
 				    
-				    reception_thread.set_need_more(false);
+				    receptionThread.setNeedMore(false);
 				    break;
 				}
 				
 				Thread.sleep(1);
 			    }
-			    k = k + reception_thread.get_number_of_packets();
-			    reception_thread.reset_number_of_packets();
+			    k = k + receptionThread.getNumberOfPackets();
+			    receptionThread.resetNumberOfPackets();
 			    
-			} else if ( historique_inline && ((Utils.BIT_RATE * histo_count) > Utils.INLINE_REDON_RATE) ) {
-			    byte[] data_ready = packet_maker(Utils.FLAG_PUSH, ID_PACKET, symbols[i]);
-			    DatagramPacket sendPacket = new DatagramPacket(data_ready, data_ready.length, destIP, destPort);
+			} else if ( historiqueInline && ((Utils.BIT_RATE * histoCount) > Utils.INLINE_REDON_RATE) ) {
+			    byte[] dataReady = packetMaker(Utils.FLAG_PUSH, ID_PACKET, symbols[i]);
+			    DatagramPacket sendPacket = new DatagramPacket(dataReady, dataReady.length, destIP, destPort);
 			    clientSocket.send(sendPacket);
-			    histo_count = 0;
+			    histoCount = 0;
 			} else {
 			    // if you send a normal packet
-			    byte[] data_ready = packet_maker(length_of_the_file, ID_PACKET, symbols[i]);
-			    DatagramPacket sendPacket = new DatagramPacket(data_ready, data_ready.length, destIP, destPort);
+			    byte[] dataReady = packetMaker(lengthOfTheFile, ID_PACKET, symbols[i]);
+			    DatagramPacket sendPacket = new DatagramPacket(dataReady, dataReady.length, destIP, destPort);
 			    
 			    clientSocket.send(sendPacket);
 			    Thread.sleep(Utils.BIT_RATE);
@@ -352,18 +352,18 @@ public class Sender_multicast {
 	    }
 	}
 	
-	int total_overhead = (nb_packet - Kt) * Utils.SYMB_LENGTH;
+	int total_overhead = (nbPacket - Kt) * Utils.SYMB_LENGTH;
 	float total_overhead_pourcent = 100 * ((float) total_overhead / (float) (Kt * Utils.SYMB_LENGTH));
-	nb_packet = nb_packet + reception_thread.get_nb_ack();
+	nbPacket = nbPacket + receptionThread.getNbAck();
 	long time_2 = System.currentTimeMillis() - before;
 	System.out.println(total_overhead);
 	System.out.println(total_overhead_pourcent);
-	System.out.println(reception_thread.get_nb_ack());
-	System.out.println((float) reception_thread.get_time_1() / 1000);
-	System.out.println((float) reception_thread.get_time_2() / 1000);
-	System.out.println((float) ((float) reception_thread.get_time_2() - (float) reception_thread.get_time_1()) / (float) reception_thread.get_time_1());
+	System.out.println(receptionThread.getNbAck());
+	System.out.println((float) receptionThread.getTime_1() / 1000);
+	System.out.println((float) receptionThread.getTime_2() / 1000);
+	System.out.println((float) ((float) receptionThread.getTime_2() - (float) receptionThread.getTime_1()) / (float) receptionThread.getTime_1());
 	// System.out.println(time_2);
 	
-	reception_thread.join();
+	receptionThread.join();
     }
 }

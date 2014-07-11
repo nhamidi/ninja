@@ -21,62 +21,57 @@ public class RecepteurThreadMulti extends Thread {
     private long time_2;
     private int nbAck;
     private long before;
-    private boolean need_more;
-    private double redondancy;
+    private boolean needMore;
+   //private double redondancy;
     private float[] tab_lost = new float[50];
     
-    public RecepteurThreadMulti(int port, InetAddress groupeIP, int nb_of_recv, boolean historic) throws IOException {
+    public RecepteurThreadMulti(int port, InetAddress groupeIP, int nbOfRecv, boolean historic) throws IOException {
 	this.port = port;
 	this.endLoop = true;
-	this.need_more = false;
+	this.needMore = false;
 	this.socketReception = new MulticastSocket(port);
 	this.socketReception.joinGroup(groupeIP);
 	this.numberOfPackets = 0;
 	this.endReception = 1;
 	this.packetData = 0;
-	this.nbOfReceiver = nb_of_recv;
+	this.nbOfReceiver = nbOfRecv;
 	this.totalSymb = 1;
 	this.time_1 = 0;
 	this.time_2 = 0;
 	this.nbAck = 0;
 	this.historic = historic;
-	redondancy = 1.00;
 	for (int i = 0; i < tab_lost.length; i++)
 	    this.tab_lost[i] = 0;
 	
     }
     
     
-    public void set_redondancy(double val) {
-	this.redondancy = val;
+    public boolean getNeedMore() {
+	return this.needMore;
     }
     
-    public boolean get_need_more() {
-	return this.need_more;
+    public void setNeedMore(boolean var) {
+	this.needMore = var;
     }
     
-    public void set_need_more(boolean var) {
-	this.need_more = var;
-    }
-    
-    public boolean get_status_end_loop() {
+    public boolean getStatusEndLoop() {
 	return this.endLoop;
     }
     
-    public void change_status_end_loop() {
+    public void changeStatusEndLoop() {
 	this.endLoop = false;
     }
     
-    public void set_total_number_of_packets(int nb_packet) {
+    public void setTotalNumberOfPackets(int nb_packet) {
 	this.totalSymb = nb_packet;
     }
     
-    public int get_number_of_packets() {
+    public int getNumberOfPackets() {
 	return this.numberOfPackets;
     }
     
-    public void set_number_of_packets(int nb_packets) {
-	this.need_more = true;
+    public void setNumberOfPackets(int nb_packets) {
+	this.needMore = true;
 	if ( this.numberOfPackets <= nb_packets ) {
 	    
 	    if ( this.historic ) {
@@ -97,29 +92,29 @@ public class RecepteurThreadMulti extends Thread {
 	    } else
 		this.numberOfPackets = nb_packets;
 	    
-	    set_total_number_of_packets(this.numberOfPackets);
+	    setTotalNumberOfPackets(this.numberOfPackets);
 	    
 	}
 	
     }
     
-    public void reset_number_of_packets() {
+    public void resetNumberOfPackets() {
 	this.numberOfPackets = 0;
     }
     
-    public long get_time_1() {
+    public long getTime_1() {
 	return this.time_1;
     }
     
-    public long get_time_2() {
+    public long getTime_2() {
 	return this.time_2;
     }
     
-    public int get_nb_ack() {
+    public int getNbAck() {
 	return this.nbAck;
     }
     
-    public void set_time_simu() {
+    public void setTimeSimu() {
 	this.before = System.currentTimeMillis();
     }
     
@@ -136,7 +131,7 @@ public class RecepteurThreadMulti extends Thread {
 		for (int l = 0; l < Utils.IntegerSize; l++) {
 		    this.packetData = (this.packetData << 8) + (packetData_2[l] & 0xff);
 		}
-		this.need_more = false;
+		this.needMore = false;
 	    } catch (Exception exc) {
 		System.out.println(exc);
 	    }
@@ -151,13 +146,13 @@ public class RecepteurThreadMulti extends Thread {
 	    }
 	    
 	    if ( this.packetData == Utils.FLAG_PUSH ) {
-		set_number_of_packets(this.packetData);
+		setNumberOfPackets(this.packetData);
 		break;
 	    }
 	    
 	    if ( this.packetData == Utils.NACK ) {
-		this.need_more = true;
-		set_number_of_packets(1);
+		this.needMore = true;
+		setNumberOfPackets(1);
 		continue;
 	    }
 	    
@@ -169,13 +164,13 @@ public class RecepteurThreadMulti extends Thread {
 		endReception++;
 		if ( endReception > this.nbOfReceiver ) {
 		    this.numberOfPackets = 0;
-		    this.change_status_end_loop();
+		    this.changeStatusEndLoop();
 		    time_2 = System.currentTimeMillis() - before;
 		    Utils.printInFile(String.valueOf(System.currentTimeMillis()), port,1);
 		    break;
 		}
 	    } else {
-		set_number_of_packets(this.packetData);
+		setNumberOfPackets(this.packetData);
 	    }
 	}
     }

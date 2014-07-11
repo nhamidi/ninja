@@ -52,13 +52,6 @@ public class Treatment extends Thread {
 	boucle = false;
     }
     
-    public static final int byte_array_to_int(byte[] byte_array) {
-	int interger = 0;
-	for (int i = 0; i < size_int; i++) {
-	    interger = (interger << 8) + (byte_array[i] & 0xff);
-	}
-	return interger;
-    }
     
     public void run() {
 	// look and compare all time if > RTT pop it
@@ -70,7 +63,7 @@ public class Treatment extends Thread {
 		   if ( System.currentTimeMillis() - temps[i] > this.RTT ) {
 			nbRecv++;
 			temps[i] = 0;
-			receivedPackets.add((EncodingSymbol) treat_packet(matrice[i]));
+			receivedPackets.add((EncodingSymbol) treatPacket(matrice[i]));
 		    }
 		}
 	    }
@@ -83,8 +76,8 @@ public class Treatment extends Thread {
 	}	
     }
     
-    EncodingSymbol treat_packet(byte[] packet) {
-	int T = 192;
+    EncodingSymbol treatPacket(byte[] packet) {
+	int T = Utils.SYMB_LENGTH;
 	byte[] sbn = new byte[4];
 	byte[] esi = new byte[4];
 	byte[] data = new byte[T];
@@ -93,13 +86,13 @@ public class Treatment extends Thread {
 	System.arraycopy(packet, size_int, esi, 0, size_int);
 	System.arraycopy(packet, size_int * 2, data, 0, T);
 	// System.out.println("      SBN      "+byte_array_to_int(sbn)+"            ESI                "+byte_array_to_int(esi));
-	this.ESI=byte_array_to_int(esi);
-	EncodingSymbol symbols = new EncodingSymbol(byte_array_to_int(sbn), byte_array_to_int(esi), data);
+	this.ESI=Utils.byteArrayToInt(esi);
+	EncodingSymbol symbols = new EncodingSymbol(Utils.byteArrayToInt(sbn), Utils.byteArrayToInt(esi), data);
 	
 	return symbols;
     }
     
-    void add_packet(byte[] packet) {
+    void addPacket(byte[] packet) {
 	// Add a packet and write the entering time
 	nb++;
 	if ( start ) {
@@ -118,7 +111,7 @@ public class Treatment extends Thread {
 	
     }
     
-    Set<EncodingSymbol> get_encoding_symbol() {
+    Set<EncodingSymbol> getEncodingSymbol() {
 	Set<EncodingSymbol> tmp = new HashSet<EncodingSymbol>();
 	synchronized (receivedPackets) {
 	    tmp.addAll(receivedPackets);
