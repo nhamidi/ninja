@@ -1,10 +1,4 @@
-834 ce que j'ai besoin 760 ce que j'ai vraiment 838
-834 ce que j'ai besoin 840 ce que j'ai vraiment 935
 11.151079
-834 ce que j'ai besoin 746 ce que j'ai vraiment 838
-834 ce que j'ai besoin 844 ce que j'ai vraiment 940
-11.390887
-834 ce que j'ai besoin 757 ce que j'ai vraiment 838
-834 ce que j'ai besoin 835 ce que j'ai vraiment 927
-834 ce que j'ai besoin 752 ce que j'ai vraiment 838
-834 ce que j'ai besoin 845 ce que j'ai vraiment 944
+10.431655
+10.071942
+11.630695

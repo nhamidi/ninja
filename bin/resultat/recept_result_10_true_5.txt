@@ -1,37 +1,4 @@
-834 ce que j'ai besoin 835 ce que j'ai vraiment 921
-834 ce que j'ai besoin 841 ce que j'ai vraiment 921
-834 ce que j'ai besoin 829 ce que j'ai vraiment 921
-834 ce que j'ai besoin 834 ce que j'ai vraiment 926
-834 ce que j'ai besoin 828 ce que j'ai vraiment 921
-834 ce que j'ai besoin 838 ce que j'ai vraiment 932
-11.151079
-834 ce que j'ai besoin 801 ce que j'ai vraiment 921
-834 ce que j'ai besoin 835 ce que j'ai vraiment 960
-834 ce que j'ai besoin 824 ce que j'ai vraiment 921
-834 ce que j'ai besoin 838 ce que j'ai vraiment 936
-11.630695
-834 ce que j'ai besoin 830 ce que j'ai vraiment 921
-834 ce que j'ai besoin 835 ce que j'ai vraiment 926
-10.791367
-834 ce que j'ai besoin 842 ce que j'ai vraiment 927
-9.952039
-834 ce que j'ai besoin 822 ce que j'ai vraiment 921
-834 ce que j'ai besoin 836 ce que j'ai vraiment 938
-12.1103115
-834 ce que j'ai besoin 838 ce que j'ai vraiment 921
-9.832134
-834 ce que j'ai besoin 830 ce que j'ai vraiment 921
-834 ce que j'ai besoin 835 ce que j'ai vraiment 926
-834 ce que j'ai besoin 828 ce que j'ai vraiment 921
-834 ce que j'ai besoin 839 ce que j'ai vraiment 932
+10.5515585
 11.031175
-834 ce que j'ai besoin 825 ce que j'ai vraiment 921
-834 ce que j'ai besoin 837 ce que j'ai vraiment 935
-11.630695
-834 ce que j'ai besoin 829 ce que j'ai vraiment 921
-834 ce que j'ai besoin 833 ce que j'ai vraiment 926
-834 ce que j'ai besoin 843 ce que j'ai vraiment 936
-11.031175
-834 ce que j'ai besoin 815 ce que j'ai vraiment 921
-834 ce que j'ai besoin 837 ce que j'ai vraiment 945
-12.829736
+9.352518
+11.870503

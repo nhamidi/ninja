@@ -1,11 +1,30 @@
+4
 Listening for file /home/tai/Bureau/test1.txt (0 bytes) at port 7001
 
 # source symbols: 834
 # source blocks: 1
 
 Waiting for packets...
+                     lol     125
+                     lol     35
+                     lol     40
+                     lol     103
+                     lol     244
+                     lol     272
+                     lol     112
+                     lol     445
+                     lol     501
+                     lol     105
+                     lol     657
+                     lol     734
           je decode
-                                    nb of packet pop'up: 835
-           envoie ACK 1 bon
+           envoie Utils.ACK 1 bon
+   apres le tri    15
+   replace 1    236
+   generate lt    10735
+   fin decodage    10787
 
-Waiting for packets...
+Successfuint lly decoded block: 0 (in 10789 milliseconds)
+nb reiceive packets: 1315
+17.985611
+Delai total d’envoi du message : 45499

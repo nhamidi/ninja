@@ -1,0 +1,19 @@
+On a recu :                125
+je suce 0.125
+je suce pour 0.10500000007450581
+On a recu :                103
+je suce 0.103
+je suce pour 0.1006000000089407
+On a recu :                112
+je suce 0.112
+je suce pour 0.10240000003576279
+On a recu :                105
+je suce 0.105
+je suce pour 0.10100000001490117
+On a recu :                -2
+92544
+57.793766
+5
+39.697
+39.697
+0.0

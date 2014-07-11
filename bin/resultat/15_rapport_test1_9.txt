@@ -5,14 +5,7 @@ Listening for file /home/tai/workspace/stage_pfe/bin/simulation/test1_9.txt (0 b
 
 Waiting for packets...
           je decode
-                                    nb of packet pop'up: 835
+                                    nb of packet pop'up: 834                               834
            envoie ACK 1 bon
-   apres le tri    14
-   replace 1    250
-   generate lt    10718
-   fin decodage    10783
-
-Successfuint lly decoded block: 0 (in 10785 milliseconds)
-nb reiceive packets: 987
-17.026379
-Delai total d’envoi du message : 37267
+   apres le tri    21
+   replace 1    253

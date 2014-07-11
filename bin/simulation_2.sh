@@ -8,12 +8,12 @@ graph_file=graph
 
 
 #clean for a new simulation
-rm -rf $current_file/$result_file/*
+#rm -rf $current_file/$result_file/*
 #rm -rf $current_file/$graph_file/*
 rm -rf $current_file/$simulation_file/*
-rm $current_file/histo/time_division_r_final.txt
-rm $current_file/histo/time_division_final_s.txt
-rm $current_file/histo/time_division_final.txt
+rm -rf $current_file/histo/time_division_r_final.txt
+rm -rf $current_file/histo/time_division_final_s.txt
+rm -rf $current_file/histo/time_division_final.txt
 
 
 #create the file
@@ -33,22 +33,22 @@ perte=('0' '1' '5' '10' '15' '20')
 
 #$j donne les redondances
 historic=('true')
+historic_in_line=('false')
 file_simulation='/home/tai/Bureau/test.txt'
 
 
 for ((k=0 ; k<6 ; k++))
 do
-
-k=4
-for ((i=0 ; i<5 ; i++))
+#k=4
+for ((i=0 ; i<10 ; i++))
     do 
    
 	for ((j=0 ; j<13 ; j++))
 	    do 
 		
-		java Receiver_multicast "$current_file/$simulation_file/test1_$j.txt" 0 239.255.80.84 ${port_simul[$j]} ${perte[$k]} 7 ${redondance[$j]} > "$current_file/$result_file/${perte[$k]}_rapport_test1_$j.txt" &
+		java Receiver_multicast "$current_file/$simulation_file/test1_$j.txt" 0 239.255.80.84 ${port_simul[$j]} ${perte[$k]} 7 ${redondance[$j]} ${historic_in_line[0]} > "$current_file/$result_file/${perte[$k]}_rapport_test1_$j.txt" &
 		
-		java Sender_multicast $file_simulation 1 239.255.80.84 ${port_simul[$j]} 1 ${redondance[$j]} ${historic[0]} >> "$current_file/$result_file/resultat_bis_${perte[$k]}_${historic[0]}_$j.txt"
+		java Sender_multicast $file_simulation 1 239.255.80.84 ${port_simul[$j]} 1 ${redondance[$j]} ${historic[0]} ${historic_in_line[0]} >> "$current_file/$result_file/resultat_bis_${perte[$k]}_${historic[0]}_$j.txt"
 		
 		   
 		#sleep 100

@@ -8,17 +8,24 @@ port_simul=('5033' '5036' '5039' '5030' '5040' '5042' '5044' '5046' '5048' '5050
 redondance=('1.00' '1.02' '1.04' '1.06' '1.08' '1.10' '1.12' '1.14' '1.16' '1.18' '1.20'  '1.22'  '1.24')
 perte=('0' '1' '5' '10' '15' '20')
 perte_theo=('0' '0.01' '0.05' '0.10' '0.15' '0.20')
-nb_symbol=834
+file_simulation='/home/tai/Bureau/test.txt'
 
+k=$(stat -c "%s" $file_simulation)
+k=`echo "$k/192" | bc`
+k=`echo "$k+1" | bc`
+
+
+#nb_symbol=834
+nb_symbol=$k
 #$j donne les redondances
 historic=('true')
-file_simulation='/home/tai/Bureau/image_test2.jpg'
+
 
 rm -rf $current_file/$graph_file/*
 rm -f $current_file/$result_file/true_perte_de_*
 for ((k=0 ; k<6 ; k++))
 do
-#k=5
+#k=4
 
 
 
@@ -261,7 +268,7 @@ set title "Simulation for 159985 octets file with ${perte[$k]} % of lost and a R
 set ylabel "Nb of ack"
 set xlabel 'Redundancy Ratio in %'
 set autoscale x
-set yrange [0:*]
+set yrange [0:10]
 plot '/home/tai/workspace/stage_pfe/bin/graph/_${historic[0]}_perte_de_${perte[$k]}_graph_ack.txt' using 1:2:3 with yerrorbars notitle, '/home/tai/workspace/stage_pfe/bin/graph/_${historic[0]}_perte_de_${perte[$k]}_graph_ack.txt' using 1:2:3 title 'Nb of ack' w l
  
 EOF

@@ -1,39 +1,4 @@
-834 ce que j'ai besoin 768 ce que j'ai vraiment 855
-834 ce que j'ai besoin 835 ce que j'ai vraiment 931
-11.390887
-834 ce que j'ai besoin 768 ce que j'ai vraiment 855
-834 ce que j'ai besoin 836 ce que j'ai vraiment 931
-11.270983
-834 ce que j'ai besoin 781 ce que j'ai vraiment 855
-834 ce que j'ai besoin 835 ce que j'ai vraiment 916
-9.592326
-834 ce que j'ai besoin 776 ce que j'ai vraiment 855
-834 ce que j'ai besoin 856 ce que j'ai vraiment 943
-10.191847
-834 ce que j'ai besoin 756 ce que j'ai vraiment 855
-834 ce que j'ai besoin 837 ce que j'ai vraiment 945
-834 ce que j'ai besoin 769 ce que j'ai vraiment 855
-834 ce que j'ai besoin 837 ce que j'ai vraiment 930
-11.031175
-834 ce que j'ai besoin 768 ce que j'ai vraiment 861
-834 ce que j'ai besoin 835 ce que j'ai vraiment 937
-834 ce que j'ai besoin 776 ce que j'ai vraiment 855
-834 ce que j'ai besoin 838 ce que j'ai vraiment 922
-834 ce que j'ai besoin 772 ce que j'ai vraiment 855
-834 ce que j'ai besoin 837 ce que j'ai vraiment 927
-834 ce que j'ai besoin 786 ce que j'ai vraiment 855
-834 ce que j'ai besoin 834 ce que j'ai vraiment 911
-9.11271
-834 ce que j'ai besoin 765 ce que j'ai vraiment 855
-834 ce que j'ai besoin 839 ce que j'ai vraiment 935
-834 ce que j'ai besoin 774 ce que j'ai vraiment 855
-834 ce que j'ai besoin 838 ce que j'ai vraiment 924
-10.191847
-834 ce que j'ai besoin 762 ce que j'ai vraiment 855
-834 ce que j'ai besoin 844 ce que j'ai vraiment 949
-12.35012
-834 ce que j'ai besoin 760 ce que j'ai vraiment 855
-834 ce que j'ai besoin 840 ce que j'ai vraiment 941
-11.990408
-834 ce que j'ai besoin 757 ce que j'ai vraiment 855
-834 ce que j'ai besoin 838 ce que j'ai vraiment 944
+8.153478
+12.470024
+10.791367
+10.791367

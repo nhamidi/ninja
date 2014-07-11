@@ -4,9 +4,3 @@ Listening for file /home/tai/workspace/stage_pfe/bin/simulation/test1_4.txt (0 b
 # source blocks: 1
 
 Waiting for packets...
-834 ce que j'ai besoin 898 ce que j'ai vraiment 905
-          je decode
-                                    nb of packet pop'up: 880
-           envoie ACK 1 bon
-   apres le tri    15
-   replace 1    253

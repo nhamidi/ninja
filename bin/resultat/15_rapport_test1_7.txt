@@ -4,10 +4,12 @@ Listening for file /home/tai/workspace/stage_pfe/bin/simulation/test1_7.txt (0 b
 # source blocks: 1
 
 Waiting for packets...
-Socket bloquée
+                     lol     149
+                     lol     653
+                     lol     767
           je peux pas decoder
           je decode
-                                    nb of packet pop'up: 835
+                                    nb of packet pop'up: 834                               834
            envoie ACK 1 bon
-   apres le tri    16
-   replace 1    274
+   apres le tri    15
+   replace 1    236

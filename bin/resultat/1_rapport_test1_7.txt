@@ -1,12 +1,2 @@
 Listening for file /home/tai/workspace/stage_pfe/bin/simulation/test1_7.txt (0 bytes) at port 5046
 
-# source symbols: 834
-# source blocks: 1
-
-Waiting for packets...
-834 ce que j'ai besoin 947 ce que j'ai vraiment 955
-          je decode
-                                    nb of packet pop'up: 929
-           envoie ACK 1 bon
-   apres le tri    19
-   replace 1    249

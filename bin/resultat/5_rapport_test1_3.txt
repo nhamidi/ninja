@@ -4,16 +4,8 @@ Listening for file /home/tai/workspace/stage_pfe/bin/simulation/test1_3.txt (0 b
 # source blocks: 1
 
 Waiting for packets...
-834 ce que j'ai besoin 848 ce que j'ai vraiment 888
           je decode
-                                    nb of packet pop'up: 835
+                                    nb of packet pop'up: 834                               834
            envoie ACK 1 bon
-   apres le tri    18
-   replace 1    245
-   generate lt    10478
-   fin decodage    10503
-
-Successfuint lly decoded block: 0 (in 10506 milliseconds)
-nb reiceive packets: 887
-4.676259
-Delai total d’envoi du message : 34394
+   apres le tri    12
+   replace 1    257

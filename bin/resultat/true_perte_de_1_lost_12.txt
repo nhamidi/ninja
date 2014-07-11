@@ -1,15 +1,30 @@
-834 ce que j'ai besoin 1032 ce que j'ai vraiment 1038
-834 ce que j'ai besoin 1027 ce que j'ai vraiment 1038
-834 ce que j'ai besoin 1028 ce que j'ai vraiment 1038
-834 ce que j'ai besoin 1026 ce que j'ai vraiment 1038
-834 ce que j'ai besoin 1033 ce que j'ai vraiment 1038
-834 ce que j'ai besoin 1022 ce que j'ai vraiment 1038
-834 ce que j'ai besoin 1028 ce que j'ai vraiment 1038
-834 ce que j'ai besoin 1026 ce que j'ai vraiment 1038
-834 ce que j'ai besoin 1026 ce que j'ai vraiment 1044
-834 ce que j'ai besoin 1030 ce que j'ai vraiment 1038
-834 ce que j'ai besoin 1029 ce que j'ai vraiment 1038
-834 ce que j'ai besoin 1024 ce que j'ai vraiment 1038
 1.558753
-834 ce que j'ai besoin 1025 ce que j'ai vraiment 1038
-834 ce que j'ai besoin 1023 ce que j'ai vraiment 1038
+1.9184653
+1.558753
+1.678657
+1.3189448
+1.3189448
+0.9592326
+1.7985611
+1.0791367
+1.0791367
+0.9592326
+0.5995204
+1.3189448
+1.3189448
+2.0383694
+1.1990408
+1.438849
+1.7985611
+1.1990408
+1.438849
+1.0791367
+0.8393285
+0.9592326
+1.438849
+2.1582735
+0.8393285
+0.8393285
+1.0791367
+1.9184653
+1.3189448

@@ -1,15 +1,21 @@
-834 ce que j'ai besoin 997 ce que j'ai vraiment 1005
-0.8393285
-834 ce que j'ai besoin 997 ce que j'ai vraiment 1005
-834 ce que j'ai besoin 986 ce que j'ai vraiment 1005
-834 ce que j'ai besoin 990 ce que j'ai vraiment 1003
-1.438849
-834 ce que j'ai besoin 992 ce que j'ai vraiment 1005
-834 ce que j'ai besoin 994 ce que j'ai vraiment 1005
 1.1990408
-834 ce que j'ai besoin 997 ce que j'ai vraiment 1005
 0.8393285
-834 ce que j'ai besoin 1000 ce que j'ai vraiment 1005
-0.4796163
-834 ce que j'ai besoin 1000 ce que j'ai vraiment 1005
-0.4796163
+0.5995204
+0.8393285
+1.1990408
+1.3189448
+1.438849
+1.0791367
+0.9592326
+1.0791367
+0.9592326
+0.8393285
+0.9592326
+1.678657
+1.1990408
+0.5995204
+1.0791367
+1.438849
+0.5995204
+1.3189448
+1.438849
