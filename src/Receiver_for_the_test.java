@@ -205,7 +205,7 @@ public class Receiver_for_the_test extends Thread {
 						// call the sending thread
 						sending_thread.setAckType(49);
 						try {
-							sending_thread.send_thing();
+							sending_thread.sendMsg();
 						} catch (Exception e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -313,7 +313,7 @@ public class Receiver_for_the_test extends Thread {
 					successfulDecoding = false;
 					sending_thread.setAckType(49);
 					try {
-						sending_thread.send_thing();
+						sending_thread.sendMsg();
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -328,7 +328,7 @@ public class Receiver_for_the_test extends Thread {
 					sending_thread.setAckType(nb_packets_lost);
 					successfulDecoding = false;
 					try {
-						sending_thread.send_thing();
+						sending_thread.sendMsg();
 					} catch (Exception e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -356,7 +356,7 @@ public class Receiver_for_the_test extends Thread {
 					Thread.sleep(1000);
 					Files.write(file.toPath(), decoded_data);
 					sending_thread.setAckType((byte) 48);
-					sending_thread.send_thing();
+					sending_thread.sendMsg();
 					sending_thread.join();
 					number_of_ack++;
 					System.out.println("nb of symboles : " + total_symbols);

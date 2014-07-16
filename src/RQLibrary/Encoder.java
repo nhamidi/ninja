@@ -358,7 +358,7 @@ public class Encoder {
      * @throws SingularMatrixException
      */
     public static SourceBlock decode(EncodingPacket eb) throws SingularMatrixException {
-	long before =System.currentTimeMillis();
+	
 	
 	// encoding symbols in the encoded source block
 	EncodingSymbol[] enc_symbols = eb.getEncoding_symbols(); // TODO these MUST be ordered, would be nice if it wasn't needed
@@ -443,11 +443,6 @@ public class Encoder {
 		num_repair_symbols++;
 	    }
 	}
-	
-	
-	
-	long time_1=System.currentTimeMillis()-before;
-	System.out.println("   apres le tri    "+time_1);
 	
 	
 	
@@ -559,10 +554,6 @@ public class Encoder {
 	    }
 	    
 	    
-	    long time_2=System.currentTimeMillis()-before;
-		System.out.println("   replace 1    "+time_2);
-	    
-	    
 	    // insert the values for overhead (repair) symbols
 	    for (int row = L; row < M; row++) {
 		EncodingSymbol repair = (EncodingSymbol) repair_symbol.next();
@@ -594,11 +585,7 @@ public class Encoder {
 	     */
 	    
 	    byte[] intermediate_symbols = generateIntermediateSymbols(constraint_matrix, D, T, kLinha);
-	    
-	    
-	    long time_3=System.currentTimeMillis()-before;
-		System.out.println("   generate lt    "+time_3);
-	    /*
+	      /*
 	     * with the intermediate symbols calculated, one can recover every missing source symbol
 	     */
 	    
@@ -611,10 +598,6 @@ public class Encoder {
 		// write to the decoded data buffer
 		System.arraycopy(original_symbol, 0, decoded_data, missing.getKey() * T, T);
 	    }
-	    
-	    
-	    long time_4=System.currentTimeMillis()-before;
-		System.out.println("   fin decodage    "+time_4);
 	    
 	    // write the received source symbols to the decoded data buffer
 	    for (EncodingSymbol enc_symbol : source_symbols) {

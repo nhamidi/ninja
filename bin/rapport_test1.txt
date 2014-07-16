@@ -5,23 +5,13 @@ Listening for file /home/tai/Bureau/test1.txt (0 bytes) at port 7001
 # source blocks: 1
 
 Waiting for packets...
-                     lol     125
-                     lol     35
-                     lol     40
-                     lol     92
-                     lol     247
-                     lol     272
-                     lol     82
-                     lol     462
-                     lol     503
+                     lol     77
+                     lol     109
+                     lol     120
           je decode
            envoie Utils.ACK 1 bon
-   apres le tri    12
-   replace 1    250
-   generate lt    10247
-   fin decodage    10292
 
-Successfuint lly decoded block: 0 (in 10293 milliseconds)
-nb reiceive packets: 923
-10.671463
-Delai total d’envoi du message : 39651
+Successfuint lly decoded block: 0 (in 10386 milliseconds)
+nb reiceive packets: 1079
+14.268585
+Delai total d’envoi du message : 40235

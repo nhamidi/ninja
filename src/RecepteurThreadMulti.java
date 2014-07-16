@@ -22,7 +22,7 @@ public class RecepteurThreadMulti extends Thread {
     private int nbAck;
     private long before;
     private boolean needMore;
-   //private double redondancy;
+    // private double redondancy;
     private float[] tab_lost = new float[50];
     
     public RecepteurThreadMulti(int port, InetAddress groupeIP, int nbOfRecv, boolean historic) throws IOException {
@@ -44,7 +44,6 @@ public class RecepteurThreadMulti extends Thread {
 	    this.tab_lost[i] = 0;
 	
     }
-    
     
     public boolean getNeedMore() {
 	return this.needMore;
@@ -85,8 +84,8 @@ public class RecepteurThreadMulti extends Thread {
 		
 		System.out.println("             " + nb_packets + "       " + this.totalSymb);
 		System.out.println("      Plost                " + ((float) nb_packets / (float) this.totalSymb) + "            " + tab_lost[0]
-		+ "            " + tab_lost[1] + "            " + tab_lost[2]);
-		int packet_sup=10;
+			+ "            " + tab_lost[1] + "            " + tab_lost[2]);
+		int packet_sup = 10;
 		this.numberOfPackets = (int) Math.round((((float) nb_packets / (float) this.totalSymb) + 1) * (float) nb_packets) + packet_sup;
 		
 	    } else
@@ -166,7 +165,7 @@ public class RecepteurThreadMulti extends Thread {
 		    this.numberOfPackets = 0;
 		    this.changeStatusEndLoop();
 		    time_2 = System.currentTimeMillis() - before;
-		    Utils.printInFile(String.valueOf(System.currentTimeMillis()), port,1);
+		    Utils.printInFile(String.valueOf(System.currentTimeMillis()), port, 1);
 		    break;
 		}
 	    } else {

@@ -30,7 +30,7 @@ public class Treatment extends Thread {
 	nbRecv = 0;
 	start = true;
 	boucle = true;
-	ESI=1;
+	ESI = 1;
 	start();
 	
     }
@@ -38,7 +38,6 @@ public class Treatment extends Thread {
     int getESI() {
 	return this.ESI;
     }
-    
     
     int getNb() {
 	return this.nb;
@@ -52,15 +51,14 @@ public class Treatment extends Thread {
 	boucle = false;
     }
     
-    
     public void run() {
 	// look and compare all time if > RTT pop it
 	while (boucle) {
 	    for (int i = 0; i < temps.length; i++) {
 		
 		if ( temps[i] != 0 ) {
-		   // if ( System.currentTimeMillis() - temps[i] > 500 ) {
-		   if ( System.currentTimeMillis() - temps[i] > this.RTT ) {
+		    // if ( System.currentTimeMillis() - temps[i] > 500 ) {
+		    if ( System.currentTimeMillis() - temps[i] > this.RTT ) {
 			nbRecv++;
 			temps[i] = 0;
 			receivedPackets.add((EncodingSymbol) treatPacket(matrice[i]));
@@ -72,8 +70,8 @@ public class Treatment extends Thread {
 	    } catch (InterruptedException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
-	    }   
-	}	
+	    }
+	}
     }
     
     EncodingSymbol treatPacket(byte[] packet) {
@@ -86,7 +84,7 @@ public class Treatment extends Thread {
 	System.arraycopy(packet, size_int, esi, 0, size_int);
 	System.arraycopy(packet, size_int * 2, data, 0, T);
 	// System.out.println("      SBN      "+byte_array_to_int(sbn)+"            ESI                "+byte_array_to_int(esi));
-	this.ESI=Utils.byteArrayToInt(esi);
+	this.ESI = Utils.byteArrayToInt(esi);
 	EncodingSymbol symbols = new EncodingSymbol(Utils.byteArrayToInt(sbn), Utils.byteArrayToInt(esi), data);
 	
 	return symbols;

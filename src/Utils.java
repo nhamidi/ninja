@@ -12,8 +12,9 @@ public class Utils {
     public static int SYMB_LENGTH = 192;
     public static double LOST = 0.1;
     public static int BIT_RATE = 26;
-    public static int INLINE_REDON_RATE = 6000;
-    public static int IntegerSize=(Integer.SIZE/8);
+    public static int INLINE_REDON_RATE = 7000;
+    public static int IntegerSize = (Integer.SIZE / 8);
+    public static float ALPHA = (float) 0.2;
     
     public static int byteArrayToInt(byte[] byte_array) {
 	int integer = 0;
@@ -30,7 +31,7 @@ public class Utils {
     public static void printInFile(String message, int port, int diff) {
 	try {
 	    String path = System.getProperty("user.dir");
-	    File file = new File(path+"/histo/time_division_final_" + diff + "_" + port + ".txt");
+	    File file = new File(path + "/histo/time_division_final_" + diff + "_" + port + ".txt");
 	    
 	    // if file doesnt exists, then create it
 	    if ( !file.exists() ) {
@@ -46,7 +47,5 @@ public class Utils {
 	    e.printStackTrace();
 	}
     }
-    
-    
     
 }

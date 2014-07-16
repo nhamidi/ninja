@@ -176,7 +176,7 @@
 
 			EmetteurThreadMulti sending_thread = new EmetteurThreadMulti(
 					sendIP, src_port + 1);
-			sending_thread.setParameterTest(para_test);
+			//sending_thread.setParameterTest(para_test);
 
 			// Recepteur_thread Reception_thread = new Recepteur_thread(src_port+2);
 			/**
@@ -250,7 +250,7 @@
 							// call the sending thread
 							sending_thread.setAckType(NACK);
 
-							sending_thread.send_thing();
+							sending_thread.sendMsg();
 							System.out.println("Socket bloquée");
 							number_of_ack++;
 							recv--;
@@ -300,7 +300,7 @@
 							System.out.println("          je peux pas decoder");
 							sending_thread.setAckType((nb_of_utils_packet
 									- compteur_utils_packet));
-							sending_thread.send_thing();
+							sending_thread.sendMsg();
 							recv--;
 							continue;
 
@@ -319,7 +319,7 @@
 				
 				while (true) {
 					sending_thread.setAckType(ACK);
-					sending_thread.send_thing();
+					sending_thread.sendMsg();
 					System.out.println("           envoie ACK 1 bon");
 					break;
 				}

@@ -40,16 +40,14 @@ public class Sender_multicast {
     static Random randomGenerator = new Random();
     final static int ID_PACKET = randomGenerator.nextInt(100);
     
-   
-    
-    public static final double redundancyInLine(double currentLost,double lost) {
-	float alpha = (float) 0.2;
-	if(currentLost==1000)
-	    currentLost=0.0;
-	currentLost=currentLost/1000;
+    public static final double redundancyInLine(double currentLost, double lost) {
+	float alpha = Utils.ALPHA;
+	if ( currentLost == 1000 )
+	    currentLost = 0.0;
+	currentLost = currentLost / 1000;
 	System.out.println("je suce " + currentLost);
 	if ( currentLost < (lost + 0.001) && currentLost > (lost - 0.001) ) {
-	    // branlas
+	    System.out.println("je suis un K SOS ");
 	} else
 	    lost = lost + alpha * (currentLost - lost);
 	System.out.println("je suce pour " + lost);
@@ -72,8 +70,6 @@ public class Sender_multicast {
 	return finalPacket;
     }
     
-    
-    
     public static void main(String[] args) throws Exception {
 	if ( args.length != 8 ) {
 	    StringBuilder s = new StringBuilder();
@@ -95,8 +91,8 @@ public class Sender_multicast {
 	/**
 	 * Test on parameters
 	 */
-	double lost=Utils.LOST;
-	long before_2 = System.currentTimeMillis();
+	double lost = Utils.LOST*1000;
+	
 	double redondance = Double.valueOf(args[5]);
 	Boolean historique = Boolean.valueOf(args[6]);
 	Boolean historiqueInline = Boolean.valueOf(args[7]);
@@ -190,9 +186,10 @@ public class Sender_multicast {
 	int nbPacket = -1;
 	// start the thread
 	receptionThread.start();
-	//long temps = System.currentTimeMillis() - before_2;
+	// long temps = System.currentTimeMillis() - before_2;
 	
-	//int normal_redundancy = (int) Math.round((((float) lengthOfTheFile / Utils.SYMB_LENGTH) * redondance) - ((float) lengthOfTheFile / Utils.SYMB_LENGTH));
+	// int normal_redundancy = (int) Math.round((((float) lengthOfTheFile / Utils.SYMB_LENGTH) * redondance) - ((float) lengthOfTheFile /
+	// Utils.SYMB_LENGTH));
 	boolean oneTime = true;
 	if ( oneTime ) {
 	    receptionThread.setTotalNumberOfPackets((int) Math.round((float) lengthOfTheFile / Utils.SYMB_LENGTH) + 1);
@@ -234,21 +231,21 @@ public class Sender_multicast {
 		/*
 		 * serialize and send the encoded symbols
 		 */
-		/*ObjectOutput out = null;
-		byte[] serialized_data = null;*/
+		/*
+		 * ObjectOutput out = null; byte[] serialized_data = null;
+		 */
 		boolean oneTimeBis = true;
 		
 		try {
-		    
 		    
 		    // serialize and send each encoded symbol
 		    
 		    int k = (int) Math.round((float) Kt * redondance) + 2;
 		    
 		    receptionThread.setTimeSimu();
-		    //byte[] test_1 = null;
+		    // byte[] test_1 = null;
 		    int histoCount = 0;
-		   
+		    
 		    int nbPacketSend = 0;
 		    
 		    for (int i = 0; i < noSymbols; i++) {
@@ -258,15 +255,15 @@ public class Sender_multicast {
 			int nbOfPacketLost = receptionThread.getNumberOfPackets();
 			if ( historiqueInline && nbOfPacketLost != 0 ) {
 			    
-			    //double history = (double) nb_of_packet_lost / (double) 1000;
 			    
-			    double history = redundancyInLine(nbOfPacketLost,lost);
+			    
+			    double history = redundancyInLine(nbOfPacketLost, lost);
 			    
 			    receptionThread.resetNumberOfPackets();
 			    k = (int) Math.round(history * nbPacketSend + history * nbPacketSend * (history + 1) + (Kt - nbPacketSend) * (history + 1)
 				    + (Kt - nbPacketSend));
-			    // System.out.println("            " + nb_of_packet_lost + "    history    " + history
-			    // + "     nb_packet_send   " + nb_packet_send + "  Kt   " + Kt);
+			     System.out.println("            " + nbOfPacketLost + "    history    " + history
+			     + "     nb_packet_send   " + nbOfPacketLost + "  Kt   " + Kt);
 			    nbPacketSend = 0;
 			}
 			
@@ -275,17 +272,14 @@ public class Sender_multicast {
 			    break;
 			}
 			// simple serialization
-			/*ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			/*
+			 * ByteArrayOutputStream bos = new ByteArrayOutputStream();
+			 * 
+			 * out = new ObjectOutputStream(bos); out.writeObject(symbols[i]); serialized_data = bos.toByteArray(); out.close(); bos.close();
+			 */
 			
-			out = new ObjectOutputStream(bos);
-			out.writeObject(symbols[i]);
-			serialized_data = bos.toByteArray();
-			out.close();
-			bos.close();
-			*/
-			
-			//test_1 = symbols[i].getData();
-			//byte[] test = new byte[4];
+			// test_1 = symbols[i].getData();
+			// byte[] test = new byte[4];
 			
 			// setup an UDP packet with the serialized symbol
 			// and
@@ -296,7 +290,7 @@ public class Sender_multicast {
 			// byte[] serialized_data_with_length = new byte[serialized_data.length + 2 * Utils.IntegerSize];
 			nbPacket++;
 			if ( oneTimeBis ) {
-			    Utils.printInFile(String.valueOf(System.currentTimeMillis()), destPort,5);
+			    Utils.printInFile(String.valueOf(System.currentTimeMillis()), destPort, 5);
 			    oneTimeBis = false;
 			}
 			
@@ -352,12 +346,11 @@ public class Sender_multicast {
 	    }
 	}
 	
-	int total_overhead = (nbPacket - Kt) * Utils.SYMB_LENGTH;
-	float total_overhead_pourcent = 100 * ((float) total_overhead / (float) (Kt * Utils.SYMB_LENGTH));
+	int totalOverhead = (nbPacket - Kt) * Utils.SYMB_LENGTH;
+	float totalOverheadPourcent = 100 * ((float) totalOverhead / (float) (Kt * Utils.SYMB_LENGTH));
 	nbPacket = nbPacket + receptionThread.getNbAck();
-	long time_2 = System.currentTimeMillis() - before;
-	System.out.println(total_overhead);
-	System.out.println(total_overhead_pourcent);
+	System.out.println(totalOverhead);
+	System.out.println(totalOverheadPourcent);
 	System.out.println(receptionThread.getNbAck());
 	System.out.println((float) receptionThread.getTime_1() / 1000);
 	System.out.println((float) receptionThread.getTime_2() / 1000);

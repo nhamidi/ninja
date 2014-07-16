@@ -1,16 +1,19 @@
-On a recu :                125
-je suce 0.125
-je suce pour 0.10500000007450581
-On a recu :                92
-je suce 0.092
-je suce pour 0.09839999997615814
-On a recu :                82
-je suce 0.082
-je suce pour 0.09639999994635583
+On a recu :                77
+je suce 0.077
+je suce pour 80.01539970220625
+            77    history    80.01539970220625     nb_packet_send   77  Kt   834
+On a recu :                109
+je suce 0.109
+je suce pour 80.02179970230162
+            109    history    80.02179970230162     nb_packet_send   109  Kt   834
+On a recu :                120
+je suce 0.12
+je suce pour 80.02399970233441
+            120    history    80.02399970233441     nb_packet_send   120  Kt   834
 On a recu :                -2
-90240
-56.354916
+94464
+58.9928
 4
-34.344
-34.344
+34.832
+34.832
 0.0
