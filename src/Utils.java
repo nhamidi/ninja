@@ -12,7 +12,7 @@ public class Utils {
     public static int SYMB_LENGTH = 192;
     public static double LOST = 0.1;
     public static int BIT_RATE = 26;
-    public static int INLINE_REDON_RATE = 7000;
+    public static int INLINE_REDON_RATE = 4;
     public static int IntegerSize = (Integer.SIZE / 8);
     public static float ALPHA = (float) 0.2;
     

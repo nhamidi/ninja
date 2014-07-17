@@ -91,7 +91,7 @@ public class Sender_multicast {
 	/**
 	 * Test on parameters
 	 */
-	double lost = Utils.LOST*1000;
+	double lost = Utils.LOST * 1000;
 	
 	double redondance = Double.valueOf(args[5]);
 	Boolean historique = Boolean.valueOf(args[6]);
@@ -241,29 +241,27 @@ public class Sender_multicast {
 		    // serialize and send each encoded symbol
 		    
 		    int k = (int) Math.round((float) Kt * redondance) + 2;
+		    final int historyRate = (int) Math.round((float) Kt / Utils.INLINE_REDON_RATE);
+		    int historyCount = historyRate;
 		    
 		    receptionThread.setTimeSimu();
-		    // byte[] test_1 = null;
-		    int histoCount = 0;
 		    
 		    int nbPacketSend = 0;
 		    
 		    for (int i = 0; i < noSymbols; i++) {
-			histoCount++;
+			
 			nbPacketSend++;
 			
 			int nbOfPacketLost = receptionThread.getNumberOfPackets();
 			if ( historiqueInline && nbOfPacketLost != 0 ) {
-			    
-			    
 			    
 			    double history = redundancyInLine(nbOfPacketLost, lost);
 			    
 			    receptionThread.resetNumberOfPackets();
 			    k = (int) Math.round(history * nbPacketSend + history * nbPacketSend * (history + 1) + (Kt - nbPacketSend) * (history + 1)
 				    + (Kt - nbPacketSend));
-			     System.out.println("            " + nbOfPacketLost + "    history    " + history
-			     + "     nb_packet_send   " + nbOfPacketLost + "  Kt   " + Kt);
+			    System.out.println("            " + nbOfPacketLost + "    history    " + history + "     nb_packet_send   " + nbOfPacketLost
+				    + "  Kt   " + Kt);
 			    nbPacketSend = 0;
 			}
 			
@@ -314,11 +312,11 @@ public class Sender_multicast {
 			    k = k + receptionThread.getNumberOfPackets();
 			    receptionThread.resetNumberOfPackets();
 			    
-			} else if ( historiqueInline && ((Utils.BIT_RATE * histoCount) > Utils.INLINE_REDON_RATE) ) {
+			} else if ( historiqueInline && (i >= historyCount) ) {
 			    byte[] dataReady = packetMaker(Utils.FLAG_PUSH, ID_PACKET, symbols[i]);
 			    DatagramPacket sendPacket = new DatagramPacket(dataReady, dataReady.length, destIP, destPort);
 			    clientSocket.send(sendPacket);
-			    histoCount = 0;
+			    historyCount = historyCount + historyRate;
 			} else {
 			    // if you send a normal packet
 			    byte[] dataReady = packetMaker(lengthOfTheFile, ID_PACKET, symbols[i]);
